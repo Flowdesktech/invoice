@@ -1,0 +1,29 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Invoice PDFs are stored in /invoices/{userId}/{invoiceId}/
+    match /invoices/{userId}/{invoiceId}/{fileName} {
+      // Allow read access only to the owner
+      allow read: if isOwner(userId);
+      
+      // Only allow backend (admin SDK) to write
+      // Frontend should never directly upload to storage
+      allow write: if false;
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

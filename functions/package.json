@@ -1,0 +1,29 @@
+{
+  "name": "invoice-management-functions",
+  "description": "Backend API for Invoice Management System",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^13.0.2",
+    "firebase-functions": "^6.1.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "html-pdf-node": "^1.0.8",
+    "handlebars": "^4.7.8",
+    "express-validator": "^7.2.1",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.3.0"
+  },
+  "private": true
+}

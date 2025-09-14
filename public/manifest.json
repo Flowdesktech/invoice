@@ -1,0 +1,21 @@
+{
+  "name": "FlowDesk - Business Management Platform",
+  "short_name": "FlowDesk",
+  "description": "Professional business management platform for invoicing, payments, and client management",
+  "theme_color": "#1976d2",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/flowdesk-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "finance", "productivity"],
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}

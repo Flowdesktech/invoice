@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Helper function to check if the document belongs to the user
+    function belongsToUser() {
+      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+    
+    // Helper function to check if the request is from Firebase Admin SDK (backend)
+    function isBackend() {
+      return request.auth.token.admin == true;
+    }
+    
+    // Rules for users collection
+    // Frontend: Read only for own profile
+    // Backend: Full access
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if isBackend();
+    }
+    
+    // Rules for customers collection
+    // Frontend: Read only for own customers
+    // Backend: Full access for CRUD operations
+    match /customers/{customerId} {
+      allow read: if belongsToUser();
+      allow write: if isBackend();
+    }
+    
+    // Rules for invoices collection
+    // Frontend: Read only for own invoices
+    // Backend: Full access for CRUD operations
+    match /invoices/{invoiceId} {
+      allow read: if belongsToUser();
+      allow write: if isBackend();
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

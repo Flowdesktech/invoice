@@ -1,0 +1,24 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#gradient1)"/>
+  
+  <!-- Invoice Icon -->
+  <path d="M8 6C8 5.44772 8.44772 5 9 5H18L23 10V26C23 26.5523 22.5523 27 22 27H9C8.44772 27 8 26.5523 8 26V6Z" fill="white" opacity="0.9"/>
+  
+  <!-- Document Corner -->
+  <path d="M18 5V10H23L18 5Z" fill="white" opacity="0.5"/>
+  
+  <!-- Flow Lines -->
+  <path d="M11 13H19M11 17H19M11 21H17" stroke="#1976D2" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <!-- Flow Arrow -->
+  <path d="M19 17L22 17M22 17L20.5 15.5M22 17L20.5 18.5" stroke="#1976D2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient1" x1="0" y1="0" x2="32" y2="32">
+      <stop stop-color="#1976D2"/>
+      <stop offset="1" stop-color="#1565C0"/>
+    </linearGradient>
+  </defs>
+</svg>
