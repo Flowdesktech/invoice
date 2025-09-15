@@ -219,11 +219,15 @@ class InvoiceController {
     // Get user data
     const userData = await userService.getUserById(userId);
     
+    // Get profile data if using profile
+    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+    
     // Generate PDF
     const pdfData = {
       invoice,
       userData,
-      customer
+      customer,
+      profileData
     };
     
     const pdfBase64 = await pdfService.generateInvoicePDF(pdfData);

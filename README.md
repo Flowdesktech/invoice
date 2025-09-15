@@ -1,18 +1,26 @@
-# Invoice Management System
+# FlowDesk Invoice Management System v0.1
 
-A professional invoice management system built with React 19 and Firebase, featuring customer management, invoice creation, and PDF generation.
+A professional invoice management system built with React 19 and Firebase, featuring customer management, invoice creation, PDF generation, multi-currency support, and business profiles.
+
+🌐 **Live Demo**: [https://invoice.coremaven.tech](https://invoice.coremaven.tech)
 
 ## Features
 
+### Core Features
 - 🔐 **User Authentication**: Secure login and registration with Firebase Auth
 - 👥 **Customer Management**: Add, edit, and manage customer information
 - 📄 **Invoice Creation**: Create professional invoices with line items and calculations
 - 📊 **Dashboard**: Overview of revenue, pending invoices, and recent activity
-- 📑 **PDF Generation**: Download invoices as PDF documents
-- 💼 **Profile Management**: Manage company information and invoice settings
+- 📑 **PDF Generation**: Download and preview invoices as PDF documents
 - 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
-- 🔒 **Secure**: Firebase security rules protect user data
-- ⚡ **Fast Development**: Built with Vite for lightning-fast HMR and builds
+
+### v0.1 New Features
+- 💱 **Multi-Currency Support**: Create invoices in 30+ currencies with proper formatting
+- 👔 **Business Profiles**: Manage multiple businesses under one account
+- ✉️ **Email in Profiles**: Add business email to profiles for professional invoices
+- 🔢 **Flexible Invoice Numbers**: Always editable invoice numbers with auto-increment option
+- 🌍 **Custom Domain Support**: Deployed at invoice.coremaven.tech with CORS support
+- 🎨 **Enhanced UI**: Improved currency selectors with symbols and better form layouts
 
 ## Technologies Used
 
@@ -230,9 +238,23 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For support, email support@invoicemanager.com or open an issue in the GitHub repository.
 
+## Changelog
+
+### v0.1 (September 2025)
+- ✅ Added multi-currency support for invoices
+- ✅ Implemented business profiles for managing multiple businesses
+- ✅ Added email field to business profiles
+- ✅ Made invoice numbers always editable
+- ✅ Fixed PDF generation to use profile data instead of account data
+- ✅ Added currency selector to invoice creation and profile settings
+- ✅ Deployed to custom domain with SSL support
+- ✅ Enhanced CORS configuration for *.coremaven.tech domains
+- ✅ Fixed various UI issues and improved user experience
+
 ## Acknowledgments
 
 - Material-UI for the component library
 - Firebase for backend services
 - jsPDF for PDF generation
 - React team for the amazing framework
+- Vite for blazing fast development experience

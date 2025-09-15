@@ -236,7 +236,7 @@
         <div class="invoice-header">
             <div class="company-info">
                 <h1>{{#if profileData.company}}{{profileData.company}}{{else}}{{userData.company}}{{/if}}</h1>
-                <p>{{#if profileData.name}}{{profileData.name}}{{else}}{{userData.displayName}}{{/if}}</p>
+                <p>{{#if profileData.displayName}}{{profileData.displayName}}{{else}}{{userData.displayName}}{{/if}}</p>
                 <p>{{#if profileData.email}}{{profileData.email}}{{else}}{{userData.email}}{{/if}}</p>
                 {{#if profileData.phone}}<p>{{profileData.phone}}</p>{{else}}{{#if userData.phone}}<p>{{userData.phone}}</p>{{/if}}{{/if}}
                 {{#if profileData.address}}
