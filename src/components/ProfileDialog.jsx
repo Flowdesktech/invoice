@@ -30,6 +30,7 @@ const ProfileDialog = ({ open, onClose }) => {
     defaultValues: {
       displayName: '',
       company: '',
+      email: '',
       phone: '',
       address: {
         street: '',
@@ -48,6 +49,7 @@ const ProfileDialog = ({ open, onClose }) => {
 
   const onSubmit = async (data) => {
     try {
+      console.log('ProfileDialog - Form data being submitted:', data);
       await addProfile(data);
       handleClose();
     } catch (error) {
@@ -118,6 +120,31 @@ const ProfileDialog = ({ open, onClose }) => {
                     error={!!errors.company}
                     helperText={errors.company?.message}
                     placeholder="e.g., ABC Consulting Ltd."
+                  />
+                )}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <Controller
+                name="email"
+                control={control}
+                rules={{ 
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Invalid email address'
+                  }
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Business Email"
+                    fullWidth
+                    type="email"
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                    placeholder="e.g., contact@company.com"
                   />
                 )}
               />

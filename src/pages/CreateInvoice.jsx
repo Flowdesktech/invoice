@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CustomerDialog from '../components/CustomerDialog';
 import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
+import currencyOptions from '../data/currencyOptions.json';
 import {
   Dialog,
   DialogTitle,
@@ -95,11 +96,13 @@ const CreateInvoice = () => {
       notes: '',
       taxRate: (currentProfile || userData)?.invoiceSettings?.taxRate || 0,
       paymentTerms: (currentProfile || userData)?.invoiceSettings?.paymentTerms || 'Due on receipt',
+      currency: (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
     }
   });
 
   const selectedCustomer = watch('customer');
   const taxRate = watch('taxRate');
+  const currency = watch('currency');
 
   useEffect(() => {
     fetchCustomers();
@@ -132,6 +135,7 @@ const CreateInvoice = () => {
         notes: duplicateData.notes || '',
         taxRate: duplicateData.taxRate || 0,
         paymentTerms: duplicateData.paymentTerms || 'Due on receipt',
+        currency: duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
       });
       
       // Set line items
@@ -170,6 +174,7 @@ const CreateInvoice = () => {
         notes: invoice.notes || '',
         taxRate: invoice.taxRate || 0,
         paymentTerms: invoice.paymentTerms || 'Due on receipt',
+        currency: invoice.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
       });
       
       // Set line items
@@ -257,6 +262,7 @@ const CreateInvoice = () => {
         notes: processTemplateDescription(watch('notes'), watch('date')),
         paymentTerms: watch('paymentTerms'),
         status: watch('status') || 'draft',  // Include status for preview
+        currency: watch('currency') || 'USD',  // Include currency for preview
       };
       
       // Call backend preview API
@@ -378,6 +384,7 @@ const CreateInvoice = () => {
         dueDate: new Date(data.dueDate).getTime(),  // Convert to Date object then timestamp
         status: data.status,
         invoiceNumber: data.invoiceNumber, // Always include invoice number
+        currency: data.currency, // Include currency for invoice
       };
 
       if (isEditMode) {
@@ -437,7 +444,7 @@ const CreateInvoice = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency || 'USD',
     }).format(amount);
   };
 
@@ -695,7 +702,7 @@ const CreateInvoice = () => {
                           type="text"
                           fullWidth
                           size="medium"
-                          disabled={!isEditMode && autoIncrement}
+                          disabled={false}
                           placeholder={!isEditMode && autoIncrement ? String(nextNumber) : ''}
                           helperText={
                             isEditMode 
@@ -1005,30 +1012,68 @@ const CreateInvoice = () => {
 
               <Divider sx={{ my: { xs: 1.5, sm: 2 }, display: { xs: 'none', sm: 'block' } }} />
 
-              <Box mb={{ xs: 2, sm: 3 }}>
-                <Controller
-                  name="taxRate"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Tax Rate (%)"
-                      type="number"
-                      size="small"
-                      fullWidth
-                      inputProps={{ min: 0, step: 0.01 }}
-                      sx={{
-                        '& .MuiInputBase-root': {
-                          backgroundColor: '#ffffff',
-                        },
-                        '& .MuiInputLabel-root': {
-                          fontSize: { xs: '0.875rem', sm: '1rem' }
-                        }
-                      }}
-                    />
-                  )}
-                />
-              </Box>
+              <Grid container spacing={2} mb={{ xs: 2, sm: 3 }}>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name="currency"
+                    control={control}
+                    render={({ field }) => (
+                      <FormControl fullWidth size="small">
+                        <InputLabel>Currency</InputLabel>
+                        <Select
+                          {...field}
+                          label="Currency"
+                          sx={{
+                            '& .MuiInputBase-root': {
+                              backgroundColor: '#ffffff',
+                            },
+                            '& .MuiInputLabel-root': {
+                              fontSize: { xs: '0.875rem', sm: '1rem' }
+                            }
+                          }}
+                        >
+                          {currencyOptions.map((currencyOption) => (
+                            <MenuItem key={currencyOption.value} value={currencyOption.value}>
+                              <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                  {currencyOption.symbol}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {currencyOption.label}
+                                </Typography>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name="taxRate"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Tax Rate (%)"
+                        type="number"
+                        size="small"
+                        fullWidth
+                        inputProps={{ min: 0, step: 0.01 }}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            backgroundColor: '#ffffff',
+                          },
+                          '& .MuiInputLabel-root': {
+                            fontSize: { xs: '0.875rem', sm: '1rem' }
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
 
               <Box mb={3}>
                 <Controller

@@ -4,7 +4,7 @@
 const errorHandler = (err, req, res, next) => {
   // Log detailed error information
   console.error('==================== ERROR ====================');
-  console.error('Timestamp:', new Date().toISOString());
+  console.error('Timestamp:', new Date().valueOf());
   console.error('Method:', req.method);
   console.error('Path:', req.path);
   console.error('Body:', JSON.stringify(req.body, null, 2));

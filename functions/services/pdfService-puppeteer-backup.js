@@ -50,7 +50,7 @@ class PdfService {
         invoice,
         userData,
         customer,
-        currentDate: new Date().toISOString()
+        currentDate: new Date().valueOf()
       };
 
       // Generate HTML
@@ -173,7 +173,7 @@ class PdfService {
         invoice,
         userData,
         customer,
-        currentDate: new Date().toISOString()
+        currentDate: new Date().valueOf()
       };
 
       // Generate HTML

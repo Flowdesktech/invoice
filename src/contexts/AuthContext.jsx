@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
             timezone: companyData.timezone || 'America/New_York'
           },
           isDefault: true,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().valueOf()
         }]
       };
       
@@ -236,10 +236,12 @@ export const AuthProvider = ({ children }) => {
   // Add new profile
   const addProfile = async (profileData) => {
     try {
+      console.log('AuthContext - addProfile received data:', profileData);
       const newProfile = {
         id: `profile_${Date.now()}`,
         displayName: profileData.displayName || 'New Profile',
         company: profileData.company || '',
+        email: profileData.email || '',
         phone: profileData.phone || '',
         address: profileData.address || {},
         invoiceSettings: {
@@ -251,16 +253,21 @@ export const AuthProvider = ({ children }) => {
           dueDateDuration: 7,
           autoIncrementNumber: true
         },
-        createdAt: new Date().toISOString()
+        createdAt: new Date().valueOf()
       };
       
-      const updatedProfiles = [...(userData?.profiles || []), newProfile];
+      // Ensure profiles is an array
+      const currentProfiles = Array.isArray(userData?.profiles) ? userData.profiles : [];
+      const updatedProfiles = [...currentProfiles, newProfile];
       
       // Update user document with new profile
-      const response = await profileAPI.update({ 
+      const updateData = { 
         profiles: updatedProfiles,
         activeProfileId: newProfile.id 
-      });
+      };
+      
+      console.log('AuthContext - Data being sent to API:', JSON.stringify(updateData, null, 2));
+      const response = await profileAPI.update(updateData);
       
       setUserData(response.data);
       setActiveProfileId(newProfile.id);
@@ -308,7 +315,7 @@ export const AuthProvider = ({ children }) => {
                 autoIncrementNumber: true
               },
               isDefault: true,
-              createdAt: new Date().toISOString()
+              createdAt: new Date().valueOf()
             }]
           };
           const response = await profileAPI.update(newUserDoc);

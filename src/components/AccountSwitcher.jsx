@@ -18,7 +18,7 @@ import {
   ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 
-const AccountSwitcher = ({ currentProfile, profiles, onSwitchProfile, onAddProfile }) => {
+const AccountSwitcher = ({ currentProfile, profiles = [], onSwitchProfile, onAddProfile }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -168,7 +168,7 @@ const AccountSwitcher = ({ currentProfile, profiles, onSwitchProfile, onAddProfi
           </Typography>
         </Box>
         
-        {profiles.map((profile) => (
+        {profiles && profiles.length > 0 && profiles.map((profile) => (
           <MenuItem
             key={profile.id}
             onClick={() => handleSwitch(profile.id)}

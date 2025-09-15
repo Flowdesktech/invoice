@@ -118,7 +118,7 @@ const ViewInvoice = () => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: invoice?.currency || 'USD',
     }).format(amount || 0);
   };
 

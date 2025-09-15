@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import timezoneOptions from '../data/timezoneOptions.json';
+import currencyOptions from '../data/currencyOptions.json';
 import {
   Container,
   Paper,
@@ -28,6 +29,7 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Phone as PhoneIcon,
+  Email as EmailIcon,
   Home as HomeIcon,
   Settings as SettingsIcon,
   Lock as LockIcon,
@@ -64,6 +66,7 @@ const Profile = () => {
       resetProfile({
         displayName: profileData.displayName || '',
         company: profileData.company || '',
+        email: profileData.email || '',
         phone: profileData.phone || '',
         address: {
           street: profileData.address?.street || '',
@@ -124,6 +127,7 @@ const Profile = () => {
       const profileData = {
         displayName: data.displayName,
         company: data.company,
+        email: data.email,
         phone: data.phone,
         address: data.address
       };
@@ -237,6 +241,30 @@ const Profile = () => {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
+                    label="Email"
+                    type="email"
+                    error={!!profileErrors.email}
+                    helperText={profileErrors.email?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <EmailIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    {...registerProfile('email', {
+                      required: 'Email is required',
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: 'Invalid email address',
+                      },
+                    })}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
                     label="Phone"
                     InputProps={{
                       startAdornment: (
@@ -250,7 +278,6 @@ const Profile = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Divider sx={{ my: 2 }} />
                   <Typography variant="h6" gutterBottom>
                     Address
                   </Typography>
@@ -354,11 +381,35 @@ const Profile = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Currency"
-                    helperText="Default currency for invoices"
-                    {...registerInvoice('invoiceSettings.currency')}
+                  <Controller
+                    name="invoiceSettings.currency"
+                    control={controlInvoice}
+                    defaultValue={userData?.invoiceSettings?.currency || 'USD'}
+                    render={({ field }) => (
+                      <FormControl fullWidth>
+                        <InputLabel>Currency</InputLabel>
+                        <Select
+                          {...field}
+                          label="Currency"
+                        >
+                          {currencyOptions.map((currency) => (
+                            <MenuItem key={currency.value} value={currency.value}>
+                              <Box display="flex" alignItems="center" gap={1}>
+                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                  {currency.symbol}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {currency.label}
+                                </Typography>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+                          Default currency for invoices
+                        </Typography>
+                      </FormControl>
+                    )}
                   />
                 </Grid>
 

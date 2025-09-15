@@ -235,14 +235,22 @@
         <!-- Header -->
         <div class="invoice-header">
             <div class="company-info">
-                <h1>{{userData.company}}</h1>
-                <p>{{userData.displayName}}</p>
-                <p>{{userData.email}}</p>
-                {{#if userData.phone}}<p>{{userData.phone}}</p>{{/if}}
-                {{#if userData.address.street}}
-                <p>{{userData.address.street}}</p>
-                <p>{{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}</p>
-                {{#if userData.address.country}}<p>{{userData.address.country}}</p>{{/if}}
+                <h1>{{#if profileData.company}}{{profileData.company}}{{else}}{{userData.company}}{{/if}}</h1>
+                <p>{{#if profileData.name}}{{profileData.name}}{{else}}{{userData.displayName}}{{/if}}</p>
+                <p>{{#if profileData.email}}{{profileData.email}}{{else}}{{userData.email}}{{/if}}</p>
+                {{#if profileData.phone}}<p>{{profileData.phone}}</p>{{else}}{{#if userData.phone}}<p>{{userData.phone}}</p>{{/if}}{{/if}}
+                {{#if profileData.address}}
+                    {{#if profileData.address.street}}
+                    <p>{{profileData.address.street}}</p>
+                    <p>{{profileData.address.city}}, {{profileData.address.state}} {{profileData.address.zipCode}}</p>
+                    {{#if profileData.address.country}}<p>{{profileData.address.country}}</p>{{/if}}
+                    {{/if}}
+                {{else}}
+                    {{#if userData.address.street}}
+                    <p>{{userData.address.street}}</p>
+                    <p>{{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}</p>
+                    {{#if userData.address.country}}<p>{{userData.address.country}}</p>{{/if}}
+                    {{/if}}
                 {{/if}}
             </div>
             <div class="invoice-title">
@@ -273,7 +281,7 @@
                 <h3>Invoice Details</h3>
                 <div class="invoice-details-grid">
                     <p><span>Payment Terms:</span> <strong>{{invoice.paymentTerms}}</strong></p>
-                    <p><span>Currency:</span> <strong>{{userData.invoiceSettings.currency}}</strong></p>
+                    <p><span>Currency:</span> <strong>{{invoice.currency}}</strong></p>
                 </div>
             </div>
         </div>
@@ -293,8 +301,8 @@
                 <tr>
                     <td>{{this.description}}</td>
                     <td>{{this.quantity}}</td>
-                    <td>{{formatCurrency this.rate}}</td>
-                    <td>{{formatCurrency this.amount}}</td>
+                    <td>{{formatCurrency this.rate currency=../invoice.currency}}</td>
+                    <td>{{formatCurrency this.amount currency=../invoice.currency}}</td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -305,17 +313,17 @@
             <div class="summary-box">
                 <div class="summary-row">
                     <span>Subtotal:</span>
-                    <span>{{formatCurrency invoice.subtotal}}</span>
+                    <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
                 </div>
                 {{#if invoice.taxRate}}
                 <div class="summary-row">
                     <span>Tax ({{invoice.taxRate}}%):</span>
-                    <span>{{formatCurrency invoice.taxAmount}}</span>
+                    <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
                 </div>
                 {{/if}}
                 <div class="summary-row total">
                     <span>Total:</span>
-                    <span>{{formatCurrency invoice.total}}</span>
+                    <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
                 </div>
             </div>
         </div>

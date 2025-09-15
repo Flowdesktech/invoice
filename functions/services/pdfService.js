@@ -15,8 +15,9 @@ class PdfService {
    */
   registerHelpers() {
     // Format currency helper
-    handlebars.registerHelper('formatCurrency', (amount) => {
-      return formatCurrency(amount);
+    handlebars.registerHelper('formatCurrency', (amount, options) => {
+      const currency = options?.hash?.currency || 'USD';
+      return formatCurrency(amount, currency);
     });
 
     // Format date helper
@@ -72,7 +73,7 @@ class PdfService {
         profileData,
         timezone,
         invoicePrefix,
-        currentDate: new Date().toISOString()
+        currentDate: new Date().valueOf()
       };
 
       // Generate HTML
@@ -124,6 +125,13 @@ class PdfService {
     try {
       console.log('Starting PDF preview generation for invoice:', invoice.invoiceNumber);
       
+      // Debug log the invoice data
+      console.log('PDF Preview - Invoice data:', {
+        currency: invoice.currency,
+        subtotal: invoice.subtotal,
+        total: invoice.total
+      });
+      
       // Read and compile template
       const templateHtml = await fs.readFile(this.templatePath, 'utf-8');
       const template = handlebars.compile(templateHtml);
@@ -139,7 +147,7 @@ class PdfService {
         profileData,
         timezone,
         invoicePrefix,
-        currentDate: new Date().toISOString()
+        currentDate: new Date().valueOf()
       };
 
       // Generate HTML

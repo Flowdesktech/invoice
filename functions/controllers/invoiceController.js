@@ -54,6 +54,14 @@ class InvoiceController {
       });
     }
 
+    // Debug logging for currency
+    console.log('Preview Invoice Data:', {
+      requestedCurrency: invoiceData.currency,
+      profileCurrency: profileData?.invoiceSettings?.currency,
+      userCurrency: userData?.invoiceSettings?.currency,
+      defaultCurrency: 'USD'
+    });
+
     // Prepare invoice data for PDF generation in the format expected by PDF service
     const previewData = {
       invoice: {
@@ -65,6 +73,7 @@ class InvoiceController {
         notes: invoiceData.notes || '',
         paymentTerms: invoiceData.paymentTerms || 'Due on receipt',
         status: invoiceData.status || 'draft',
+        currency: invoiceData.currency || profileData?.invoiceSettings?.currency || userData?.invoiceSettings?.currency || 'USD',
         // Calculate totals
         subtotal: (invoiceData.lineItems || []).reduce((sum, item) => sum + (item.quantity * item.rate), 0),
         taxAmount: 0, // Will be calculated
@@ -74,6 +83,9 @@ class InvoiceController {
       customer: customer,
       profileData: profileData
     };
+
+    // Debug log the final currency being used
+    console.log('Final preview currency:', previewData.invoice.currency);
 
     // Calculate tax and total
     previewData.invoice.taxAmount = (previewData.invoice.subtotal * previewData.invoice.taxRate) / 100;

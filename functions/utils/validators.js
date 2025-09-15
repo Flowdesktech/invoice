@@ -53,7 +53,8 @@ const invoiceValidators = {
     body('dueDate').isInt({ min: 0 }).withMessage('Valid due date timestamp is required'),
     body('status').optional().isIn(['draft', 'pending', 'paid', 'overdue']).withMessage('Invalid status'),
     body('notes').optional().trim(),
-    body('paymentTerms').optional().trim()
+    body('paymentTerms').optional().trim(),
+    body('currency').optional().trim().isLength({ min: 3, max: 3 }).withMessage('Currency must be a 3-letter code')
   ],
   
   updateStatus: [
@@ -72,7 +73,8 @@ const invoiceValidators = {
     body('dueDate').optional().isInt({ min: 0 }).withMessage('Valid due date timestamp is required'),
     body('status').optional().isIn(['draft', 'pending', 'paid', 'overdue']).withMessage('Invalid status'),
     body('notes').optional().trim(),
-    body('paymentTerms').optional().trim()
+    body('paymentTerms').optional().trim(),
+    body('currency').optional().trim().isLength({ min: 3, max: 3 }).withMessage('Currency must be a 3-letter code')
   ],
   
   getById: [

@@ -268,10 +268,10 @@ const Invoices = () => {
     }
   };
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount, currency = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency,
     }).format(amount || 0);
   };
 
@@ -632,7 +632,7 @@ const Invoices = () => {
                             : '-'
                           }
                         </TableCell>
-                        <TableCell>{formatCurrency(invoice.total)}</TableCell>
+                        <TableCell>{formatCurrency(invoice.total, invoice.currency)}</TableCell>
                         <TableCell>
                           <FormControl size="small">
                             <Select

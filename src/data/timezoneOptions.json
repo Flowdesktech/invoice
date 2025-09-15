@@ -1,0 +1,357 @@
+[
+  {
+    "label": "Eastern Time (New York)",
+    "value": "America/New_York",
+    "group": "North America"
+  },
+  {
+    "label": "Central Time (Chicago)",
+    "value": "America/Chicago",
+    "group": "North America"
+  },
+  {
+    "label": "Mountain Time (Denver)",
+    "value": "America/Denver",
+    "group": "North America"
+  },
+  {
+    "label": "Pacific Time (Los Angeles)",
+    "value": "America/Los_Angeles",
+    "group": "North America"
+  },
+  {
+    "label": "Arizona (Phoenix)",
+    "value": "America/Phoenix",
+    "group": "North America"
+  },
+  {
+    "label": "Alaska (Anchorage)",
+    "value": "America/Anchorage",
+    "group": "North America"
+  },
+  {
+    "label": "Hawaii (Honolulu)",
+    "value": "Pacific/Honolulu",
+    "group": "North America"
+  },
+  {
+    "label": "Eastern Time (Toronto)",
+    "value": "America/Toronto",
+    "group": "North America"
+  },
+  {
+    "label": "Pacific Time (Vancouver)",
+    "value": "America/Vancouver",
+    "group": "North America"
+  },
+  {
+    "label": "Central Time (Mexico City)",
+    "value": "America/Mexico_City",
+    "group": "North America"
+  },
+  {
+    "label": "Pacific Time (Tijuana)",
+    "value": "America/Tijuana",
+    "group": "North America"
+  },
+  {
+    "label": "Brasília Time (São Paulo)",
+    "value": "America/Sao_Paulo",
+    "group": "South America"
+  },
+  {
+    "label": "Argentina (Buenos Aires)",
+    "value": "America/Argentina/Buenos_Aires",
+    "group": "South America"
+  },
+  {
+    "label": "Colombia (Bogotá)",
+    "value": "America/Bogota",
+    "group": "South America"
+  },
+  {
+    "label": "Peru (Lima)",
+    "value": "America/Lima",
+    "group": "South America"
+  },
+  {
+    "label": "Chile (Santiago)",
+    "value": "America/Santiago",
+    "group": "South America"
+  },
+  {
+    "label": "Venezuela (Caracas)",
+    "value": "America/Caracas",
+    "group": "South America"
+  },
+  {
+    "label": "London (GMT/BST)",
+    "value": "Europe/London",
+    "group": "Europe"
+  },
+  {
+    "label": "Dublin (GMT/IST)",
+    "value": "Europe/Dublin",
+    "group": "Europe"
+  },
+  {
+    "label": "Paris (CET/CEST)",
+    "value": "Europe/Paris",
+    "group": "Europe"
+  },
+  {
+    "label": "Berlin (CET/CEST)",
+    "value": "Europe/Berlin",
+    "group": "Europe"
+  },
+  {
+    "label": "Madrid (CET/CEST)",
+    "value": "Europe/Madrid",
+    "group": "Europe"
+  },
+  {
+    "label": "Rome (CET/CEST)",
+    "value": "Europe/Rome",
+    "group": "Europe"
+  },
+  {
+    "label": "Amsterdam (CET/CEST)",
+    "value": "Europe/Amsterdam",
+    "group": "Europe"
+  },
+  {
+    "label": "Brussels (CET/CEST)",
+    "value": "Europe/Brussels",
+    "group": "Europe"
+  },
+  {
+    "label": "Zurich (CET/CEST)",
+    "value": "Europe/Zurich",
+    "group": "Europe"
+  },
+  {
+    "label": "Vienna (CET/CEST)",
+    "value": "Europe/Vienna",
+    "group": "Europe"
+  },
+  {
+    "label": "Stockholm (CET/CEST)",
+    "value": "Europe/Stockholm",
+    "group": "Europe"
+  },
+  {
+    "label": "Oslo (CET/CEST)",
+    "value": "Europe/Oslo",
+    "group": "Europe"
+  },
+  {
+    "label": "Warsaw (CET/CEST)",
+    "value": "Europe/Warsaw",
+    "group": "Europe"
+  },
+  {
+    "label": "Prague (CET/CEST)",
+    "value": "Europe/Prague",
+    "group": "Europe"
+  },
+  {
+    "label": "Budapest (CET/CEST)",
+    "value": "Europe/Budapest",
+    "group": "Europe"
+  },
+  {
+    "label": "Athens (EET/EEST)",
+    "value": "Europe/Athens",
+    "group": "Europe"
+  },
+  {
+    "label": "Helsinki (EET/EEST)",
+    "value": "Europe/Helsinki",
+    "group": "Europe"
+  },
+  {
+    "label": "Bucharest (EET/EEST)",
+    "value": "Europe/Bucharest",
+    "group": "Europe"
+  },
+  {
+    "label": "Istanbul (TRT)",
+    "value": "Europe/Istanbul",
+    "group": "Europe"
+  },
+  {
+    "label": "Moscow (MSK)",
+    "value": "Europe/Moscow",
+    "group": "Europe"
+  },
+  {
+    "label": "Kyiv (EET/EEST)",
+    "value": "Europe/Kiev",
+    "group": "Europe"
+  },
+  {
+    "label": "Dubai (GST)",
+    "value": "Asia/Dubai",
+    "group": "Asia"
+  },
+  {
+    "label": "Riyadh (AST)",
+    "value": "Asia/Riyadh",
+    "group": "Asia"
+  },
+  {
+    "label": "Tehran (IRST)",
+    "value": "Asia/Tehran",
+    "group": "Asia"
+  },
+  {
+    "label": "Karachi (PKT)",
+    "value": "Asia/Karachi",
+    "group": "Asia"
+  },
+  {
+    "label": "India (IST)",
+    "value": "Asia/Kolkata",
+    "group": "Asia"
+  },
+  {
+    "label": "Dhaka (BST)",
+    "value": "Asia/Dhaka",
+    "group": "Asia"
+  },
+  {
+    "label": "Bangkok (ICT)",
+    "value": "Asia/Bangkok",
+    "group": "Asia"
+  },
+  {
+    "label": "Jakarta (WIB)",
+    "value": "Asia/Jakarta",
+    "group": "Asia"
+  },
+  {
+    "label": "Singapore (SGT)",
+    "value": "Asia/Singapore",
+    "group": "Asia"
+  },
+  {
+    "label": "Kuala Lumpur (MYT)",
+    "value": "Asia/Kuala_Lumpur",
+    "group": "Asia"
+  },
+  {
+    "label": "Manila (PHT)",
+    "value": "Asia/Manila",
+    "group": "Asia"
+  },
+  {
+    "label": "Hong Kong (HKT)",
+    "value": "Asia/Hong_Kong",
+    "group": "Asia"
+  },
+  {
+    "label": "Beijing/Shanghai (CST)",
+    "value": "Asia/Shanghai",
+    "group": "Asia"
+  },
+  {
+    "label": "Taipei (CST)",
+    "value": "Asia/Taipei",
+    "group": "Asia"
+  },
+  {
+    "label": "Seoul (KST)",
+    "value": "Asia/Seoul",
+    "group": "Asia"
+  },
+  {
+    "label": "Tokyo (JST)",
+    "value": "Asia/Tokyo",
+    "group": "Asia"
+  },
+  {
+    "label": "Vladivostok (VLAT)",
+    "value": "Asia/Vladivostok",
+    "group": "Asia"
+  },
+  {
+    "label": "Cairo (EET)",
+    "value": "Africa/Cairo",
+    "group": "Africa"
+  },
+  {
+    "label": "Lagos (WAT)",
+    "value": "Africa/Lagos",
+    "group": "Africa"
+  },
+  {
+    "label": "Johannesburg (SAST)",
+    "value": "Africa/Johannesburg",
+    "group": "Africa"
+  },
+  {
+    "label": "Nairobi (EAT)",
+    "value": "Africa/Nairobi",
+    "group": "Africa"
+  },
+  {
+    "label": "Casablanca (WET)",
+    "value": "Africa/Casablanca",
+    "group": "Africa"
+  },
+  {
+    "label": "Tunis (CET)",
+    "value": "Africa/Tunis",
+    "group": "Africa"
+  },
+  {
+    "label": "Perth (AWST)",
+    "value": "Australia/Perth",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Adelaide (ACST/ACDT)",
+    "value": "Australia/Adelaide",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Darwin (ACST)",
+    "value": "Australia/Darwin",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Brisbane (AEST)",
+    "value": "Australia/Brisbane",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Sydney (AEST/AEDT)",
+    "value": "Australia/Sydney",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Melbourne (AEST/AEDT)",
+    "value": "Australia/Melbourne",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Auckland (NZST/NZDT)",
+    "value": "Pacific/Auckland",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Fiji (FJT)",
+    "value": "Pacific/Fiji",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Guam (ChST)",
+    "value": "Pacific/Guam",
+    "group": "Australia & Pacific"
+  },
+  {
+    "label": "Tahiti (TAHT)",
+    "value": "Pacific/Tahiti",
+    "group": "Australia & Pacific"
+  }
+]
