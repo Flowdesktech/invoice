@@ -28,6 +28,7 @@ import {
   AccountCircle as AccountCircleIcon,
   Logout as LogoutIcon,
   Add as AddIcon,
+  Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
@@ -71,6 +72,7 @@ const Layout = () => {
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Customers', icon: <PeopleIcon />, path: '/customers' },
     { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices' },
+    { text: 'Recurring Invoices', icon: <ScheduleIcon />, path: '/recurring-invoices' },
   ];
 
   const drawer = (

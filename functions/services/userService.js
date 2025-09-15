@@ -43,10 +43,23 @@ class UserService {
   /**
    * Increment invoice number for user
    */
-  async incrementInvoiceNumber(userId) {
-    await this.collection.doc(userId).update({
-      'invoiceSettings.nextNumber': FieldValue.increment(1)
-    });
+  async incrementInvoiceNumber(userId, profileId = null) {
+    if (profileId && profileId !== 'default') {
+      // Update profile-specific invoice number
+      const user = await this.getUserById(userId);
+      const profileIndex = user.profiles?.findIndex(p => p.id === profileId);
+      
+      if (profileIndex >= 0) {
+        await this.collection.doc(userId).update({
+          [`profiles.${profileIndex}.invoiceSettings.nextNumber`]: FieldValue.increment(1)
+        });
+      }
+    } else {
+      // Update main invoice settings
+      await this.collection.doc(userId).update({
+        'invoiceSettings.nextNumber': FieldValue.increment(1)
+      });
+    }
   }
 
   /**

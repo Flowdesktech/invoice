@@ -81,10 +81,12 @@ class InvoiceService {
     let invoiceNumber;
     if (invoiceData.invoiceNumber) {
       // Always use provided invoice number if available
-      invoiceNumber = invoiceData.invoiceNumber;
+      // Extract just the number if it includes a prefix
+      const match = String(invoiceData.invoiceNumber).match(/^[A-Z]+-?(\d+)$/);
+      invoiceNumber = match ? parseInt(match[1], 10) : parseInt(invoiceData.invoiceNumber, 10);
     } else if (userData.invoiceSettings.autoIncrementNumber !== false) {
       // Generate number if auto-increment is enabled (default true)
-      invoiceNumber = `${userData.invoiceSettings.prefix}-${String(userData.invoiceSettings.nextNumber).padStart(5, '0')}`;
+      invoiceNumber = userData.invoiceSettings.nextNumber || 1;
     } else {
       // If auto-increment is disabled and no number provided, throw error
       throw new Error('Invoice number is required when auto-increment is disabled');

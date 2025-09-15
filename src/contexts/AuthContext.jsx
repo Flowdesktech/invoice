@@ -79,7 +79,8 @@ export const AuthProvider = ({ children }) => {
             currency: 'USD',
             paymentTerms: 'Due on receipt',
             dueDateDuration: 7,
-            autoIncrementNumber: true
+            autoIncrementNumber: true,
+            timezone: companyData.timezone || 'America/New_York'
           },
           isDefault: true,
           createdAt: new Date().toISOString()

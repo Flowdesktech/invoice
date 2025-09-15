@@ -34,6 +34,7 @@ import {
   GetApp as DownloadIcon,
   FilterList as FilterIcon,
   FileCopy as FileCopyIcon,
+  Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -42,6 +43,7 @@ import { invoiceAPI } from '../utils/api';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { formatInvoiceNumber } from '../utils/formatters';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -93,7 +95,7 @@ const Invoices = () => {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { currentUser } = useAuth();
+  const { currentUser, userData } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const Invoices = () => {
     if (searchTerm) {
       filtered = filtered.filter(
         (invoice) =>
-          invoice.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           invoice.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           invoice.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -400,7 +402,7 @@ const Invoices = () => {
     
     // Convert data to CSV format
     const csvData = selectedInvoiceData.map(invoice => [
-      invoice.invoiceNumber,
+      formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix),
       invoice.customerName,
       invoice.date ? format(new Date(invoice.date), 'yyyy-MM-dd') : '',
       invoice.dueDate ? format(new Date(invoice.dueDate), 'yyyy-MM-dd') : '',
@@ -603,7 +605,19 @@ const Invoices = () => {
                             }}
                           />
                         </TableCell>
-                        <TableCell>{invoice.invoiceNumber}</TableCell>
+                        <TableCell>
+                          <Box display="flex" alignItems="center" gap={1}>
+                            {formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
+                            {invoice.recurringInvoiceId && (
+                              <Tooltip title="Generated from recurring invoice">
+                                <ScheduleIcon 
+                                  fontSize="small" 
+                                  sx={{ color: 'primary.main', opacity: 0.7 }}
+                                />
+                              </Tooltip>
+                            )}
+                          </Box>
+                        </TableCell>
                         <TableCell>{invoice.customerName}</TableCell>
                         <TableCell>
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import timezoneOptions from '../data/timezoneOptions.json';
 import {
   Container,
   Paper,
@@ -17,6 +18,11 @@ import {
   FormControlLabel,
   Switch,
   Chip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Autocomplete,
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -92,6 +98,7 @@ const Profile = () => {
   const {
     register: registerInvoice,
     handleSubmit: handleSubmitInvoice,
+    control: controlInvoice,
     reset: resetInvoice,
     formState: { errors: invoiceErrors },
   } = useForm();
@@ -376,6 +383,77 @@ const Profile = () => {
                       />
                     }
                     label="Auto-increment invoice numbers"
+                  />
+                </Grid>
+
+                <Grid item xs={12} style={{width: '300px'}}>
+                  <Controller
+                    name="invoiceSettings.timezone"
+                    control={controlInvoice}
+                    defaultValue={userData?.invoiceSettings?.timezone || 'America/New_York'}
+                    render={({ field }) => {
+                      const currentValue = timezoneOptions.find(tz => tz.value === field.value) || 
+                                         timezoneOptions.find(tz => tz.value === 'America/New_York');
+                      
+                      return (
+                        <Autocomplete
+                          {...field}
+                          options={timezoneOptions}
+                          groupBy={(option) => option.group}
+                          getOptionLabel={(option) => option.label}
+                          value={currentValue}
+                          onChange={(event, newValue) => {
+                            field.onChange(newValue?.value || 'America/New_York');
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Timezone"
+                              placeholder="Search for a timezone..."
+                              fullWidth
+                            />
+                          )}
+                          renderGroup={(params) => (
+                            <li key={params.key}>
+                              <Box
+                                sx={{
+                                  position: 'sticky',
+                                  top: '-8px',
+                                  padding: '4px 16px',
+                                  color: 'text.secondary',
+                                  backgroundColor: 'background.paper',
+                                  fontWeight: 'bold',
+                                  fontSize: '0.875rem',
+                                }}
+                              >
+                                {params.group}
+                              </Box>
+                              <ul style={{ padding: 0 }}>{params.children}</ul>
+                            </li>
+                          )}
+                          isOptionEqualToValue={(option, value) => option.value === value?.value}
+                          disableClearable
+                          sx={{
+                            width: '100%',
+                            '& .MuiAutocomplete-listbox': {
+                              maxWidth: '600px',
+                              '& .MuiAutocomplete-option': {
+                                paddingLeft: '24px',
+                              },
+                            },
+                            '& .MuiAutocomplete-paper': {
+                              width: '600px !important',
+                            },
+                          }}
+                          PaperComponent={(props) => (
+                            <Paper {...props} sx={{ width: '600px' }} />
+                          )}
+                          ListboxProps={{
+                            style: { maxHeight: '400px' }
+                          }}
+                        />
+                      );
+                    }}
                   />
                 </Grid>
 

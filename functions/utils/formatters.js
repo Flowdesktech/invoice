@@ -16,11 +16,12 @@ const formatCurrency = (amount, currency = 'USD') => {
 };
 
 /**
- * Format date values
+ * Format date values with timezone support
  * @param {string|Date} date - The date to format
+ * @param {string} timezone - IANA timezone string (e.g., 'America/New_York')
  * @returns {string} Formatted date string
  */
-const formatDate = (date) => {
+const formatDate = (date, timezone = 'America/New_York') => {
   if (!date) return '';
   
   const dateObj = date instanceof Date ? date : new Date(date);
@@ -33,16 +34,18 @@ const formatDate = (date) => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: timezone
   }).format(dateObj);
 };
 
 /**
- * Format date for display in short format
+ * Format date for display in short format with timezone support
  * @param {string|Date} date - The date to format
+ * @param {string} timezone - IANA timezone string (e.g., 'America/New_York')
  * @returns {string} Formatted date string (MMM DD, YYYY)
  */
-const formatDateShort = (date) => {
+const formatDateShort = (date, timezone = 'America/New_York') => {
   if (!date) return '';
   
   const dateObj = date instanceof Date ? date : new Date(date);
@@ -54,19 +57,32 @@ const formatDateShort = (date) => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: timezone
   }).format(dateObj);
 };
 
 /**
- * Generate invoice number with padding
+ * Format invoice number with prefix
+ * @param {number} number - Invoice number (without prefix)
+ * @param {string} prefix - Invoice prefix
+ * @param {number} padding - Number of digits to pad (default: 5)
+ * @returns {string} Formatted invoice number
+ */
+const formatInvoiceNumber = (number, prefix = 'INV', padding = 5) => {
+  if (!number && number !== 0) return '';
+  return `${prefix}-${String(number).padStart(padding, '0')}`;
+};
+
+/**
+ * Generate invoice number with padding (deprecated - use formatInvoiceNumber)
  * @param {string} prefix - Invoice prefix
  * @param {number} number - Invoice number
  * @param {number} padding - Number of digits to pad (default: 5)
  * @returns {string} Formatted invoice number
  */
 const generateInvoiceNumber = (prefix, number, padding = 5) => {
-  return `${prefix}-${String(number).padStart(padding, '0')}`;
+  return formatInvoiceNumber(number, prefix, padding);
 };
 
 /**
@@ -111,10 +127,55 @@ const sanitizeString = (str) => {
   return str.trim().replace(/[<>]/g, '');
 };
 
+/**
+ * Format date for template placeholders with timezone support
+ * @param {string|Date} date - The date to format
+ * @param {string} format - Format string (e.g., 'MMM d', 'MMMM', 'yyyy')
+ * @param {string} timezone - IANA timezone string
+ * @returns {string} Formatted date string
+ */
+const formatDateForTemplate = (date, format, timezone = 'America/New_York') => {
+  if (!date) return '';
+  
+  const dateObj = date instanceof Date ? date : new Date(date);
+  
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
+  
+  // Create formatter options based on format string
+  const options = { timeZone: timezone };
+  
+  switch (format) {
+    case 'MMM d':
+      options.month = 'short';
+      options.day = 'numeric';
+      break;
+    case 'MMMM':
+      options.month = 'long';
+      break;
+    case 'MMM':
+      options.month = 'short';
+      break;
+    case 'yyyy':
+      options.year = 'numeric';
+      break;
+    default:
+      // Default to short date format
+      options.year = 'numeric';
+      options.month = 'short';
+      options.day = 'numeric';
+  }
+  
+  return new Intl.DateTimeFormat('en-US', options).format(dateObj);
+};
+
 module.exports = {
   formatCurrency,
   formatDate,
   formatDateShort,
+  formatDateForTemplate,
+  formatInvoiceNumber,
   generateInvoiceNumber,
   calculateInvoiceTotals,
   isValidEmail,

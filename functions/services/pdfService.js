@@ -2,7 +2,7 @@ const pdf = require('html-pdf-node');
 const handlebars = require('handlebars');
 const fs = require('fs').promises;
 const path = require('path');
-const { formatCurrency, formatDate } = require('../utils/formatters');
+const { formatCurrency, formatDate, formatDateShort, formatInvoiceNumber } = require('../utils/formatters');
 
 class PdfService {
   constructor() {
@@ -20,19 +20,39 @@ class PdfService {
     });
 
     // Format date helper
-    handlebars.registerHelper('formatDate', (date) => {
-      return formatDate(date);
+    handlebars.registerHelper('formatDate', (date, options) => {
+      // Get timezone from options.hash or use default
+      const timezone = options?.hash?.timezone || 'America/New_York';
+      return formatDate(date, timezone);
+    });
+
+    // Format date short helper
+    handlebars.registerHelper('formatDateShort', (date, options) => {
+      // Get timezone from options.hash or use default
+      const timezone = options?.hash?.timezone || 'America/New_York';
+      return formatDateShort(date, timezone);
     });
 
     // Conditional helper for status classes
     handlebars.registerHelper('eq', (a, b) => a === b);
+
+    // Format invoice number helper
+    handlebars.registerHelper('formatInvoiceNumber', (number, prefix) => {
+      return formatInvoiceNumber(number, prefix || 'INV');
+    });
   }
 
   /**
    * Generate PDF from invoice data
    */
   async generateInvoicePDF(data) {
-    const { invoice, userData, customer } = data;
+    const { invoice, userData, customer, profileData } = data;
+    
+    // Get timezone from profile or user settings
+    const timezone = profileData?.invoiceSettings?.timezone || userData?.invoiceSettings?.timezone || 'America/New_York';
+    
+    // Get invoice prefix from profile or user settings
+    const invoicePrefix = profileData?.invoiceSettings?.prefix || userData?.invoiceSettings?.prefix || 'INV';
 
     try {
       console.log('Starting PDF generation for invoice:', invoice.invoiceNumber);
@@ -43,9 +63,15 @@ class PdfService {
 
       // Prepare template data
       const templateData = {
-        invoice,
+        invoice: {
+          ...invoice,
+          formattedInvoiceNumber: formatInvoiceNumber(invoice.invoiceNumber, invoicePrefix)
+        },
         userData,
         customer,
+        profileData,
+        timezone,
+        invoicePrefix,
         currentDate: new Date().toISOString()
       };
 
@@ -87,7 +113,13 @@ class PdfService {
    * Generate PDF preview (returns base64 string for immediate display)
    */
   async generatePdfPreview(data) {
-    const { invoice, userData, customer } = data;
+    const { invoice, userData, customer, profileData } = data;
+    
+    // Get timezone from profile or user settings
+    const timezone = profileData?.invoiceSettings?.timezone || userData?.invoiceSettings?.timezone || 'America/New_York';
+    
+    // Get invoice prefix from profile or user settings
+    const invoicePrefix = profileData?.invoiceSettings?.prefix || userData?.invoiceSettings?.prefix || 'INV';
 
     try {
       console.log('Starting PDF preview generation for invoice:', invoice.invoiceNumber);
@@ -98,9 +130,15 @@ class PdfService {
 
       // Prepare template data
       const templateData = {
-        invoice,
+        invoice: {
+          ...invoice,
+          formattedInvoiceNumber: formatInvoiceNumber(invoice.invoiceNumber, invoicePrefix)
+        },
         userData,
         customer,
+        profileData,
+        timezone,
+        invoicePrefix,
         currentDate: new Date().toISOString()
       };
 

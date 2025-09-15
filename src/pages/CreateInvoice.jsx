@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CustomerDialog from '../components/CustomerDialog';
+import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
 import {
   Dialog,
   DialogTitle,
@@ -26,6 +27,8 @@ import {
   Divider,
   CircularProgress,
   Autocomplete,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -46,9 +49,10 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { customerAPI, invoiceAPI } from '../utils/api';
-import { format, addDays } from 'date-fns';
+import { format, addDays, subDays, subWeeks, subMonths, subYears, getWeek, getQuarter } from 'date-fns';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import { formatInvoiceNumber } from '../utils/formatters';
 
 const CreateInvoice = () => {
   const { id } = useParams();
@@ -59,6 +63,9 @@ const CreateInvoice = () => {
   const [lineItems, setLineItems] = useState([
     { description: '', quantity: 1, rate: 0, amount: 0 }
   ]);
+  const [setAsRecurring, setSetAsRecurring] = useState(false);
+  const [recurringDialogOpen, setRecurringDialogOpen] = useState(false);
+  const [createdInvoice, setCreatedInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingCustomers, setLoadingCustomers] = useState(true);
   const [loadingInvoice, setLoadingInvoice] = useState(false);
@@ -231,15 +238,23 @@ const CreateInvoice = () => {
     try {
       setPreviewLoading(true);
       
+      // Process line items to replace template placeholders
+      const processedLineItems = lineItems
+        .filter(item => item.description)
+        .map(item => ({
+          ...item,
+          description: processTemplateDescription(item.description, watch('date'))
+        }));
+      
       // Prepare invoice data for preview
       const invoiceData = {
         customerId: selectedCustomer.id,
         invoiceNumber: watch('invoiceNumber'),
         date: new Date(watch('date')).getTime(),  // Convert to timestamp
         dueDate: new Date(watch('dueDate')).getTime(),  // Convert to timestamp
-        lineItems: lineItems.filter(item => item.description),
+        lineItems: processedLineItems,
         taxRate: watch('taxRate') || 0,
-        notes: watch('notes'),
+        notes: processTemplateDescription(watch('notes'), watch('date')),
         paymentTerms: watch('paymentTerms'),
         status: watch('status') || 'draft',  // Include status for preview
       };
@@ -261,12 +276,41 @@ const CreateInvoice = () => {
     }
   };
 
+  // Process template placeholders in descriptions
+  const processTemplateDescription = (description, invoiceDate) => {
+    if (!description || !description.includes('{{')) {
+      return description;
+    }
+    
+    // Calculate period dates based on a monthly frequency (most common)
+    const endDate = new Date(invoiceDate);
+    const startDate = subMonths(endDate, 1);
+    
+    // Replace placeholders with actual dates
+    let processed = description;
+    
+    // Date range placeholders
+    processed = processed.replace(/\{\{PERIOD_START\}\}/gi, format(startDate, 'MMM d'));
+    processed = processed.replace(/\{\{PERIOD_END\}\}/gi, format(endDate, 'MMM d'));
+    
+    // Month placeholders
+    processed = processed.replace(/\{\{MONTH_NAME\}\}/gi, format(startDate, 'MMMM'));
+    processed = processed.replace(/\{\{MONTH_SHORT\}\}/gi, format(startDate, 'MMM'));
+    
+    // Year and other placeholders
+    processed = processed.replace(/\{\{YEAR\}\}/gi, format(startDate, 'yyyy'));
+    processed = processed.replace(/\{\{WEEK_NUMBER\}\}/gi, getWeek(endDate).toString());
+    processed = processed.replace(/\{\{QUARTER\}\}/gi, getQuarter(startDate).toString());
+    
+    return processed;
+  };
+
   const generateInvoiceNumber = async () => {
     if (!userData?.invoiceSettings) return;
 
-    const { prefix, nextNumber } = userData.invoiceSettings;
-    const invoiceNumber = `${prefix}-${String(nextNumber).padStart(5, '0')}`;
-    setValue('invoiceNumber', invoiceNumber);
+    const { nextNumber } = userData.invoiceSettings;
+    // Store only the number in the form
+    setValue('invoiceNumber', nextNumber);
   };
 
   const handleAddLineItem = () => {
@@ -315,12 +359,20 @@ const CreateInvoice = () => {
     try {
       setLoading(true);
 
+      // Process line items to replace template placeholders
+      const processedLineItems = lineItems
+        .filter(item => item.description && item.amount > 0)
+        .map(item => ({
+          ...item,
+          description: processTemplateDescription(item.description, data.date)
+        }));
+      
       // Prepare invoice data for API
       const invoiceData = {
         customerId: selectedCustomer.id,
-        lineItems: lineItems.filter(item => item.description && item.amount > 0),
+        lineItems: processedLineItems,
         taxRate: data.taxRate,
-        notes: data.notes,
+        notes: processTemplateDescription(data.notes, data.date),
         paymentTerms: data.paymentTerms,
         date: new Date(data.date).getTime(),  // Convert to Date object then timestamp
         dueDate: new Date(data.dueDate).getTime(),  // Convert to Date object then timestamp
@@ -336,7 +388,34 @@ const CreateInvoice = () => {
         // Create new invoice
         const response = await invoiceAPI.create(invoiceData);
         toast.success('Invoice created successfully with PDF!');
-        navigate(`/invoices/${response.data.id}`);
+        
+        // If set as recurring is checked, open the recurring dialog
+        if (setAsRecurring) {
+          // Validate the response contains valid invoice data
+          if (!response.data || typeof response.data === 'string' || response.data.toString().includes('<!DOCTYPE')) {
+            console.error('Invalid invoice data received:', response.data);
+            toast.error('Error: Invalid response from server. Please try again.');
+            navigate('/invoices');
+            return;
+          }
+          
+          // Ensure we have the complete invoice data including lineItems from our local state
+          const completeInvoiceData = {
+            ...response.data,
+            lineItems: lineItems.filter(item => item.description && item.amount > 0),
+            customerId: selectedCustomer.id,
+            customerName: selectedCustomer.name,
+            customerEmail: selectedCustomer.email,
+            taxRate: data.taxRate,
+            notes: data.notes,
+            paymentTerms: data.paymentTerms
+          };
+          
+          setCreatedInvoice(completeInvoiceData);
+          setRecurringDialogOpen(true);
+        } else {
+          navigate(`/invoices/${response.data.id}`);
+        }
         return;
       }
       
@@ -598,22 +677,31 @@ const CreateInvoice = () => {
                       const autoIncrement = profileData?.invoiceSettings?.autoIncrementNumber !== false;
                       const prefix = profileData?.invoiceSettings?.prefix || 'INV';
                       const nextNumber = profileData?.invoiceSettings?.nextNumber || 1;
-                      const nextInvoiceNumber = `${prefix}-${String(nextNumber).padStart(5, '0')}`;
+                      
+                      // Display only the number without prefix
+                      const displayValue = field.value || '';
+                      const nextInvoiceNumberFormatted = formatInvoiceNumber(nextNumber, prefix);
                       
                       return (
                         <TextField
                           {...field}
+                          value={displayValue}
+                          onChange={(e) => {
+                            // Only allow numbers
+                            const numberOnly = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(numberOnly ? parseInt(numberOnly, 10) : '');
+                          }}
                           label="Invoice #"
                           type="text"
                           fullWidth
                           size="medium"
                           disabled={!isEditMode && autoIncrement}
-                          placeholder={!isEditMode && autoIncrement ? nextInvoiceNumber : ''}
+                          placeholder={!isEditMode && autoIncrement ? String(nextNumber) : ''}
                           helperText={
                             isEditMode 
                               ? "Update invoice number" 
                               : autoIncrement 
-                                ? `Auto-generated: ${nextInvoiceNumber}`
+                                ? `Will be saved as: ${nextInvoiceNumberFormatted}`
                                 : "Enter invoice number"
                           }
                           inputProps={{ 
@@ -638,14 +726,26 @@ const CreateInvoice = () => {
                   <Controller
                     name="date"
                     control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        label="Invoice Date"
-                        value={field.value}
-                        onChange={field.onChange}
-                        renderInput={(params) => <TextField {...params} fullWidth />}
-                      />
-                    )}
+                    render={({ field }) => {
+                      const profileData = currentProfile || userData;
+                      const dueDateDuration = profileData?.invoiceSettings?.dueDateDuration || 7;
+                      
+                      return (
+                        <DatePicker
+                          label="Invoice Date"
+                          value={field.value}
+                          onChange={(newDate) => {
+                            field.onChange(newDate);
+                            // Automatically update due date based on profile settings
+                            if (newDate) {
+                              const newDueDate = addDays(newDate, dueDateDuration);
+                              setValue('dueDate', newDueDate);
+                            }
+                          }}
+                          renderInput={(params) => <TextField {...params} fullWidth />}
+                        />
+                      );
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
@@ -782,8 +882,7 @@ const CreateInvoice = () => {
                 >
                   Additional Information
                 </Typography>
-                <Grid container spacing={{ xs: 2, sm: 3 }}>
-                  <Grid item xs={12} md={8} lg={6}>
+                <Grid container spacing={{ xs: 2, sm: 3 }} style={{width: '100%'}}>
                     <Controller
                       name="notes"
                       control={control}
@@ -814,7 +913,6 @@ const CreateInvoice = () => {
                       )}
                     />
                   </Grid>
-                </Grid>
               </Box>
             </Paper>
           </Grid>
@@ -1010,6 +1108,25 @@ const CreateInvoice = () => {
               </Box>
 
                 <Box display="flex" flexDirection="column" gap={{ xs: 1, sm: 1.5, md: 2 }}>
+                {!isEditMode && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={setAsRecurring}
+                        onChange={(e) => setSetAsRecurring(e.target.checked)}
+                        color="primary"
+                      />
+                    }
+                    label="Set as recurring invoice"
+                    sx={{
+                      mb: 1,
+                      '& .MuiFormControlLabel-label': {
+                        fontSize: { xs: '0.875rem', sm: '1rem' },
+                        fontWeight: 500
+                      }
+                    }}
+                  />
+                )}
                 <Button
                   variant="outlined"
                   fullWidth
@@ -1169,6 +1286,25 @@ const CreateInvoice = () => {
           )}
         </DialogContent>
       </Dialog>
+      
+      {/* Recurring Invoice Dialog */}
+      {createdInvoice && (
+        <RecurringInvoiceDialog
+          open={recurringDialogOpen}
+          onClose={() => {
+            setRecurringDialogOpen(false);
+            navigate(`/invoices/${createdInvoice.id}`);
+          }}
+          invoiceData={{
+            ...createdInvoice,
+            startDate: createdInvoice.date // Use invoice date as start date
+          }}
+          onSuccess={() => {
+            setRecurringDialogOpen(false);
+            navigate('/recurring-invoices');
+          }}
+        />
+      )}
     </Container>
   );
 };

@@ -1,15 +1,19 @@
 const { onRequest } = require('firebase-functions/v2/https');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { setGlobalOptions } = require('firebase-functions/v2');
 const express = require('express');
-const cors = require('cors');
-
 // Import routes
 const customerRoutes = require('./routes/customerRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const userRoutes = require('./routes/userRoutes');
+const recurringInvoiceRoutes = require('./routes/recurringInvoiceRoutes');
 
 // Import middleware
 const { errorHandler } = require('./middleware/errorHandler');
+const { corsMiddleware, corsOptions } = require('./middleware/cors');
+
+// Import controller for scheduled functions
+const recurringInvoiceController = require('./controllers/recurringInvoiceController');
 
 // Set global options for all functions
 setGlobalOptions({
@@ -23,47 +27,8 @@ setGlobalOptions({
 // Initialize Express app
 const app = express();
 
-// Enable CORS with flexible configuration
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // Allow all localhost origins (any port)
-    const localhostPattern = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
-    
-    // Allow all Firebase hosting URLs (any subdomain of web.app or firebaseapp.com)
-    const firebaseHostingPattern = /^https:\/\/[a-zA-Z0-9-]+\.(web\.app|firebaseapp\.com)$/;
-    
-    // List of additional allowed origins
-    const allowedOrigins = [];
-    
-    // Allow custom domains if specified in environment
-    if (process.env.ALLOWED_DOMAINS) {
-      const customDomains = process.env.ALLOWED_DOMAINS.split(',').map(domain => domain.trim());
-      allowedOrigins.push(...customDomains);
-    }
-    
-    // Check if origin is allowed
-    if (localhostPattern.test(origin) ||
-        firebaseHostingPattern.test(origin) || 
-        allowedOrigins.includes(origin) ||
-        process.env.NODE_ENV === 'development') {
-      callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Profile-Id'],
-  exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  maxAge: 86400, // 24 hours
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+// Enable CORS with configuration from middleware
+app.use(corsMiddleware);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -82,12 +47,13 @@ app.get('/health', (req, res) => {
 });
 
 // Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
+app.options('*', corsMiddleware);
 
 // API Routes
 app.use('/customers', customerRoutes);
 app.use('/invoices', invoiceRoutes);
 app.use('/users', userRoutes); // Profile and stats routes
+app.use('/recurring-invoices', recurringInvoiceRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -110,3 +76,17 @@ exports.api = onRequest({
   maxInstances: 10,
   minInstances: 0
 }, app);
+
+// Scheduled function to automatically generate recurring invoices
+// Runs every day at 2:00 AM (server time)
+exports.generateRecurringInvoices = onSchedule({
+  schedule: 'every day 02:00',
+  timeZone: 'America/New_York', // Eastern Time
+  region: 'us-central1',
+  memory: '1GiB',
+  timeoutSeconds: 540, // 9 minutes
+  maxInstances: 1, // Prevent concurrent runs
+}, async (event) => {
+  // Delegate to controller method for better organization and testability
+  return await recurringInvoiceController.processScheduledGeneration();
+});

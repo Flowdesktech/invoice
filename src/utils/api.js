@@ -80,4 +80,17 @@ export const statsAPI = {
   get: () => api.get('/users/stats'),
 };
 
+// Recurring Invoice API endpoints
+export const recurringInvoiceAPI = {
+  getAll: () => api.get('/recurring-invoices'),
+  getById: (id) => api.get(`/recurring-invoices/${id}`),
+  create: (data) => api.post('/recurring-invoices', data),
+  update: (id, data) => api.put(`/recurring-invoices/${id}`, data),
+  pause: (id, pauseUntil) => api.post(`/recurring-invoices/${id}/pause`, { pauseUntil }),
+  resume: (id) => api.post(`/recurring-invoices/${id}/resume`),
+  stop: (id) => api.delete(`/recurring-invoices/${id}`),
+  generateNext: (id) => api.post(`/recurring-invoices/${id}/generate`),
+  getGeneratedInvoices: (id) => api.get(`/recurring-invoices/${id}/invoices`),
+};
+
 export default api;

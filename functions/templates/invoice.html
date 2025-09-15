@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Invoice {{invoice.invoiceNumber}}</title>
+    <title>Invoice {{invoice.formattedInvoiceNumber}}</title>
     <style>
         * {
             margin: 0;
@@ -248,7 +248,7 @@
             <div class="invoice-title">
                 <h2>INVOICE</h2>
                 <div class="invoice-meta">
-                    <p><strong>Invoice #:</strong> {{invoice.invoiceNumber}}</p>
+                    <p><strong>Invoice #:</strong> {{invoice.formattedInvoiceNumber}}</p>
                     <p><strong>Date:</strong> {{formatDate invoice.date}}</p>
                     <p><strong>Due Date:</strong> {{formatDate invoice.dueDate}}</p>
                 </div>

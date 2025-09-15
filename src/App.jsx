@@ -16,6 +16,7 @@ import Customers from './pages/Customers';
 import Invoices from './pages/Invoices';
 import CreateInvoice from './pages/CreateInvoice';
 import ViewInvoice from './pages/ViewInvoice';
+import RecurringInvoices from './pages/RecurringInvoices';
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -217,6 +218,10 @@ const router = createBrowserRouter([
           {
             path: 'invoices/:id/edit',
             element: <CreateInvoice />,
+          },
+          {
+            path: 'recurring-invoices',
+            element: <RecurringInvoices />,
           },
         ],
       },

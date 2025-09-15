@@ -23,12 +23,15 @@ import {
   Print as PrintIcon,
   Email as EmailIcon,
   ArrowBack as ArrowBackIcon,
+  Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
 import { invoiceAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
+import { formatInvoiceNumber } from '../utils/formatters';
 
 const ViewInvoice = () => {
   const { id } = useParams();
@@ -36,6 +39,7 @@ const ViewInvoice = () => {
   const { currentUser, userData } = useAuth();
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [recurringDialogOpen, setRecurringDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchInvoice();
@@ -154,7 +158,7 @@ const ViewInvoice = () => {
               <ArrowBackIcon />
             </IconButton>
             <Typography variant="h4">
-              Invoice #{invoice.invoiceNumber}
+              Invoice #{formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
             </Typography>
             <Chip
               label={invoice.status}
@@ -163,6 +167,13 @@ const ViewInvoice = () => {
             />
           </Box>
           <Box display="flex" gap={2} flexWrap="wrap">
+            <Button
+              variant="outlined"
+              startIcon={<ScheduleIcon />}
+              onClick={() => setRecurringDialogOpen(true)}
+            >
+              Make Recurring
+            </Button>
             <Button
               variant="outlined"
               startIcon={<PrintIcon />}
@@ -332,6 +343,20 @@ const ViewInvoice = () => {
           </Paper>
         </Grid>
       </Grid>
+
+      {/* Recurring Invoice Dialog */}
+      {invoice && (
+        <RecurringInvoiceDialog
+          open={recurringDialogOpen}
+          onClose={() => {
+            setRecurringDialogOpen(false);
+            // Navigate to recurring invoices page after creation
+            navigate('/recurring-invoices');
+          }}
+          invoice={invoice}
+          mode="create"
+        />
+      )}
     </Container>
   );
 };

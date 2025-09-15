@@ -43,6 +43,9 @@ class InvoiceController {
       userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
     }
     
+    // Get profile data if using profile
+    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+    
     // Ensure invoice settings exist
     if (!userData.invoiceSettings) {
       return res.status(400).json({
@@ -68,7 +71,8 @@ class InvoiceController {
         total: 0 // Will be calculated
       },
       userData: userData,
-      customer: customer
+      customer: customer,
+      profileData: profileData
     };
 
     // Calculate tax and total
@@ -105,6 +109,9 @@ class InvoiceController {
       userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
     }
     
+    // Get profile data if using profile
+    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+    
     // Ensure invoice settings exist
     if (!userData.invoiceSettings) {
       return res.status(400).json({
@@ -130,7 +137,7 @@ class InvoiceController {
     );
 
     // Update user's next invoice number
-    await userService.incrementInvoiceNumber(userId);
+    await userService.incrementInvoiceNumber(userId, req.profileId);
 
     res.status(201).json(invoice);
   });

@@ -43,6 +43,10 @@ const Register = () => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+      
+      // Detect user's system timezone
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/New_York';
+      
       await signup(
         data.email,
         data.password,
@@ -50,6 +54,7 @@ const Register = () => {
         {
           company: data.company,
           phone: data.phone,
+          timezone: timezone,
         }
       );
       navigate('/dashboard');
