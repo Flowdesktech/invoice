@@ -4,6 +4,18 @@ const { formatCurrency, formatDate } = require('../utils/formatters');
 
 class EmailService {
   constructor() {
+    // Lazy initialization - will be initialized on first use
+    this.mg = null;
+    this.domain = null;
+    this.initialized = false;
+  }
+
+  /**
+   * Initialize Mailgun client (lazy initialization)
+   */
+  initializeMailgun() {
+    if (this.initialized) return;
+    
     // Initialize Mailgun client
     const mailgun = new Mailgun(formData);
     const domain = process.env.MAILGUN_DOMAIN || 'mg.flowdesk.tech';
@@ -16,10 +28,14 @@ class EmailService {
         url: process.env.MAILGUN_EU ? 'https://api.eu.mailgun.net' : 'https://api.mailgun.net'
       });
       this.domain = domain;
+      console.log('Mailgun initialized successfully with domain:', domain);
     } else {
-      console.warn('Mailgun API key not configured');
+      console.error('Mailgun API key not found in environment variables');
+      console.log('Available env vars:', Object.keys(process.env).filter(key => key.includes('MAIL')));
       this.mg = null;
     }
+    
+    this.initialized = true;
   }
 
   /**
@@ -28,11 +44,14 @@ class EmailService {
    * @returns {Promise} Mailgun response
    */
   async sendInvoiceEmail(data) {
+    // Initialize Mailgun on first use
+    this.initializeMailgun();
+    
     const { invoice, customer, sender, customMessage, pdfBase64, recipients } = data;
 
     // Validate Mailgun configuration
-    if (!this.mg || !process.env.MAILGUN_API_KEY) {
-      throw new Error('Mailgun API key not configured');
+    if (!this.mg) {
+      throw new Error('Mailgun API key not configured. Please check your .env file.');
     }
 
     // Generate email content
@@ -86,11 +105,14 @@ class EmailService {
    * @returns {Promise} Mailgun response
    */
   async sendContactEmail(data) {
+    // Initialize Mailgun on first use
+    this.initializeMailgun();
+    
     const { name, email, subject, message } = data;
 
     // Validate Mailgun configuration
-    if (!this.mg || !process.env.MAILGUN_API_KEY) {
-      throw new Error('Mailgun API key not configured');
+    if (!this.mg) {
+      throw new Error('Mailgun API key not configured. Please check your .env file.');
     }
 
     // Generate email content

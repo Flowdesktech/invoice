@@ -16,6 +16,13 @@ const TermsOfService = () => {
 
   return (
     <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Terms of Service - FlowDesk Invoice Management</title>
+      <meta name="description" content="FlowDesk terms of service. Read our terms and conditions for using our free invoice management software. Clear, fair terms for all users." />
+      <meta name="keywords" content="terms of service, terms and conditions, user agreement, invoice software terms, FlowDesk terms" />
+      <link rel="canonical" href="https://flowdesk.tech/terms" />
+      <meta name="robots" content="index, follow" />
+      
       <Container maxWidth="md" sx={{ mt: 4, mb: 4, pb: 30 }}>
         <Button
           startIcon={<ArrowBackIcon />}

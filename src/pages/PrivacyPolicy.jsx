@@ -16,6 +16,13 @@ const PrivacyPolicy = () => {
 
   return (
     <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Privacy Policy - FlowDesk Invoice Management Software</title>
+      <meta name="description" content="FlowDesk privacy policy. Learn how we protect your data, what information we collect, and your privacy rights. We take your privacy seriously." />
+      <meta name="keywords" content="privacy policy, data protection, GDPR compliance, invoice software privacy, data security, user privacy rights" />
+      <link rel="canonical" href="https://flowdesk.tech/privacy" />
+      <meta name="robots" content="index, follow" />
+      
       <Container maxWidth="md" sx={{ mt: 4, mb: 4, pb: 30 }}>
         <Button
           startIcon={<ArrowBackIcon />}

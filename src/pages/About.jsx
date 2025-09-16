@@ -79,6 +79,38 @@ const About = () => {
 
   return (
     <>
+      {/* React 19 SEO Meta Tags */}
+      <title>About FlowDesk - Full Stack Developer & Invoice Software Creator</title>
+      <meta name="description" content="FlowDesk was built by a full stack developer specializing in React, Node.js, mobile apps, and blockchain. Available for custom software development and app maintenance." />
+      <meta name="keywords" content="full stack developer, react developer, node.js developer, invoice software developer, custom software development, app maintenance, freelance developer, web development services" />
+      <link rel="canonical" href="https://flowdesk.tech/about" />
+      
+      {/* Open Graph */}
+      <meta property="og:title" content="About FlowDesk - Professional Invoice Software & Development Services" />
+      <meta property="og:description" content="Built by a full stack developer who understands business needs. Available for custom development projects." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://flowdesk.tech/about" />
+      
+      {/* Structured Data for Developer */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "FlowDesk Developer",
+          "jobTitle": "Full Stack Developer",
+          "description": "Professional full stack developer specializing in React, Node.js, mobile apps, and blockchain development",
+          "knowsAbout": techStack,
+          "offers": {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Custom Software Development",
+              "description": "Full stack development, mobile apps, maintenance, and support"
+            }
+          }
+        })}
+      </script>
+      
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, pb: 30 }}>
         <Button
           startIcon={<ArrowBackIcon />}
@@ -174,6 +206,73 @@ const About = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Roadmap Section */}
+      <Box sx={{ mt: 6, mb: 6 }}>
+        <Typography variant="h4" sx={{ mb: 4, fontWeight: '600', textAlign: 'center' }}>
+          🚀 Coming Soon: Premium Features
+        </Typography>
+        
+        <Card sx={{ p: 4, bgcolor: '#f0f9ff', mb: 4 }}>
+          <Typography variant="body1" sx={{ mb: 2, textAlign: 'center', fontSize: '1.1rem' }}>
+            FlowDesk is <strong>100% FREE</strong> right now! Premium features are in development.
+          </Typography>
+          <Box sx={{ textAlign: 'center', mb: 3 }}>
+            <Chip 
+              label="Early adopters get 50% off premium plans forever!" 
+              color="success" 
+              size="medium"
+            />
+          </Box>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 3, height: '100%' }}>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+                  🤖 AI Payment Predictor
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  • Predict payment dates with 90% accuracy<br/>
+                  • Cash flow forecasting dashboard<br/>
+                  • Auto-schedule follow-ups<br/>
+                  • Risk scoring for new clients<br/>
+                  • Payment behavior analytics
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 3, height: '100%' }}>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+                  🎯 Smart Invoice Optimization
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  • A/B test invoice designs<br/>
+                  • Optimize payment terms per client<br/>
+                  • Best send time detection<br/>
+                  • Personalized invoice messaging<br/>
+                  • Conversion rate tracking
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ p: 3, height: '100%' }}>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
+                  ⚡ Smart Payment Incentives
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  • Automate early payment discounts<br/>
+                  • Gamified "rewards" experience<br/>
+                  • Dynamic discount optimization<br/>
+                  • Payment milestone badges<br/>
+                  • Client payment leaderboards
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Card>
+      </Box>
 
       {/* CTA Section */}
       <Paper sx={{ p: 4, textAlign: 'center', backgroundColor: 'primary.main', color: 'white' }}>

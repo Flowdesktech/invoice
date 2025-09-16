@@ -143,7 +143,7 @@ const Footer = () => {
             <Typography variant="body2" color="text.secondary">
               Available Monday - Friday
               <br />
-              9:00 AM - 5:00 PM EST
+              9:00 AM - 9:00 PM CST
             </Typography>
           </Grid>
         </Grid>

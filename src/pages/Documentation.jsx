@@ -81,6 +81,30 @@ const Documentation = () => {
 
   return (
     <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Documentation - FlowDesk Invoice Management Guide</title>
+      <meta name="description" content="Complete FlowDesk documentation. Learn how to create invoices, manage customers, set up recurring billing, and use all features of our free invoice software." />
+      <meta name="keywords" content="FlowDesk documentation, invoice software guide, how to use FlowDesk, invoice management tutorial, billing software help" />
+      <link rel="canonical" href="https://flowdesk.tech/docs" />
+      <meta name="robots" content="index, follow" />
+      
+      {/* Documentation Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "TechArticle",
+          "headline": "FlowDesk Documentation",
+          "description": "Complete guide to using FlowDesk invoice management software",
+          "url": "https://flowdesk.tech/docs",
+          "datePublished": "2025-09-01",
+          "dateModified": "2025-09-16",
+          "author": {
+            "@type": "Organization",
+            "name": "FlowDesk"
+          }
+        })}
+      </script>
+      
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, pb: 30 }}>
         <Button
           startIcon={<ArrowBackIcon />}

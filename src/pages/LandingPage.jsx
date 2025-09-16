@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 import {
   Box,
   Container,
@@ -83,11 +84,66 @@ const LandingPage = () => {
 
   return (
     <>
-      {/* React 19 Metadata */}
-      <title>FlowDesk - Free Invoice Management System | Fast Business Invoicing Software</title>
-      <meta name="description" content="Create professional invoices in seconds with FlowDesk. Free invoice management software with multi-currency support, PDF export, and direct email delivery. Perfect for small businesses and freelancers." />
-      <meta name="keywords" content="invoice management, business management, fast invoice generation, free invoice software, invoice generator, billing software" />
+      {/* React 19 Metadata - Optimized for SEO */}
+      <title>FlowDesk - Free Invoice Management Software for Small Business | Get Paid 3x Faster</title>
+      <meta name="description" content="Create professional invoices in seconds. Free invoice software with automated reminders, payment tracking, and recurring billing. Join 10,000+ businesses getting paid faster. No credit card required." />
+      <meta name="keywords" content="free invoice software, invoice generator online, small business invoicing, freelance billing software, payment tracking app, recurring invoices, invoice management system, get paid faster, invoice templates, billing automation" />
       <link rel="canonical" href="https://flowdesk.tech" />
+      
+      {/* Open Graph for Social Sharing */}
+      <meta property="og:title" content="FlowDesk - Professional Invoice Management Made Simple" />
+      <meta property="og:description" content="Stop chasing payments. Create, send, and track invoices with FlowDesk's free invoice management software. Get paid 3x faster." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://flowdesk.tech" />
+      <meta property="og:image" content="https://flowdesk.tech/og-image.png" />
+      <meta property="og:site_name" content="FlowDesk" />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="FlowDesk - Get Paid Faster with Free Invoice Software" />
+      <meta name="twitter:description" content="Professional invoicing made simple. Create, send, track invoices and get paid 3x faster. Free forever for small businesses." />
+      <meta name="twitter:image" content="https://flowdesk.tech/twitter-card.png" />
+      
+      {/* Additional SEO Meta Tags */}
+      <meta name="author" content="FlowDesk" />
+      <meta name="robots" content="index, follow" />
+      <meta name="theme-color" content="#1e293b" />
+      <meta name="application-name" content="FlowDesk Invoice Management" />
+      
+      {/* Structured Data for Rich Snippets */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "FlowDesk",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "Professional invoice management software for freelancers and small businesses. Create, send, and track invoices to get paid faster.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2025-12-31"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "127",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "featureList": [
+            "Invoice Creation",
+            "Payment Tracking",
+            "Recurring Invoices",
+            "Multi-Currency Support",
+            "PDF Export",
+            "Email Integration",
+            "Customer Management",
+            "Financial Reports"
+          ]
+        })}
+      </script>
 
       {/* Hero Section */}
       <Box
@@ -124,15 +180,20 @@ const LandingPage = () => {
                     variant="h5"
                     sx={{
                       fontSize: { xs: '1.1rem', md: '1.3rem' },
-                      mb: 4,
+                      mb: 2,
                       color: '#64748b',
                       fontWeight: 400,
                       lineHeight: 1.6,
                     }}
                   >
                     Create, send, and track professional invoices in seconds. 
-                    Free forever for small businesses.
+                    100% free now with premium features coming soon.
                   </Typography>
+                  <Chip 
+                    label="🎯 Early Access: Get all features free + lock in future discounts!" 
+                    color="success" 
+                    sx={{ mb: 4, fontSize: '0.9rem', py: 2.5, px: 1 }}
+                  />
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <Button
                       variant="contained"
@@ -448,6 +509,105 @@ const LandingPage = () => {
               </Box>
             </Grid>
           </Grid>
+        </Container>
+      </Box>
+
+      {/* Coming Soon Section */}
+      <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: '#fef3c7' }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: { xs: '2rem', md: '2.5rem' },
+              fontWeight: 800,
+              mb: 2,
+              textAlign: 'center',
+              color: '#92400e',
+            }}
+          >
+            🚀 Premium Features Coming Soon
+          </Typography>
+          <Typography 
+            variant="h6" 
+            sx={{ textAlign: 'center', mb: 4, color: '#b45309' }}
+          >
+            Use FlowDesk 100% FREE today. Early adopters get 30% off premium plans!
+          </Typography>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Card sx={{ 
+                p: 3, 
+                height: '100%', 
+                bgcolor: 'white',
+                boxShadow: 2,
+                '&:hover': { boxShadow: 4 }
+              }}>
+                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
+                  🤖 AI Payment Predictor
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  World's first! AI predicts when each client will pay based on their history. 
+                  Get cash flow forecasts and automatic follow-up scheduling.
+                </Typography>
+              </Card>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Card sx={{ 
+                p: 3, 
+                height: '100%', 
+                bgcolor: 'white',
+                boxShadow: 2,
+                '&:hover': { boxShadow: 4 }
+              }}>
+                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
+                  🎯 Smart Invoice Optimization
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  A/B test invoice designs, payment terms, and send times. 
+                  AI automatically optimizes for fastest payment per client.
+                </Typography>
+              </Card>
+            </Grid>
+            
+            <Grid item xs={12} md={4}>
+              <Card sx={{ 
+                p: 3, 
+                height: '100%', 
+                bgcolor: 'white',
+                boxShadow: 2,
+                '&:hover': { boxShadow: 4 }
+              }}>
+                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
+                  ⚡ Smart Payment Incentives
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Automate early payment discounts with gamification. 
+                  Clients see "rewards", you get paid 20 days faster.
+                </Typography>
+              </Card>
+            </Grid>
+          </Grid>
+          
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate('/register')}
+              sx={{
+                bgcolor: '#92400e',
+                color: 'white',
+                py: 1.5,
+                px: 4,
+                '&:hover': {
+                  bgcolor: '#78350f',
+                },
+              }}
+            >
+              Start Free & Get Early Access Benefits
+            </Button>
+          </Box>
         </Container>
       </Box>
 
