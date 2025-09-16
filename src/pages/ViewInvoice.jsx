@@ -27,7 +27,8 @@ import {
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
-import { invoiceAPI } from '../utils/api';
+import { invoiceAPI, customerAPI } from '../utils/api';
+import SendInvoiceDialog from '../components/SendInvoiceDialog';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
@@ -36,14 +37,24 @@ import { formatInvoiceNumber } from '../utils/formatters';
 const ViewInvoice = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { currentUser, userData } = useAuth();
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [recurringDialogOpen, setRecurringDialogOpen] = useState(false);
+  const [sendDialogOpen, setSendDialogOpen] = useState(false);
+  const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
     fetchInvoice();
   }, [id]);
+
+  // Check if send parameter is present and open send dialog
+  useEffect(() => {
+    if (searchParams.get('send') === 'true' && invoice && customer) {
+      setSendDialogOpen(true);
+    }
+  }, [searchParams, invoice, customer]);
 
   const fetchInvoice = async () => {
     if (!currentUser || !id) return;
@@ -51,7 +62,18 @@ const ViewInvoice = () => {
     try {
       setLoading(true);
       const response = await invoiceAPI.getById(id);
-      setInvoice(response.data);
+      const invoiceData = response.data;
+      setInvoice(invoiceData);
+      
+      // Fetch customer data for sending emails
+      if (invoiceData.customerId) {
+        try {
+          const customerResponse = await customerAPI.getById(invoiceData.customerId);
+          setCustomer(customerResponse.data);
+        } catch (error) {
+          console.error('Error fetching customer:', error);
+        }
+      }
     } catch (error) {
       console.error('Error fetching invoice:', error);
       Swal.fire({
@@ -122,6 +144,50 @@ const ViewInvoice = () => {
     }).format(amount || 0);
   };
 
+  const handleSendInvoice = async (sendData) => {
+    try {
+      const loadingToast = toast.loading('Sending invoice...');
+      
+      // Handle both old format (string) and new format (object with message and recipients)
+      const payload = typeof sendData === 'string' 
+        ? { customMessage: sendData } 
+        : { 
+            customMessage: sendData.message, 
+            recipients: sendData.recipients 
+          };
+      
+      const response = await invoiceAPI.send(id, payload);
+      
+      toast.dismiss(loadingToast);
+      
+      const recipientCount = sendData.recipients?.length || 1;
+      toast.success(
+        `Invoice sent successfully to ${recipientCount} recipient${recipientCount !== 1 ? 's' : ''}!`
+      );
+      
+      // Refresh invoice to get updated sent count
+      fetchInvoice();
+      
+      return response.data;
+    } catch (error) {
+      toast.dismiss();
+      console.error('Error sending invoice:', error);
+      
+      const errorMessage = error.response?.data?.error || 
+                          error.response?.data?.message || 
+                          'Failed to send invoice. Please check your email configuration.';
+      
+      Swal.fire({
+        title: 'Error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonColor: '#3085d6'
+      });
+      
+      throw error;
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'paid':
@@ -171,6 +237,8 @@ const ViewInvoice = () => {
               variant="outlined"
               startIcon={<ScheduleIcon />}
               onClick={() => setRecurringDialogOpen(true)}
+              disabled={!!invoice.recurringInvoiceId}
+              title={invoice.recurringInvoiceId ? "This invoice was generated from a recurring template" : "Create recurring invoice from this template"}
             >
               Make Recurring
             </Button>
@@ -180,6 +248,14 @@ const ViewInvoice = () => {
               onClick={handleDownloadPDF}
             >
               Download PDF
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<EmailIcon />}
+              onClick={() => setSendDialogOpen(true)}
+              color="primary"
+            >
+              Send Invoice
             </Button>
             <Button
               variant="contained"
@@ -355,6 +431,26 @@ const ViewInvoice = () => {
           }}
           invoice={invoice}
           mode="create"
+        />
+      )}
+
+      {/* Send Invoice Dialog */}
+      {invoice && customer && (
+        <SendInvoiceDialog
+          open={sendDialogOpen}
+          onClose={() => setSendDialogOpen(false)}
+          invoice={{
+            ...invoice,
+            formattedInvoiceNumber: formatInvoiceNumber(
+              invoice.invoiceNumber,
+              userData?.profiles?.find(p => p.id === userData?.activeProfileId)?.invoiceSettings?.prefix || 
+              userData?.invoiceSettings?.prefix || 
+              'INV'
+            ),
+            userData: userData
+          }}
+          customer={customer}
+          onSend={handleSendInvoice}
         />
       )}
     </Container>

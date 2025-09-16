@@ -151,7 +151,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Customer Name"
+                    label="Customer Name *"
                     fullWidth
                     error={!!errors.name}
                     helperText={errors.name?.message}
@@ -176,7 +176,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Email"
+                    label="Email *"
                     type="email"
                     fullWidth
                     error={!!errors.email}

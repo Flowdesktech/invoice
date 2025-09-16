@@ -7,6 +7,7 @@ const customerRoutes = require('./routes/customerRoutes');
 const invoiceRoutes = require('./routes/invoiceRoutes');
 const userRoutes = require('./routes/userRoutes');
 const recurringInvoiceRoutes = require('./routes/recurringInvoiceRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 // Import middleware
 const { errorHandler } = require('./middleware/errorHandler');
@@ -54,6 +55,7 @@ app.use('/customers', customerRoutes);
 app.use('/invoices', invoiceRoutes);
 app.use('/users', userRoutes); // Profile and stats routes
 app.use('/recurring-invoices', recurringInvoiceRoutes);
+app.use('/contact', contactRoutes);
 
 // 404 handler
 app.use((req, res) => {

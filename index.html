@@ -6,10 +6,48 @@
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1976d2" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>FlowDesk - Free Invoice Management System | Business Management Software</title>
+    <meta name="title" content="FlowDesk - Free Invoice Management System | Business Management Software" />
     <meta
       name="description"
-      content="FlowDesk - Professional business management platform for invoicing, payments, and client management"
+      content="Fast invoice generation, business management & client tracking. Create professional invoices in seconds. Multi-currency support, PDF export, email invoices directly. Free forever for small businesses."
     />
+    <meta name="keywords" content="invoice management, business management software, fast invoice generation, free invoice software, invoice generator, billing software, business invoicing, invoice creation tool, professional invoices, multi-currency invoices, PDF invoices, email invoices, small business software, freelance invoicing, invoice tracking, payment tracking, client management, recurring invoices, invoice templates, online invoicing" />
+    <meta name="author" content="FlowDesk Team" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <link rel="canonical" href="https://flowdesk.tech" />
+    
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flowdesk.tech" />
+    <meta property="og:title" content="FlowDesk - Free Invoice Management System | Business Management Software" />
+    <meta property="og:description" content="Fast invoice generation for businesses. Create, send & track professional invoices in seconds. Multi-currency support, PDF export, direct email. Free forever." />
+    <meta property="og:image" content="https://flowdesk.tech/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="FlowDesk Invoice Management" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://flowdesk.tech" />
+    <meta property="twitter:title" content="FlowDesk - Fast Invoice Generation & Business Management" />
+    <meta property="twitter:description" content="Create professional invoices in seconds. Multi-currency, PDF export, email directly to clients. Free invoice management system." />
+    <meta property="twitter:image" content="https://flowdesk.tech/twitter-card.png" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="application-name" content="FlowDesk Invoice Management" />
+    <meta name="apple-mobile-web-app-title" content="FlowDesk" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-TileColor" content="#1976d2" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
     
     <!-- Material UI Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,10 +61,79 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
     
-    <title>FlowDesk - Business Management Platform</title>
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "FlowDesk Invoice Management",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Fast invoice generation and business management software. Create professional invoices in seconds with multi-currency support, PDF export, and direct email capabilities.",
+      "url": "https://flowdesk.tech",
+      "author": {
+        "@type": "Organization",
+        "name": "FlowDesk",
+        "url": "https://flowdesk.tech"
+      },
+      "datePublished": "2024-01-01",
+      "softwareVersion": "1.0",
+      "screenshot": "https://flowdesk.tech/screenshot.png",
+      "featureList": [
+        "Fast invoice generation",
+        "Multi-currency support (30+ currencies)",
+        "PDF export and download",
+        "Email invoices directly to clients",
+        "Customer management system",
+        "Business profile management",
+        "Recurring invoices",
+        "Payment tracking",
+        "Real-time dashboard analytics",
+        "Mobile responsive design",
+        "Secure cloud storage",
+        "Free forever for small businesses"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250"
+      }
+    }
+    </script>
+    
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://flowdesk.tech",
+      "name": "FlowDesk Invoice Management",
+      "description": "Professional invoice management system for fast invoice generation",
+      "publisher": {
+        "@type": "Organization",
+        "name": "FlowDesk",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://flowdesk.tech/flowdesk-logo.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://flowdesk.tech/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
     <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>

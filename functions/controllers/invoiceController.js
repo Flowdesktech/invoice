@@ -2,6 +2,7 @@ const invoiceService = require('../services/invoiceService');
 const userService = require('../services/userService');
 const customerService = require('../services/customerService');
 const pdfService = require('../services/pdfService');
+const emailService = require('../services/emailService');
 const { asyncHandler } = require('../middleware/errorHandler');
 
 /**
@@ -236,6 +237,100 @@ class InvoiceController {
     res.json({
       pdf: pdfBase64,
       invoiceNumber: invoice.invoiceNumber
+    });
+  });
+
+  /**
+   * Send invoice via email
+   */
+  sendInvoice = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { customMessage, recipients } = req.body;
+    const userId = req.user.uid;
+
+    // Get invoice with customer data
+    const invoice = await invoiceService.getInvoiceById(id, userId, req.profileId);
+    
+    // Get customer data
+    const customer = await customerService.getCustomerById(invoice.customerId, userId, req.profileId);
+    
+    // Handle recipients - use provided recipients or fall back to customer email
+    let emailRecipients = recipients;
+    
+    // If no recipients provided, use customer email
+    if (!emailRecipients || emailRecipients.length === 0) {
+      if (!customer.email) {
+        return res.status(400).json({
+          error: 'No recipients specified',
+          message: 'Please provide at least one email recipient'
+        });
+      }
+      emailRecipients = [customer.email];
+    }
+    
+    // Validate all recipients
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const invalidEmails = emailRecipients.filter(email => !emailRegex.test(email));
+    
+    if (invalidEmails.length > 0) {
+      return res.status(400).json({
+        error: 'Invalid email addresses',
+        message: `The following email addresses are invalid: ${invalidEmails.join(', ')}`
+      });
+    }
+    
+    // Get user data
+    const userData = await userService.getUserById(userId);
+    
+    // Get profile data if using profile
+    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+    
+    // Prepare sender info (prioritize profile data)
+    const sender = {
+      company: profileData?.company || userData?.company || 'Your Company',
+      displayName: profileData?.displayName || userData?.displayName,
+      email: profileData?.email || userData?.email,
+      phone: profileData?.phone || userData?.phone
+    };
+    
+    // Generate PDF for attachment
+    const pdfData = {
+      invoice,
+      userData,
+      customer,
+      profileData
+    };
+    
+    const pdfBase64 = await pdfService.generateInvoicePDF(pdfData);
+    
+    // Get invoice prefix for formatted number
+    const invoicePrefix = profileData?.invoiceSettings?.prefix || userData?.invoiceSettings?.prefix || 'INV';
+    
+    // Send email with PDF attachment
+    const emailData = {
+      invoice: {
+        ...invoice,
+        formattedInvoiceNumber: `${invoicePrefix}-${String(invoice.invoiceNumber).padStart(5, '0')}`
+      },
+      customer,
+      sender,
+      customMessage,
+      recipients: emailRecipients, // Pass the array of recipient emails
+      pdfBase64: pdfBase64.replace(/^data:application\/pdf;base64,/, '') // Remove data URL prefix
+    };
+    
+    const emailResult = await emailService.sendInvoiceEmail(emailData);
+    
+    // Update invoice to track that it was sent
+    await invoiceService.updateInvoice(id, {
+      lastSentDate: Date.now(),
+      sentCount: (invoice.sentCount || 0) + 1
+    }, userId, req.profileId);
+    
+    res.json({
+      success: true,
+      message: 'Invoice sent successfully',
+      emailResult
     });
   });
 }

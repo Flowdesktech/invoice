@@ -66,16 +66,23 @@ const Register = () => {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          marginTop: 4,
-          marginBottom: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+    <>
+      {/* React 19 Metadata for SEO */}
+      <title>Register - FlowDesk Invoice Management | Create Free Account</title>
+      <meta name="description" content="Create your free FlowDesk account today. Start managing invoices, tracking payments, and growing your business with the best free invoice management software." />
+      <meta name="keywords" content="flowdesk register, create invoice account, free invoice software signup, business management registration" />
+      <link rel="canonical" href="https://flowdesk.tech/register" />
+      
+      <Container component="main" maxWidth="sm">
+        <Box
+          sx={{
+            marginTop: 4,
+            marginBottom: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Box display="flex" justifyContent="center" mb={2}>
             <Logo variant="full" size="large" />
@@ -89,7 +96,7 @@ const Register = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Full Name"
+                  label="Full Name *"
                   autoComplete="name"
                   autoFocus
                   error={!!errors.displayName}
@@ -114,7 +121,7 @@ const Register = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  label="Email Address *"
                   type="email"
                   autoComplete="email"
                   error={!!errors.email}
@@ -172,7 +179,7 @@ const Register = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Password"
+                  label="Password *"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   error={!!errors.password}
@@ -208,7 +215,7 @@ const Register = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Confirm Password"
+                  label="Confirm Password *"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   error={!!errors.confirmPassword}
@@ -249,11 +256,17 @@ const Register = () => {
                   Sign in
                 </Link>
               </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: '#1976d2' }}>
+                  ← Back to Home
+                </Link>
+              </Typography>
             </Box>
           </Box>
         </Paper>
       </Box>
     </Container>
+    </>
   );
 };
 

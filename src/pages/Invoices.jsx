@@ -24,6 +24,7 @@ import {
   Checkbox,
   Toolbar,
   Tooltip,
+  Skeleton,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -35,6 +36,7 @@ import {
   FilterList as FilterIcon,
   FileCopy as FileCopyIcon,
   Schedule as ScheduleIcon,
+  Send as SendIcon,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -435,9 +437,57 @@ const Invoices = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <CircularProgress />
-      </Box>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+            <Skeleton variant="text" width={200} height={40} />
+            <Box display="flex" gap={2}>
+              <Skeleton variant="rectangular" width={100} height={40} />
+              <Skeleton variant="rectangular" width={120} height={40} />
+            </Box>
+          </Box>
+        </Paper>
+        <Paper>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Skeleton variant="rectangular" width={20} height={20} />
+                  </TableCell>
+                  {['Invoice #', 'Customer', 'Date', 'Due Date', 'Amount', 'Status', 'Actions'].map((header) => (
+                    <TableCell key={header}>
+                      <Skeleton variant="text" width={header === 'Actions' ? 150 : 80} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {[...Array(5)].map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell padding="checkbox">
+                      <Skeleton variant="rectangular" width={20} height={20} />
+                    </TableCell>
+                    <TableCell><Skeleton variant="text" width={100} /></TableCell>
+                    <TableCell><Skeleton variant="text" width={120} /></TableCell>
+                    <TableCell><Skeleton variant="text" width={80} /></TableCell>
+                    <TableCell><Skeleton variant="text" width={80} /></TableCell>
+                    <TableCell><Skeleton variant="text" width={60} /></TableCell>
+                    <TableCell><Skeleton variant="rectangular" width={80} height={30} /></TableCell>
+                    <TableCell>
+                      <Box display="flex" gap={0.5}>
+                        {[...Array(5)].map((_, i) => (
+                          <Skeleton key={i} variant="circular" width={30} height={30} />
+                        ))}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Container>
     );
   }
 
@@ -660,6 +710,14 @@ const Invoices = () => {
                             title="View Invoice"
                           >
                             <ViewIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => navigate(`/invoices/${invoice.id}?send=true`)}
+                            title="Send Invoice"
+                            color="primary"
+                          >
+                            <SendIcon />
                           </IconButton>
                           <IconButton
                             size="small"

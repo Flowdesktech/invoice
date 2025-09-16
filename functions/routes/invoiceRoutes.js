@@ -78,6 +78,15 @@ router.patch(
   invoiceController.updateInvoiceStatus
 );
 
+// Send invoice via email
+router.post(
+  '/:id/send',
+  authenticate,
+  invoiceValidators.getById,
+  handleValidationErrors,
+  invoiceController.sendInvoice
+);
+
 // Delete invoice
 router.delete(
   '/:id',

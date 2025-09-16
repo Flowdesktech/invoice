@@ -67,6 +67,7 @@ export const invoiceAPI = {
   delete: (id) => api.delete(`/invoices/${id}`),
   getStats: () => api.get('/invoices/stats'),
   generatePdf: (id) => api.get(`/invoices/${id}/pdf`),
+  send: (id, data) => api.post(`/invoices/${id}/send`, data),
 };
 
 // User Profile API endpoints

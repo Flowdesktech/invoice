@@ -115,6 +115,7 @@ class InvoiceService {
       taxRate,
       taxAmount,
       total,
+      recurringInvoiceId: invoiceData.recurringInvoiceId,
       notes: invoiceData.notes || '',
       paymentTerms: invoiceData.paymentTerms || userData.invoiceSettings?.paymentTerms || 'Due on receipt',
       currency: invoiceData.currency || userData.invoiceSettings?.currency || 'USD',

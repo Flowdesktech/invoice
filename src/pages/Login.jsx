@@ -54,15 +54,22 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+    <>
+      {/* React 19 Metadata for SEO */}
+      <title>Login - FlowDesk Invoice Management | Sign In to Your Account</title>
+      <meta name="description" content="Sign in to FlowDesk to manage your invoices, track payments, and grow your business. Secure login for the best invoice management software." />
+      <meta name="keywords" content="flowdesk login, invoice management login, business software login, sign in" />
+      <link rel="canonical" href="https://flowdesk.tech/login" />
+      
+      <Container component="main" maxWidth="xs">
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
         <Paper elevation={3} sx={{ padding: 4, width: '100%' }}>
           <Box display="flex" justifyContent="center" mb={2}>
             <Logo variant="full" size="large" />
@@ -84,7 +91,7 @@ const Login = () => {
           <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <TextField
               fullWidth
-              label="Email Address"
+              label="Email Address *"
               type="email"
               margin="normal"
               autoComplete="email"
@@ -109,7 +116,7 @@ const Login = () => {
             
             <TextField
               fullWidth
-              label="Password"
+              label="Password *"
               type={showPassword ? 'text' : 'password'}
               margin="normal"
               autoComplete="current-password"
@@ -174,11 +181,17 @@ const Login = () => {
                   Sign up
                 </Link>
               </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                <Link to="/" style={{ textDecoration: 'none', color: '#1976d2' }}>
+                  ← Back to Home
+                </Link>
+              </Typography>
             </Box>
           </Box>
         </Paper>
       </Box>
     </Container>
+    </>
   );
 };
 

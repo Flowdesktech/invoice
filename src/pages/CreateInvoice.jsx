@@ -540,7 +540,7 @@ const CreateInvoice = () => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Customer"
+                            label="Customer *"
                             error={!!errors.customer}
                             helperText={errors.customer?.message}
                             fullWidth
@@ -739,7 +739,7 @@ const CreateInvoice = () => {
                       
                       return (
                         <DatePicker
-                          label="Invoice Date"
+                          label="Invoice Date *"
                           value={field.value}
                           onChange={(newDate) => {
                             field.onChange(newDate);
@@ -761,7 +761,7 @@ const CreateInvoice = () => {
                     control={control}
                     render={({ field }) => (
                       <DatePicker
-                        label="Due Date"
+                        label="Due Date *"
                         value={field.value}
                         onChange={field.onChange}
                         renderInput={(params) => <TextField {...params} fullWidth />}

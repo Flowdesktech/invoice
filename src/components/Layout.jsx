@@ -29,6 +29,7 @@ import {
   Logout as LogoutIcon,
   Add as AddIcon,
   Schedule as ScheduleIcon,
+  MailOutline as MailOutlineIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
@@ -321,6 +322,24 @@ const Layout = () => {
                 </ListItemIcon>
                 <Typography sx={{ fontSize: '0.875rem' }}>
                   My Profile
+                </Typography>
+              </MenuItem>
+              <MenuItem 
+                onClick={() => { navigate('/contact'); handleMenuClose(); }}
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                  },
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                }}
+              >
+                <MailOutlineIcon sx={{ fontSize: '1.25rem', color: 'text.secondary' }} />
+                <Typography sx={{ fontSize: '0.875rem' }}>
+                  Contact Support
                 </Typography>
               </MenuItem>
               <Divider sx={{ my: 0.5 }} />

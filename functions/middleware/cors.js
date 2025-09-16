@@ -24,6 +24,9 @@ const corsOptions = {
     // Pattern to match all subdomains of coremaven.tech (including the root domain)
     const coremavenPattern = /^https:\/\/([a-zA-Z0-9-]+\.)?coremaven\.tech$/;
     
+    // Pattern to match flowdesk.tech and its subdomains
+    const flowdeskPattern = /^https:\/\/([a-zA-Z0-9-]+\.)?flowdesk\.tech$/;
+    
     // List of additional allowed origins
     const allowedOrigins = [];
     
@@ -40,6 +43,7 @@ const corsOptions = {
     if (localhostPattern.test(origin) ||
         firebaseHostingPattern.test(origin) ||
         coremavenPattern.test(origin) ||
+        flowdeskPattern.test(origin) ||
         allowedOrigins.includes(origin) ||
         process.env.NODE_ENV === 'development') {
       callback(null, true);

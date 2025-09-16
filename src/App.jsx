@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,10 +17,14 @@ import Invoices from './pages/Invoices';
 import CreateInvoice from './pages/CreateInvoice';
 import ViewInvoice from './pages/ViewInvoice';
 import RecurringInvoices from './pages/RecurringInvoices';
+import LandingPage from './pages/LandingPage';
+import Features from './pages/Features';
+import Contact from './pages/Contact';
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
+import SocialImageGenerator from './components/SocialImageGenerator';
 
 // Create MUI theme with professional admin dashboard colors
 const theme = createTheme({
@@ -170,8 +174,18 @@ const theme = createTheme({
   },
 });
 
+// Component to handle root route
+const RootRoute = () => {
+  const { currentUser } = useAuth();
+  return currentUser ? <Navigate to="/dashboard" replace /> : <LandingPage />;
+};
+
 // Create router with React Router v7 syntax
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootRoute />,
+  },
   {
     path: '/login',
     element: <Login />,
@@ -181,16 +195,24 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: '/generate-social-images',
+    element: <SocialImageGenerator />,
+  },
+  {
+    path: '/features',
+    element: <Features />,
+  },
+  {
+    path: '/contact',
+    element: <Contact />,
+  },
+  {
     path: '/',
     element: <PrivateRoute />,
     children: [
       {
         element: <Layout />,
         children: [
-          {
-            index: true,
-            element: <Navigate to="/dashboard" replace />,
-          },
           {
             path: 'dashboard',
             element: <Dashboard />,
@@ -221,6 +243,10 @@ const router = createBrowserRouter([
           },
           {
             path: 'recurring-invoices',
+            element: <RecurringInvoices />,
+          },
+          {
+            path: 'recurring-invoices/:id/invoices',
             element: <RecurringInvoices />,
           },
         ],
