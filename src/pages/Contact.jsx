@@ -16,6 +16,7 @@ import {
   Fade,
   IconButton,
 } from '@mui/material';
+import Footer from '../components/Footer';
 import {
   Email as EmailIcon,
   Phone as PhoneIcon,
@@ -524,6 +525,9 @@ const Contact = () => {
           Message sent successfully! We'll get back to you soon.
         </Alert>
       </Snackbar>
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

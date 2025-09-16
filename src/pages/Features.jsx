@@ -17,6 +17,7 @@ import {
   Fade,
   Grow,
 } from '@mui/material';
+import Footer from '../components/Footer';
 import {
   Speed as SpeedIcon,
   AttachMoney as MoneyIcon,
@@ -504,6 +505,9 @@ const Features = () => {
           </Box>
         </Container>
       </Box>
+
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

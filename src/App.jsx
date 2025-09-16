@@ -30,6 +30,8 @@ import Blog from './pages/Blog';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 import SocialImageGenerator from './components/SocialImageGenerator';
+import ScrollToTop from './components/ScrollToTop';
+import RootLayout from './components/RootLayout';
 
 // Create MUI theme with professional admin dashboard colors
 const theme = createTheme({
@@ -189,55 +191,59 @@ const RootRoute = () => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootRoute />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-  },
-  {
-    path: '/generate-social-images',
-    element: <SocialImageGenerator />,
-  },
-  {
-    path: '/features',
-    element: <Features />,
-  },
-  {
-    path: '/contact',
-    element: <Contact />,
-  },
-  {
-    path: '/privacy',
-    element: <PrivacyPolicy />,
-  },
-  {
-    path: '/terms',
-    element: <TermsOfService />,
-  },
-  {
-    path: '/docs',
-    element: <Documentation />,
-  },
-  {
-    path: '/about',
-    element: <About />,
-  },
-  {
-    path: '/blog',
-    element: <Blog />,
-  },
-  {
-    path: '/',
-    element: <PrivateRoute />,
+    element: <RootLayout />, // Wrap all routes with RootLayout for ScrollToTop
     children: [
       {
-        element: <Layout />,
+        path: '/',
+        element: <RootRoute />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
+        path: '/generate-social-images',
+        element: <SocialImageGenerator />,
+      },
+      {
+        path: '/features',
+        element: <Features />,
+      },
+      {
+        path: '/contact',
+        element: <Contact />,
+      },
+      {
+        path: '/privacy',
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: '/terms',
+        element: <TermsOfService />,
+      },
+      {
+        path: '/docs',
+        element: <Documentation />,
+      },
+      {
+        path: '/about',
+        element: <About />,
+      },
+      {
+        path: '/blog',
+        element: <Blog />,
+      },
+      {
+        path: '/',
+        element: <PrivateRoute />,
         children: [
+          {
+            element: <Layout />,
+            children: [
           {
             path: 'dashboard',
             element: <Dashboard />,
@@ -273,6 +279,8 @@ const router = createBrowserRouter([
           {
             path: 'recurring-invoices/:id/invoices',
             element: <RecurringInvoices />,
+          },
+            ],
           },
         ],
       },
