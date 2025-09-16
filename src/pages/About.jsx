@@ -187,7 +187,7 @@ const About = () => {
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {services.map((service) => (
-          <Grid item xs={12} sm={6} md={4} key={service.title}>
+          <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={service.title}>
             <Card sx={{ height: '100%' }}>
               <CardContent>
                 <Box display="flex" alignItems="center" mb={2}>
@@ -226,7 +226,7 @@ const About = () => {
           </Box>
           
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 3, height: '100%' }}>
                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                   🤖 AI Payment Predictor
@@ -241,7 +241,7 @@ const About = () => {
               </Paper>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 3, height: '100%' }}>
                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                   🎯 Smart Invoice Optimization
@@ -256,7 +256,7 @@ const About = () => {
               </Paper>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Paper sx={{ p: 3, height: '100%' }}>
                 <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                   ⚡ Smart Payment Incentives
@@ -317,7 +317,7 @@ const About = () => {
           Why I Built FlowDesk
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid item size={{ xs: 12, md: 6 }}>
             <Typography variant="body1" paragraph>
               After working with numerous small businesses and freelancers, I noticed a common pain point: 
               invoice management. Many were using spreadsheets or expensive software with features they didn't need.
@@ -327,7 +327,7 @@ const About = () => {
               It includes only the features businesses actually use, with a clean interface that doesn't require training.
             </Typography>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item size={{ xs: 12, md: 6 }}>
             <Typography variant="body1" paragraph>
               This project showcases my approach to development: understanding the problem first, then building 
               a solution that's both powerful and easy to use. Every feature in FlowDesk was carefully considered 

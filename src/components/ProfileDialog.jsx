@@ -88,7 +88,7 @@ const ProfileDialog = ({ open, onClose }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="displayName"
                 control={control}
@@ -107,7 +107,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="company"
                 control={control}
@@ -125,7 +125,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="email"
                 control={control}
@@ -150,7 +150,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="phone"
                 control={control}
@@ -167,13 +167,13 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Business Address
               </Typography>
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="address.street"
                 control={control}
@@ -188,7 +188,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={6}>
+            <Grid item size={6}>
               <Controller
                 name="address.city"
                 control={control}
@@ -203,7 +203,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={6}>
+            <Grid item size={6}>
               <Controller
                 name="address.state"
                 control={control}
@@ -218,7 +218,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={6}>
+            <Grid item size={6}>
               <Controller
                 name="address.zipCode"
                 control={control}
@@ -233,7 +233,7 @@ const ProfileDialog = ({ open, onClose }) => {
               />
             </Grid>
             
-            <Grid item xs={6}>
+            <Grid item size={6}>
               <Controller
                 name="address.country"
                 control={control}

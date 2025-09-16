@@ -158,7 +158,7 @@ const LandingPage = () => {
       >
         <Container maxWidth="lg">
           <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={6}>
+            <Grid item size={{ xs: 12, md: 6 }}>
               <Fade in timeout={1000}>
                 <Box>
                   <Typography
@@ -266,7 +266,7 @@ const LandingPage = () => {
                 </Box>
               </Fade>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item size={{ xs: 12, md: 6 }}>
               <Fade in timeout={1500}>
                 <Box
                   sx={{
@@ -292,13 +292,13 @@ const LandingPage = () => {
                       Invoice Dashboard
                     </Typography>
                     <Grid container spacing={2}>
-                      <Grid item xs={6}>
+                      <Grid item size={6}>
                         <Box sx={{ bgcolor: '#e0f2fe', p: 1.5, borderRadius: 1 }}>
                           <Typography variant="caption" color="#64748b">Total Revenue</Typography>
                           <Typography variant="h6" color="#0284c7">$45,230</Typography>
                         </Box>
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item size={6}>
                         <Box sx={{ bgcolor: '#dcfce7', p: 1.5, borderRadius: 1 }}>
                           <Typography variant="caption" color="#64748b">Paid Invoices</Typography>
                           <Typography variant="h6" color="#16a34a">124</Typography>
@@ -327,7 +327,7 @@ const LandingPage = () => {
         <Container maxWidth="lg">
           <Grid container spacing={3}>
             {stats.map((stat, index) => (
-              <Grid item xs={6} md={3} key={index}>
+              <Grid item size={{ xs: 6, md: 3 }} key={index}>
                 <Fade in timeout={1000 + index * 200}>
                   <Box
                     sx={{
@@ -387,7 +387,7 @@ const LandingPage = () => {
           </Typography>
           <Grid container spacing={4}>
             {features.map((feature, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid item size={{ xs: 12, md: 6 }} key={index}>
                 <Fade in timeout={1000 + index * 100}>
                   <Card
                     elevation={0}
@@ -433,7 +433,7 @@ const LandingPage = () => {
       <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#1e293b', color: 'white' }}>
         <Container maxWidth="lg">
           <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={6}>
+            <Grid item size={{ xs: 12, md: 6 }}>
               <Typography
                 variant="h3"
                 color="white"
@@ -469,7 +469,7 @@ const LandingPage = () => {
                 ))}
               </List>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item size={{ xs: 12, md: 6 }}>
               <Box
                 sx={{
                   bgcolor: 'rgba(255, 255, 255, 0.05)',
@@ -535,7 +535,7 @@ const LandingPage = () => {
           </Typography>
           
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
                 p: 3, 
                 height: '100%', 
@@ -553,7 +553,7 @@ const LandingPage = () => {
               </Card>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
                 p: 3, 
                 height: '100%', 
@@ -571,7 +571,7 @@ const LandingPage = () => {
               </Card>
             </Grid>
             
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
                 p: 3, 
                 height: '100%', 

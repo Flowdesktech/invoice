@@ -588,7 +588,7 @@ const Blog = () => {
       </Typography>
       <Grid container spacing={3}>
         {blogPosts.map((post) => (
-          <Grid item xs={12} md={6} key={post.id}>
+          <Grid item size={{ xs: 12, md: 6 }} key={post.id}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flexGrow: 1 }}>
                 <Box display="flex" alignItems="center" mb={2}>
@@ -699,7 +699,7 @@ const Blog = () => {
         </Typography>
         <Grid container spacing={2}>
           {['Getting Started', 'Best Practices', 'Payment Tips', 'Tax & Compliance', 'Automation', 'Client Relations'].map((topic) => (
-            <Grid item key={topic}>
+            <Grid item size="auto" key={topic}>
               <Chip
                 label={topic}
                 variant="outlined"

@@ -233,14 +233,14 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
         <DialogContent>
           <Grid container spacing={3}>
             {mode === 'create' && invoice && (
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Alert severity="info">
                   Creating recurring invoice from: <strong>{invoice.invoiceNumber}</strong> - {invoice.customerName}
                 </Alert>
               </Grid>
             )}
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="frequency"
                 control={control}
@@ -266,7 +266,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
               </Typography>
             </Grid>
             
-            <Grid item xs={12} sm={6}>
+            <Grid item size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="startDate"
                 control={control}
@@ -288,7 +288,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
               />
             </Grid>
             
-            <Grid item xs={12} sm={6}>
+            <Grid item size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="endDate"
                 control={control}
@@ -309,7 +309,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
               />
             </Grid>
             
-            <Grid item xs={12}>
+            <Grid item size={12}>
               <Controller
                 name="notes"
                 control={control}
@@ -328,7 +328,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
             
             {mode === 'create' && (
               <>
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Alert severity="info">
                     <Typography variant="body2" gutterBottom>
                       <strong>Dynamic Description Templates</strong>
@@ -346,7 +346,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
                   </Alert>
                 </Grid>
                 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Alert severity="success">
                     <Typography variant="body2" gutterBottom>
                       <strong>Example for {frequency} invoices:</strong>

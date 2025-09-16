@@ -45,7 +45,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="space-between">
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="h6" color="primary" gutterBottom sx={{ fontWeight: 'bold' }}>
               FlowDesk
             </Typography>
@@ -54,7 +54,7 @@ const Footer = () => {
             </Typography>
           </Grid>
           
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item size={{ xs: 6, sm: 4, md: 2 }}>
             <Typography variant="subtitle1" color="text.primary" gutterBottom sx={{ fontWeight: '600' }}>
               Product
             </Typography>
@@ -80,7 +80,7 @@ const Footer = () => {
             ))}
           </Grid>
           
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item size={{ xs: 6, sm: 4, md: 2 }}>
             <Typography variant="subtitle1" color="text.primary" gutterBottom sx={{ fontWeight: '600' }}>
               Legal
             </Typography>
@@ -106,7 +106,7 @@ const Footer = () => {
             ))}
           </Grid>
           
-          <Grid item xs={6} sm={4} md={2}>
+          <Grid item size={{ xs: 6, sm: 4, md: 2 }}>
             <Typography variant="subtitle1" color="text.primary" gutterBottom sx={{ fontWeight: '600' }}>
               Company
             </Typography>
@@ -133,7 +133,7 @@ const Footer = () => {
             ))}
           </Grid>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography variant="subtitle1" color="text.primary" gutterBottom sx={{ fontWeight: '600' }}>
               Contact Us
             </Typography>
