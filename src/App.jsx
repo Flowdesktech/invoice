@@ -20,6 +20,11 @@ import RecurringInvoices from './pages/RecurringInvoices';
 import LandingPage from './pages/LandingPage';
 import Features from './pages/Features';
 import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import Documentation from './pages/Documentation';
+import About from './pages/About';
+import Blog from './pages/Blog';
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -205,6 +210,26 @@ const router = createBrowserRouter([
   {
     path: '/contact',
     element: <Contact />,
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: '/terms',
+    element: <TermsOfService />,
+  },
+  {
+    path: '/docs',
+    element: <Documentation />,
+  },
+  {
+    path: '/about',
+    element: <About />,
+  },
+  {
+    path: '/blog',
+    element: <Blog />,
   },
   {
     path: '/',

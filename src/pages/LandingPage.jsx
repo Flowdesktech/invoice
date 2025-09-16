@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 import {
   Box,
   Container,
@@ -555,6 +556,11 @@ const LandingPage = () => {
           </Box>
         </Container>
       </Box>
+      
+      {/* Add padding at bottom to account for fixed footer */}
+      <Box sx={{ pb: 30 }} />
+      
+      <Footer />
     </>
   );
 };

@@ -35,6 +35,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
 import AccountSwitcher from './AccountSwitcher';
 import ProfileDialog from './ProfileDialog';
+import Footer from './Footer';
 
 const drawerWidth = 240;
 
@@ -396,15 +397,27 @@ const Layout = () => {
         </Drawer>
       </Box>
       <Box
-        component="main"
         sx={{
+          display: 'flex',
+          flexDirection: 'column',
           flexGrow: 1,
-          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: 8,
         }}
       >
-        <Outlet />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            mt: 8,
+            pb: 20, // Add padding bottom to account for fixed footer
+            minHeight: 'calc(100vh - 150px)', // Full viewport height minus AppBar
+          }}
+        >
+          <Outlet />
+        </Box>
+        
+        <Footer />
       </Box>
       
       {/* Profile Dialog */}
