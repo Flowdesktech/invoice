@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  Container,
-  Paper,
-  Typography,
-  Box,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  Avatar,
-  Chip,
-  Divider,
+    Container,
+    Paper,
+    Typography,
+    Box,
+    Button,
+    Grid,
+    Card,
+    CardContent,
+    Avatar,
+    Chip,
+    Divider, Stack,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -20,9 +20,11 @@ import {
   Speed as SpeedIcon,
   Security as SecurityIcon,
   CloudDone as CloudIcon,
+    ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const About = () => {
   const navigate = useNavigate();
@@ -111,12 +113,14 @@ const About = () => {
         })}
       </script>
       
+      <Header />
+      
       {/* Hero Section */}
       <Box
         sx={{
           background: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
           color: '#1e293b',
-          pt: { xs: 10, md: 14 },
+          pt: { xs: 12, md: 16 },  // Increased padding to account for header
           pb: { xs: 8, md: 10 },
           position: 'relative',
           overflow: 'hidden',
@@ -618,7 +622,7 @@ const About = () => {
                   height: '100%',
                   p: 4,
                   borderRadius: '16px',
-                  border: '2px solid '#dcfce7',
+                  border: '2px solid #dcfce7',
                   background: '#f0fdf4',
                   transition: 'all 0.3s ease',
                   '&:hover': {

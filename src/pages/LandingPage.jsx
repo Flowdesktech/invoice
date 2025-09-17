@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
+import Header from '../components/Header';
 import {
   Box,
   Container,
@@ -145,12 +146,14 @@ const LandingPage = () => {
         })}
       </script>
 
+      <Header />
+
       {/* Hero Section */}
       <Box
         sx={{
           background: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
           color: '#1e293b',
-          pt: { xs: 10, md: 14 },
+          pt: { xs: 12, md: 16 },  // Increased padding to account for header
           pb: { xs: 10, md: 14 },
           position: 'relative',
           overflow: 'hidden',
@@ -351,7 +354,7 @@ const LandingPage = () => {
                     mx: 'auto',
                   }}
                 >
-                  {/* Professional Dashboard Mockup */}
+                  {/* Professional Invoice Preview */}
                   <Box
                     sx={{
                       background: '#ffffff',
@@ -392,113 +395,172 @@ const LandingPage = () => {
                         fontSize: '0.75rem',
                         color: '#64748b'
                       }}>
-                        flowdesk.tech/dashboard
+                        flowdesk.tech/invoice/INV-00123
                       </Box>
                     </Box>
                     
-                    {/* Dashboard Content */}
-                    <Box sx={{ p: 3 }}>
-                      {/* Header */}
-                      <Box sx={{ mb: 3 }}>
-                        <Typography variant="h5" sx={{ fontWeight: 600, color: '#0f172a', mb: 0.5 }}>
-                          Dashboard
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: '#64748b' }}>
-                          Welcome back! Here's your business overview.
-                        </Typography>
-                      </Box>
-                      
-                      {/* Stats Grid */}
-                      <Grid container spacing={2} sx={{ mb: 3 }}>
-                        <Grid item size={6}>
+                    {/* Invoice Content */}
+                    <Box sx={{ p: 3, bgcolor: '#ffffff' }}>
+                      {/* Invoice Header */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 4 }}>
+                        <Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                            <Box
+                              component="img"
+                              src="/flowdesk-favicon.svg"
+                              alt="FlowDesk"
+                              sx={{ width: 32, height: 32 }}
+                            />
+                            <Typography variant="h5" sx={{ fontWeight: 700, color: '#0f172a' }}>
+                              FlowDesk Inc.
+                            </Typography>
+                          </Box>
+                          <Typography variant="caption" sx={{ color: '#64748b', display: 'block' }}>
+                            123 Business Ave<br />
+                            San Francisco, CA 94107<br />
+                            contact@flowdesk.tech
+                          </Typography>
+                        </Box>
+                        <Box sx={{ textAlign: 'right' }}>
                           <Box
                             sx={{
+                              display: 'inline-block',
                               background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                               color: 'white',
-                              p: 2,
-                              borderRadius: '12px',
+                              px: 2,
+                              py: 0.5,
+                              borderRadius: '6px',
+                              fontSize: '0.875rem',
+                              fontWeight: 600,
+                              mb: 1,
                             }}
                           >
-                            <Typography variant="caption" sx={{ opacity: 0.9 }}>
-                              Monthly Revenue
-                            </Typography>
-                            <Typography variant="h4" sx={{ fontWeight: 700, mt: 0.5 }}>
-                              $24.8k
-                            </Typography>
-                            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
-                              <TrendingUpIcon sx={{ fontSize: 14 }} />
-                              +22% from last month
-                            </Typography>
+                            INVOICE
                           </Box>
-                        </Grid>
-                        <Grid item size={6}>
-                          <Box
-                            sx={{
-                              background: '#f8fafc',
-                              border: '1px solid #e5e7eb',
-                              p: 2,
-                              borderRadius: '12px',
-                            }}
-                          >
-                            <Typography variant="caption" sx={{ color: '#64748b' }}>
-                              Active Invoices
-                            </Typography>
-                            <Typography variant="h4" sx={{ fontWeight: 700, mt: 0.5, color: '#0f172a' }}>
-                              142
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
-                              <CheckIcon sx={{ fontSize: 14 }} />
-                              89% paid on time
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      </Grid>
-                      
-                      {/* Recent Activity */}
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ color: '#64748b', mb: 2, fontWeight: 600 }}>
-                          Recent Activity
+                          <Typography variant="h6" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                            INV-00123
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: '#64748b' }}>
+                            Date: {new Date().toLocaleDateString()}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Bill To */}
+                      <Box sx={{ mb: 3 }}>
+                        <Typography variant="overline" sx={{ color: '#64748b', fontSize: '0.7rem' }}>
+                          BILL TO
                         </Typography>
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                          Acme Corporation
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: '#64748b', display: 'block' }}>
+                          456 Client Street<br />
+                          New York, NY 10001
+                        </Typography>
+                      </Box>
+
+                      {/* Invoice Items */}
+                      <Box sx={{ mb: 3 }}>
+                        <Box
+                          sx={{
+                            bgcolor: '#f8fafc',
+                            p: 1.5,
+                            borderRadius: '8px',
+                            mb: 1,
+                          }}
+                        >
+                          <Grid container>
+                            <Grid item size={6}>
+                              <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b' }}>
+                                DESCRIPTION
+                              </Typography>
+                            </Grid>
+                            <Grid item size={2} sx={{ textAlign: 'right' }}>
+                              <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b' }}>
+                                QTY
+                              </Typography>
+                            </Grid>
+                            <Grid item size={2} sx={{ textAlign: 'right' }}>
+                              <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b' }}>
+                                RATE
+                              </Typography>
+                            </Grid>
+                            <Grid item size={2} sx={{ textAlign: 'right' }}>
+                              <Typography variant="caption" sx={{ fontWeight: 600, color: '#64748b' }}>
+                                AMOUNT
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Box>
                         {[
-                          { name: 'Acme Corp', amount: '$1,240', status: 'paid', time: '2 hours ago' },
-                          { name: 'TechStart Inc', amount: '$820', status: 'pending', time: '5 hours ago' },
-                          { name: 'Design Studio', amount: '$2,150', status: 'paid', time: 'Yesterday' },
-                        ].map((invoice, i) => (
-                          <Box
-                            key={i}
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              py: 1.5,
-                              borderBottom: i < 2 ? '1px solid #f1f5f9' : 'none',
-                            }}
-                          >
-                            <Box>
-                              <Typography variant="body2" sx={{ fontWeight: 500, color: '#0f172a' }}>
-                                {invoice.name}
-                              </Typography>
-                              <Typography variant="caption" sx={{ color: '#64748b' }}>
-                                {invoice.time}
-                              </Typography>
-                            </Box>
-                            <Box sx={{ textAlign: 'right' }}>
-                              <Typography variant="body2" sx={{ fontWeight: 600, color: '#0f172a' }}>
-                                {invoice.amount}
-                              </Typography>
-                              <Chip
-                                size="small"
-                                label={invoice.status}
-                                sx={{
-                                  height: 20,
-                                  fontSize: '0.7rem',
-                                  bgcolor: invoice.status === 'paid' ? '#dcfce7' : '#fef3c7',
-                                  color: invoice.status === 'paid' ? '#16a34a' : '#92400e',
-                                }}
-                              />
-                            </Box>
+                          { desc: 'Web Development Services', qty: 40, rate: 125 },
+                          { desc: 'UI/UX Design', qty: 20, rate: 100 },
+                          { desc: 'Project Management', qty: 10, rate: 80 },
+                        ].map((item, i) => (
+                          <Box key={i} sx={{ py: 1.5, borderBottom: '1px solid #f1f5f9' }}>
+                            <Grid container alignItems="center">
+                              <Grid item size={6}>
+                                <Typography variant="body2" sx={{ color: '#0f172a' }}>
+                                  {item.desc}
+                                </Typography>
+                              </Grid>
+                              <Grid item size={2} sx={{ textAlign: 'right' }}>
+                                <Typography variant="body2" sx={{ color: '#64748b' }}>
+                                  {item.qty}
+                                </Typography>
+                              </Grid>
+                              <Grid item size={2} sx={{ textAlign: 'right' }}>
+                                <Typography variant="body2" sx={{ color: '#64748b' }}>
+                                  ${item.rate}
+                                </Typography>
+                              </Grid>
+                              <Grid item size={2} sx={{ textAlign: 'right' }}>
+                                <Typography variant="body2" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                                  ${(item.qty * item.rate).toLocaleString()}
+                                </Typography>
+                              </Grid>
+                            </Grid>
                           </Box>
                         ))}
+                      </Box>
+
+                      {/* Total */}
+                      <Box sx={{ textAlign: 'right' }}>
+                        <Box sx={{ display: 'inline-block', minWidth: 200 }}>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                            <Typography variant="body2" sx={{ color: '#64748b' }}>
+                              Subtotal
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: '#0f172a' }}>
+                              $7,800.00
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                            <Typography variant="body2" sx={{ color: '#64748b' }}>
+                              Tax (10%)
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: '#0f172a' }}>
+                              $780.00
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              pt: 1,
+                              mt: 1,
+                              borderTop: '2px solid #e5e7eb',
+                            }}
+                          >
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                              Total
+                            </Typography>
+                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#3b82f6' }}>
+                              $8,580.00
+                            </Typography>
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
@@ -525,7 +587,31 @@ const LandingPage = () => {
                       }
                     }}
                   >
-                    LIVE DEMO
+                    LIVE PREVIEW
+                  </Box>
+                  
+                  {/* Template Badge */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: -10,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      color: 'white',
+                      px: 2,
+                      py: 0.75,
+                      borderRadius: '20px',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    <Box sx={{ fontSize: '0.875rem' }}>✨</Box>
+                    Using Modern Blue Template
                   </Box>
                 </Box>
               </Fade>
@@ -994,7 +1080,7 @@ const LandingPage = () => {
                   borderRadius: 2,
                   '&:hover': {
                     borderColor: '#94a3b8',
-                    bgcolor: '#f8fafc',
+                      bgcolor: 'rgba(255, 255, 255, 0.05)',
                   },
                 }}
               >

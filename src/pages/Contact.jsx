@@ -17,6 +17,7 @@ import {
   IconButton,
 } from '@mui/material';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import {
   Email as EmailIcon,
   Phone as PhoneIcon,
@@ -123,11 +124,13 @@ const Contact = () => {
       <meta name="keywords" content="contact flowdesk, invoice support, flowdesk help, invoice management contact" />
       <link rel="canonical" href="https://flowdesk.tech/contact" />
 
+      <Header />
+
       {/* Hero Section */}
       <Box
         sx={{
           background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)',
-          pt: { xs: 10, md: 14 },
+          pt: { xs: 12, md: 16 },  // Increased padding to account for header
           pb: { xs: 6, md: 8 },
           position: 'relative',
         }}

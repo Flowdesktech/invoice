@@ -18,6 +18,7 @@ import {
   Grow,
 } from '@mui/material';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 import {
   Speed as SpeedIcon,
   AttachMoney as MoneyIcon,
@@ -155,12 +156,14 @@ const Features = () => {
       <meta name="keywords" content="invoice features, invoice management features, billing software features, invoice generator capabilities" />
       <link rel="canonical" href="https://flowdesk.tech/features" />
 
+      <Header />
+
       {/* Hero Section */}
       <Box
         sx={{
           background: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
           color: '#1e293b',
-          pt: { xs: 10, md: 14 },
+          pt: { xs: 12, md: 16 },  // Increased padding to account for header
           pb: { xs: 8, md: 10 },
           position: 'relative',
           overflow: 'hidden',
