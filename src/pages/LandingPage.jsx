@@ -76,23 +76,23 @@ const LandingPage = () => {
   ];
 
   const stats = [
-    { label: 'Active Users', value: '10,000+' },
-    { label: 'Invoices Created', value: '500K+' },
-    { label: 'Countries Served', value: '120+' },
-    { label: 'Time Saved', value: '1M+ Hours' },
+    { label: 'Professional Templates', value: '15+' },
+    { label: 'Setup Time', value: '< 2 min' },
+    { label: 'Payment Tracking', value: '100%' },
+    { label: 'Free Forever', value: '✓' },
   ];
 
   return (
     <>
       {/* React 19 Metadata - Optimized for SEO */}
-      <title>FlowDesk - Free Invoice Management Software for Small Business | Get Paid 3x Faster</title>
-      <meta name="description" content="Create professional invoices in seconds. Free invoice software with automated reminders, payment tracking, and recurring billing. Join 10,000+ businesses getting paid faster. No credit card required." />
+      <title>FlowDesk - Free Invoice Management Software for Small Business | Get Paid Faster</title>
+      <meta name="description" content="Create professional invoices in seconds. Free invoice software with automated reminders, payment tracking, and recurring billing. Choose from 15 professional templates. No credit card required." />
       <meta name="keywords" content="free invoice software, invoice generator online, small business invoicing, freelance billing software, payment tracking app, recurring invoices, invoice management system, get paid faster, invoice templates, billing automation" />
       <link rel="canonical" href="https://flowdesk.tech" />
       
       {/* Open Graph for Social Sharing */}
       <meta property="og:title" content="FlowDesk - Professional Invoice Management Made Simple" />
-      <meta property="og:description" content="Stop chasing payments. Create, send, and track invoices with FlowDesk's free invoice management software. Get paid 3x faster." />
+      <meta property="og:description" content="Stop chasing payments. Create, send, and track invoices with FlowDesk's free invoice management software. Get paid faster with professional invoices." />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://flowdesk.tech" />
       <meta property="og:image" content="https://flowdesk.tech/og-image.png" />
@@ -101,7 +101,7 @@ const LandingPage = () => {
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="FlowDesk - Get Paid Faster with Free Invoice Software" />
-      <meta name="twitter:description" content="Professional invoicing made simple. Create, send, track invoices and get paid 3x faster. Free forever for small businesses." />
+      <meta name="twitter:description" content="Professional invoicing made simple. Create, send, track invoices and get paid faster. Free forever for small businesses." />
       <meta name="twitter:image" content="https://flowdesk.tech/twitter-card.png" />
       
       {/* Additional SEO Meta Tags */}
@@ -148,7 +148,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)',
+          background: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
           color: '#1e293b',
           pt: { xs: 10, md: 14 },
           pb: { xs: 10, md: 14 },
@@ -156,113 +156,188 @@ const LandingPage = () => {
           overflow: 'hidden',
         }}
       >
-        <Container maxWidth="lg">
+        {/* Professional Abstract Background */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '60%',
+            height: '100%',
+            opacity: 0.03,
+            background: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%231e293b' stroke-width='1' opacity='0.3'%3E%3Cpath d='M0 0h100v100H0z'/%3E%3Cpath d='M0 50h100M50 0v100'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '100px 100px',
+            transform: 'skewY(-6deg)',
+            transformOrigin: '100% 0',
+          }}
+        />
+        
+        {/* Subtle Wave Design */}
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '40%',
+            background: 'linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.02) 100%)',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '100%',
+              background: `url("data:image/svg+xml,%3Csvg width='1440' height='320' viewBox='0 0 1440 320' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='rgba(59, 130, 246, 0.03)' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'bottom',
+            }
+          }}
+        />
+        
+        {/* Professional Gradient Accent */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '-20%',
+            left: '-10%',
+            width: '40%',
+            height: '140%',
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
+            filter: 'blur(100px)',
+            transform: 'rotate(-15deg)',
+            pointerEvents: 'none',
+          }}
+        />
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Grid container spacing={4} alignItems="center">
             <Grid item size={{ xs: 12, md: 6 }}>
               <Fade in timeout={1000}>
                 <Box>
+                  {/* Small Tag */}
+                  <Box sx={{ mb: 3 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        display: 'inline-block',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                        color: 'white',
+                        px: 2,
+                        py: 0.5,
+                        borderRadius: '20px',
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        letterSpacing: '0.5px',
+                      }}
+                    >
+                      PROFESSIONAL INVOICE SOFTWARE
+                    </Typography>
+                  </Box>
+                  
                   <Typography
                     variant="h1"
                     sx={{
-                      fontSize: { xs: '2.5rem', md: '3.5rem' },
-                      fontWeight: 800,
-                      mb: 2,
-                      lineHeight: 1.2,
-                      background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
+                      fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
+                      fontWeight: 700,
+                      mb: 3,
+                      lineHeight: 1.1,
+                      color: '#0f172a',
+                      letterSpacing: '-0.02em',
                     }}
                   >
-                    Invoice Management Made Simple
+                    Get Paid Faster With
+                    <Box
+                      component="span"
+                      sx={{
+                        display: 'block',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
+                      Professional Invoices
+                    </Box>
                   </Typography>
+                  
                   <Typography
                     variant="h5"
                     sx={{
-                      fontSize: { xs: '1.1rem', md: '1.3rem' },
-                      mb: 2,
-                      color: '#64748b',
+                      fontSize: { xs: '1.125rem', md: '1.25rem' },
+                      mb: 4,
+                      color: '#475569',
                       fontWeight: 400,
-                      lineHeight: 1.6,
+                      lineHeight: 1.8,
+                      maxWidth: '600px',
                     }}
                   >
-                    Create, send, and track professional invoices in seconds. 
-                    100% free now with premium features coming soon.
+                    Choose from 15 professional templates, automate your billing workflow, 
+                    and reduce payment delays. Everything you need to get paid faster.
                   </Typography>
-                  <Chip 
-                    label="🎯 Early Access: Get all features free + lock in future discounts!" 
-                    color="success" 
-                    sx={{ mb: 4, fontSize: '0.9rem', py: 2.5, px: 1 }}
-                  />
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <Button
                       variant="contained"
                       size="large"
                       onClick={() => navigate('/register')}
                       sx={{
-                        bgcolor: '#1e293b',
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                         color: 'white',
                         py: 2,
-                        px: 4,
-                        fontSize: '1.1rem',
+                        px: 5,
+                        fontSize: '1.125rem',
                         fontWeight: 600,
-                        borderRadius: 2,
-                        boxShadow: '0 4px 14px 0 rgba(30, 41, 59, 0.2)',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.4)',
+                        textTransform: 'none',
                         '&:hover': {
-                          bgcolor: '#0f172a',
+                          background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                           transform: 'translateY(-2px)',
-                          boxShadow: '0 6px 20px 0 rgba(30, 41, 59, 0.3)',
+                          boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
                         },
-                        transition: 'all 0.3s',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       }}
                       endIcon={<ArrowForwardIcon />}
                     >
-                      Start Free Forever
+                      Start Free - No Card Required
                     </Button>
                     <Button
-                      variant="outlined"
+                      variant="text"
                       size="large"
                       onClick={() => navigate('/login')}
                       sx={{
-                        borderColor: '#cbd5e1',
-                        color: '#475569',
+                        color: '#64748b',
                         py: 2,
-                        px: 4,
-                        fontSize: '1.1rem',
-                        borderRadius: 2,
+                        px: 3,
+                        fontSize: '1rem',
+                        fontWeight: 500,
                         '&:hover': {
-                          borderColor: '#94a3b8',
-                          bgcolor: '#f8fafc',
-                          transform: 'translateY(-2px)',
+                          bgcolor: 'rgba(148, 163, 184, 0.08)',
+                          color: '#475569',
                         },
                         transition: 'all 0.3s',
                       }}
                     >
-                      Sign In
+                      Already have an account?
                     </Button>
                   </Stack>
-                  <Stack direction="row" spacing={3} sx={{ mt: 4 }}>
-                    <Chip
-                      icon={<CheckIcon sx={{ color: '#10b981' }} />}
-                      label="No Credit Card Required"
-                      sx={{ 
-                        bgcolor: 'white',
-                        color: '#475569',
-                        border: '1px solid #e2e8f0',
-                        fontWeight: 500,
-                      }}
-                    />
-                    <Chip
-                      icon={<CheckIcon sx={{ color: '#10b981' }} />}
-                      label="Free Forever"
-                      sx={{ 
-                        bgcolor: 'white',
-                        color: '#475569',
-                        border: '1px solid #e2e8f0',
-                        fontWeight: 500,
-                      }}
-                    />
-                  </Stack>
+
+                  {/* Trust Indicators */}
+                  <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+                    <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
+                      No credit card required
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
+                      Setup in under 2 minutes
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                      <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
+                      Cancel anytime
+                    </Typography>
+                  </Box>
                 </Box>
               </Fade>
             </Grid>
@@ -272,48 +347,185 @@ const LandingPage = () => {
                   sx={{
                     position: 'relative',
                     width: '100%',
-                    height: { xs: 300, md: 400 },
-                    background: 'linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%)',
-                    borderRadius: 4,
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
-                    overflow: 'hidden',
-                    p: 3,
+                    maxWidth: 500,
+                    mx: 'auto',
                   }}
                 >
-                  {/* Mock Dashboard Preview */}
-                  <Box sx={{ 
-                    background: 'white',
-                    borderRadius: 2,
-                    p: 2,
-                    mb: 2,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                  }}>
-                    <Typography variant="h6" sx={{ color: '#1e293b', fontWeight: 600, mb: 1 }}>
-                      Invoice Dashboard
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid item size={6}>
-                        <Box sx={{ bgcolor: '#e0f2fe', p: 1.5, borderRadius: 1 }}>
-                          <Typography variant="caption" color="#64748b">Total Revenue</Typography>
-                          <Typography variant="h6" color="#0284c7">$45,230</Typography>
-                        </Box>
-                      </Grid>
-                      <Grid item size={6}>
-                        <Box sx={{ bgcolor: '#dcfce7', p: 1.5, borderRadius: 1 }}>
-                          <Typography variant="caption" color="#64748b">Paid Invoices</Typography>
-                          <Typography variant="h6" color="#16a34a">124</Typography>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                  <Box sx={{ background: 'white', borderRadius: 2, p: 2, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-                    <Typography variant="subtitle2" sx={{ color: '#64748b', mb: 1 }}>Recent Invoices</Typography>
-                    {[1, 2, 3].map((i) => (
-                      <Box key={i} sx={{ display: 'flex', justifyContent: 'space-between', py: 1, borderBottom: '1px solid #f1f5f9' }}>
-                        <Typography variant="body2" color="#1e293b">INV-00{i}23</Typography>
-                        <Chip size="small" label="Paid" sx={{ bgcolor: '#dcfce7', color: '#16a34a', fontSize: '0.75rem' }} />
+                  {/* Professional Dashboard Mockup */}
+                  <Box
+                    sx={{
+                      background: '#ffffff',
+                      borderRadius: '16px',
+                      boxShadow: '0 20px 60px -10px rgba(0,0,0,0.15)',
+                      border: '1px solid rgba(0,0,0,0.05)',
+                      overflow: 'hidden',
+                      transform: { xs: 'none', md: 'perspective(1000px) rotateY(-10deg)' },
+                      transition: 'transform 0.3s ease',
+                      '&:hover': {
+                        transform: { xs: 'none', md: 'perspective(1000px) rotateY(-5deg)' },
+                      }
+                    }}
+                  >
+                    {/* Browser Bar */}
+                    <Box
+                      sx={{
+                        background: '#f8fafc',
+                        borderBottom: '1px solid #e5e7eb',
+                        px: 2,
+                        py: 1.5,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', gap: 0.5 }}>
+                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#ef4444' }} />
+                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#f59e0b' }} />
+                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#10b981' }} />
                       </Box>
-                    ))}
+                      <Box sx={{ 
+                        flex: 1, 
+                        background: '#ffffff',
+                        borderRadius: '6px',
+                        px: 2,
+                        py: 0.5,
+                        fontSize: '0.75rem',
+                        color: '#64748b'
+                      }}>
+                        flowdesk.tech/dashboard
+                      </Box>
+                    </Box>
+                    
+                    {/* Dashboard Content */}
+                    <Box sx={{ p: 3 }}>
+                      {/* Header */}
+                      <Box sx={{ mb: 3 }}>
+                        <Typography variant="h5" sx={{ fontWeight: 600, color: '#0f172a', mb: 0.5 }}>
+                          Dashboard
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#64748b' }}>
+                          Welcome back! Here's your business overview.
+                        </Typography>
+                      </Box>
+                      
+                      {/* Stats Grid */}
+                      <Grid container spacing={2} sx={{ mb: 3 }}>
+                        <Grid item size={6}>
+                          <Box
+                            sx={{
+                              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                              color: 'white',
+                              p: 2,
+                              borderRadius: '12px',
+                            }}
+                          >
+                            <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                              Monthly Revenue
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, mt: 0.5 }}>
+                              $24.8k
+                            </Typography>
+                            <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
+                              <TrendingUpIcon sx={{ fontSize: 14 }} />
+                              +22% from last month
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid item size={6}>
+                          <Box
+                            sx={{
+                              background: '#f8fafc',
+                              border: '1px solid #e5e7eb',
+                              p: 2,
+                              borderRadius: '12px',
+                            }}
+                          >
+                            <Typography variant="caption" sx={{ color: '#64748b' }}>
+                              Active Invoices
+                            </Typography>
+                            <Typography variant="h4" sx={{ fontWeight: 700, mt: 0.5, color: '#0f172a' }}>
+                              142
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: 0.5, mt: 1 }}>
+                              <CheckIcon sx={{ fontSize: 14 }} />
+                              89% paid on time
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                      
+                      {/* Recent Activity */}
+                      <Box>
+                        <Typography variant="subtitle2" sx={{ color: '#64748b', mb: 2, fontWeight: 600 }}>
+                          Recent Activity
+                        </Typography>
+                        {[
+                          { name: 'Acme Corp', amount: '$1,240', status: 'paid', time: '2 hours ago' },
+                          { name: 'TechStart Inc', amount: '$820', status: 'pending', time: '5 hours ago' },
+                          { name: 'Design Studio', amount: '$2,150', status: 'paid', time: 'Yesterday' },
+                        ].map((invoice, i) => (
+                          <Box
+                            key={i}
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              py: 1.5,
+                              borderBottom: i < 2 ? '1px solid #f1f5f9' : 'none',
+                            }}
+                          >
+                            <Box>
+                              <Typography variant="body2" sx={{ fontWeight: 500, color: '#0f172a' }}>
+                                {invoice.name}
+                              </Typography>
+                              <Typography variant="caption" sx={{ color: '#64748b' }}>
+                                {invoice.time}
+                              </Typography>
+                            </Box>
+                            <Box sx={{ textAlign: 'right' }}>
+                              <Typography variant="body2" sx={{ fontWeight: 600, color: '#0f172a' }}>
+                                {invoice.amount}
+                              </Typography>
+                              <Chip
+                                size="small"
+                                label={invoice.status}
+                                sx={{
+                                  height: 20,
+                                  fontSize: '0.7rem',
+                                  bgcolor: invoice.status === 'paid' ? '#dcfce7' : '#fef3c7',
+                                  color: invoice.status === 'paid' ? '#16a34a' : '#92400e',
+                                }}
+                              />
+                            </Box>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </Box>
+                  
+                  {/* Floating Badge */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      color: 'white',
+                      px: 2,
+                      py: 1,
+                      borderRadius: '20px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                      animation: 'pulse 2s ease-in-out infinite',
+                      '@keyframes pulse': {
+                        '0%': { transform: 'scale(1)' },
+                        '50%': { transform: 'scale(1.05)' },
+                        '100%': { transform: 'scale(1)' },
+                      }
+                    }}
+                  >
+                    LIVE DEMO
                   </Box>
                 </Box>
               </Fade>
@@ -323,7 +535,12 @@ const LandingPage = () => {
       </Box>
 
       {/* Stats Section */}
-      <Box sx={{ py: 8, bgcolor: 'white' }}>
+      <Box sx={{ 
+        py: 6, 
+        bgcolor: '#fafbfc',
+        borderTop: '1px solid #f1f5f9',
+        borderBottom: '1px solid #f1f5f9',
+      }}>
         <Container maxWidth="lg">
           <Grid container spacing={3}>
             {stats.map((stat, index) => (
@@ -331,20 +548,32 @@ const LandingPage = () => {
                 <Fade in timeout={1000 + index * 200}>
                   <Box
                     sx={{
-                      p: 3,
                       textAlign: 'center',
-                      borderRight: index < 3 ? { xs: 0, md: '1px solid #e2e8f0' } : 0,
+                      position: 'relative',
+                      '&:not(:last-child)::after': {
+                        content: '""',
+                        position: 'absolute',
+                        right: 0,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        height: '40px',
+                        width: '1px',
+                        bgcolor: '#e5e7eb',
+                        display: { xs: 'none', md: 'block' }
+                      }
                     }}
                   >
                     <Typography
                       variant="h3"
                       sx={{
-                        fontWeight: 700,
-                        background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+                        fontWeight: 800,
+                        fontSize: { xs: '2rem', md: '2.5rem' },
+                        background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                         backgroundClip: 'text',
-                        mb: 1,
+                        mb: 0.5,
+                        lineHeight: 1,
                       }}
                     >
                       {stat.value}
@@ -361,68 +590,105 @@ const LandingPage = () => {
       </Box>
 
       {/* Features Section */}
-      <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: '#fafbfc' }}>
+      <Box sx={{ py: { xs: 10, md: 16 }, bgcolor: '#ffffff' }}>
         <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            align="center"
-            sx={{
-              fontSize: { xs: '2rem', md: '2.5rem' },
-              fontWeight: 800,
-              mb: 2,
-              background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Everything You Need for Invoice Management
-          </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            sx={{ mb: 8, maxWidth: 800, mx: 'auto', color: '#64748b', fontWeight: 400 }}
-          >
-            FlowDesk provides all the tools you need to manage your business invoicing efficiently
-          </Typography>
+          <Box sx={{ textAlign: 'center', mb: 10 }}>
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontWeight: 700,
+                mb: 3,
+                color: '#0f172a',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.2,
+              }}
+            >
+              Built for modern businesses
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ 
+                maxWidth: 600, 
+                mx: 'auto', 
+                color: '#64748b', 
+                fontWeight: 400,
+                fontSize: { xs: '1.1rem', md: '1.25rem' },
+                lineHeight: 1.6,
+              }}
+            >
+              Everything you need to manage invoices, track payments, and grow your business
+            </Typography>
+          </Box>
+          
           <Grid container spacing={4}>
             {features.map((feature, index) => (
-              <Grid item size={{ xs: 12, md: 6 }} key={index}>
-                <Fade in timeout={1000 + index * 100}>
-                  <Card
-                    elevation={0}
+              <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+                <Box
+                  sx={{
+                    height: '100%',
+                    p: 4,
+                    position: 'relative',
+                    transition: 'all 0.3s ease',
+                    borderRadius: '8px',
+                    '&:hover': {
+                      '& .feature-icon': {
+                        transform: 'scale(1.1)',
+                      }
+                    }
+                  }}
+                >
+                  <Box
+                    className="feature-icon"
                     sx={{
-                      height: '100%',
-                      bgcolor: 'white',
-                      border: '1px solid #e2e8f0',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        borderColor: '#cbd5e1',
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                      },
+                      width: 56,
+                      height: 56,
+                      mb: 3,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '12px',
+                      transition: 'transform 0.3s ease',
+                      background: 
+                        index % 3 === 0 ? 'rgba(59, 130, 246, 0.1)' : 
+                        index % 3 === 1 ? 'rgba(139, 92, 246, 0.1)' : 
+                        'rgba(16, 185, 129, 0.1)',
                     }}
                   >
-                    <CardContent sx={{ p: 4 }}>
-                      <Box sx={{ 
-                        color: '#3b82f6',
-                        mb: 2,
-                        p: 2,
-                        bgcolor: '#eff6ff',
-                        borderRadius: 2,
-                        display: 'inline-block',
-                      }}>
-                        {feature.icon}
-                      </Box>
-                      <Typography variant="h6" sx={{ fontWeight: 700, color: '#1e293b', mb: 1 }}>
-                        {feature.title}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.6 }}>
-                        {feature.description}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Fade>
+                    {React.cloneElement(feature.icon, { 
+                      sx: { 
+                        fontSize: 28,
+                        color: 
+                          index % 3 === 0 ? '#3b82f6' : 
+                          index % 3 === 1 ? '#8b5cf6' : 
+                          '#10b981'
+                      } 
+                    })}
+                  </Box>
+                  
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 600, 
+                      color: '#0f172a', 
+                      mb: 2,
+                      fontSize: '1.125rem',
+                    }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      color: '#64748b', 
+                      lineHeight: 1.7,
+                      fontSize: '0.95rem',
+                    }}
+                  >
+                    {feature.description}
+                  </Typography>
+                </Box>
               </Grid>
             ))}
           </Grid>
@@ -612,65 +878,85 @@ const LandingPage = () => {
       </Box>
 
       {/* CTA Section */}
-      <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: '#f8fafc' }}>
-        <Container maxWidth="md">
-          <Box
-            sx={{
-              p: { xs: 4, md: 6 },
-              textAlign: 'center',
-              background: 'white',
-              borderRadius: 3,
-              boxShadow: '0 10px 40px rgba(0,0,0,0.08)',
-            }}
-          >
+      <Box 
+        sx={{ 
+          py: { xs: 10, md: 16 }, 
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Background Pattern */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0.05,
+            backgroundImage: `
+              radial-gradient(circle at 1px 1px, white 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+        
+        <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ textAlign: 'center' }}>
             <Typography
-              variant="h3"
+              variant="h2"
               sx={{
-                fontSize: { xs: '1.8rem', md: '2.5rem' },
-                fontWeight: 800,
-                mb: 2,
-                background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontWeight: 700,
+                color: 'white',
+                mb: 3,
+                letterSpacing: '-0.03em',
               }}
             >
-              Ready to Streamline Your Invoicing?
+              Start getting paid faster today
             </Typography>
             <Typography
-              variant="h6"
-              sx={{ mb: 4, color: '#64748b' }}
+              variant="h5"
+              sx={{ 
+                mb: 6, 
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontWeight: 400,
+                fontSize: { xs: '1.125rem', md: '1.375rem' },
+                maxWidth: 600,
+                mx: 'auto',
+              }}
             >
-              Join 10,000+ businesses using FlowDesk to manage their invoices
+              Join thousands of businesses that trust FlowDesk to manage their invoicing and get paid on time
             </Typography>
+            
             <Stack
               direction={{ xs: 'column', sm: 'row' }}
-              spacing={2}
+              spacing={3}
               justifyContent="center"
+              alignItems="center"
             >
               <Button
                 variant="contained"
                 size="large"
                 onClick={() => navigate('/register')}
                 sx={{
-                  bgcolor: '#1e293b',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                   color: 'white',
-                  py: 2,
-                  px: 4,
-                  fontSize: '1.1rem',
+                  py: 2.5,
+                  px: 6,
+                  fontSize: '1.25rem',
                   fontWeight: 600,
-                  borderRadius: 2,
-                  boxShadow: '0 4px 14px 0 rgba(30, 41, 59, 0.2)',
+                  borderRadius: '12px',
+                  boxShadow: '0 8px 32px rgba(59, 130, 246, 0.4)',
+                  textTransform: 'none',
                   '&:hover': {
-                    bgcolor: '#0f172a',
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 20px 0 rgba(30, 41, 59, 0.3)',
+                    boxShadow: '0 12px 40px rgba(59, 130, 246, 0.4)',
                   },
-                  transition: 'all 0.3s',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
                 endIcon={<ArrowForwardIcon />}
               >
-                Start Free Forever
+                Get Started Free
               </Button>
               <Button
                 variant="outlined"
@@ -678,16 +964,18 @@ const LandingPage = () => {
                 component={Link}
                 to="/features"
                 sx={{
-                  borderColor: '#cbd5e1',
-                  color: '#475569',
-                  py: 2,
-                  px: 4,
-                  fontSize: '1.1rem',
-                  borderRadius: 2,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  py: 2.5,
+                  px: 5,
+                  fontSize: '1.125rem',
+                  fontWeight: 500,
+                  borderRadius: '12px',
                   '&:hover': {
-                    borderColor: '#94a3b8',
-                    bgcolor: '#f8fafc',
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    bgcolor: 'rgba(255, 255, 255, 0.05)',
                   },
+                  transition: 'all 0.3s',
                 }}
               >
                 View All Features
@@ -699,7 +987,7 @@ const LandingPage = () => {
                 to="/contact"
                 sx={{
                   borderColor: '#cbd5e1',
-                  color: '#475569',
+                  color: 'white',
                   py: 2,
                   px: 4,
                   fontSize: '1.1rem',
