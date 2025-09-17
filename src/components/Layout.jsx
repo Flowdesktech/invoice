@@ -30,6 +30,7 @@ import {
   Add as AddIcon,
   Schedule as ScheduleIcon,
   MailOutline as MailOutlineIcon,
+  Description as DescriptionIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
@@ -74,6 +75,7 @@ const Layout = () => {
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Customers', icon: <PeopleIcon />, path: '/customers' },
     { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices' },
+    { text: 'Templates', icon: <DescriptionIcon />, path: '/invoice-templates' },
     { text: 'Recurring Invoices', icon: <ScheduleIcon />, path: '/recurring-invoices' },
   ];
 

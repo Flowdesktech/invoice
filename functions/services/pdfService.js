@@ -44,9 +44,10 @@ class PdfService {
   }
 
   /**
-   * Generate PDF from invoice data
+   * Common function to generate PDF from invoice data
+   * @private
    */
-  async generateInvoicePDF(data) {
+  async _generatePdfFromInvoice(data, isPreview = false) {
     const { invoice, userData, customer, profileData } = data;
     
     // Get timezone from profile or user settings
@@ -56,11 +57,36 @@ class PdfService {
     const invoicePrefix = profileData?.invoiceSettings?.prefix || userData?.invoiceSettings?.prefix || 'INV';
 
     try {
-      console.log('Starting PDF generation for invoice:', invoice.invoiceNumber);
       
-      // Read and compile template
-      const templateHtml = await fs.readFile(this.templatePath, 'utf-8');
-      const template = handlebars.compile(templateHtml);
+      // Determine which template to use
+      const templateId = invoice.templateId || 'default';
+      const templateFileName = `${templateId}.html`;
+      const templatePath = path.join(__dirname, '..', 'templates', templateFileName);
+      const commonPath = path.join(__dirname, '..', 'templates', 'common.html');
+      
+      // Read template HTML
+      const templateHtml = await fs.readFile(templatePath, 'utf-8');
+      
+      // Try to read common.html, but don't fail if it's missing
+      let commonHtml = '';
+      try {
+        commonHtml = await fs.readFile(commonPath, 'utf-8');
+      } catch (error) {
+        console.warn('Warning: common.html not found or could not be read. Using template without common styles.');
+      }
+      
+      // Extract common styles and running header from common.html if available
+      const styleMatch = commonHtml ? commonHtml.match(/<style[^>]*id="common-styles"[^>]*>([\s\S]*?)<\/style>/) : null;
+      const commonStyles = styleMatch ? styleMatch[0] : '';
+      const runningHeader = commonHtml ? (commonHtml.match(/<!-- RUNNING_HEADER_START -->([\s\S]*?)<!-- RUNNING_HEADER_END -->/)?.[1] || '') : '';
+      
+      // First compile the template WITHOUT common styles to avoid Handlebars parsing CSS
+      let template;
+      try {
+        template = handlebars.compile(templateHtml);
+      } catch (compileError) {
+        throw new Error(`Handlebars compilation failed: ${compileError.message}`);
+      }
 
       // Prepare template data
       const templateData = {
@@ -77,9 +103,20 @@ class PdfService {
       };
 
       // Generate HTML
-      const html = template(templateData);
-
-      console.log('Generating PDF with html-pdf-node...');
+      let html = template(templateData);
+      
+      // NOW inject common styles AFTER template compilation to avoid Handlebars parsing CSS
+      if (commonStyles) {
+        html = html.replace('</head>', `${commonStyles}\n</head>`);
+      }
+      
+      // Also inject running header if available
+      if (runningHeader && html.includes('<body>')) {
+        // Need to compile the running header as it contains Handlebars expressions
+        const headerTemplate = handlebars.compile(runningHeader);
+        const compiledHeader = headerTemplate(templateData);
+        html = html.replace('<body>', `<body>\n${compiledHeader}\n`);
+      }
       
       // PDF options
       const options = {
@@ -95,92 +132,31 @@ class PdfService {
 
       // Generate PDF buffer
       const pdfBuffer = await pdf.generatePdf({ content: html }, options);
-
-      console.log('PDF generated successfully, size:', pdfBuffer.length);
-
-      // Convert PDF buffer to base64
-      const base64Pdf = pdfBuffer.toString('base64');
-      
-      // Return base64 encoded PDF data
-      return `data:application/pdf;base64,${base64Pdf}`;
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      console.error('Error stack:', error.stack);
-      throw new Error(`Failed to generate PDF: ${error.message}`);
-    }
-  }
-
-  /**
-   * Generate PDF preview (returns base64 string for immediate display)
-   */
-  async generatePdfPreview(data) {
-    const { invoice, userData, customer, profileData } = data;
-    
-    // Get timezone from profile or user settings
-    const timezone = profileData?.invoiceSettings?.timezone || userData?.invoiceSettings?.timezone || 'America/New_York';
-    
-    // Get invoice prefix from profile or user settings
-    const invoicePrefix = profileData?.invoiceSettings?.prefix || userData?.invoiceSettings?.prefix || 'INV';
-
-    try {
-      console.log('Starting PDF preview generation for invoice:', invoice.invoiceNumber);
-      
-      // Debug log the invoice data
-      console.log('PDF Preview - Invoice data:', {
-        currency: invoice.currency,
-        subtotal: invoice.subtotal,
-        total: invoice.total
-      });
-      
-      // Read and compile template
-      const templateHtml = await fs.readFile(this.templatePath, 'utf-8');
-      const template = handlebars.compile(templateHtml);
-
-      // Prepare template data
-      const templateData = {
-        invoice: {
-          ...invoice,
-          formattedInvoiceNumber: formatInvoiceNumber(invoice.invoiceNumber, invoicePrefix)
-        },
-        userData,
-        customer,
-        profileData,
-        timezone,
-        invoicePrefix,
-        currentDate: new Date().valueOf()
-      };
-
-      // Generate HTML
-      const html = template(templateData);
-
-      console.log('Generating PDF preview with html-pdf-node...');
-      
-      // PDF options
-      const options = {
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20mm',
-          right: '20mm',
-          bottom: '20mm',
-          left: '20mm'
-        }
-      };
-
-      // Generate PDF buffer
-      const pdfBuffer = await pdf.generatePdf({ content: html }, options);
-      
-      console.log('PDF preview generated successfully');
 
       // Convert to base64
       const pdfBase64 = pdfBuffer.toString('base64');
       
       return `data:application/pdf;base64,${pdfBase64}`;
     } catch (error) {
-      console.error('PDF preview generation error:', error);
+      const errorType = isPreview ? 'preview generation' : 'generation';
+      console.error(`PDF ${errorType} error:`, error);
       console.error('Error stack:', error.stack);
-      throw new Error(`Failed to generate PDF preview: ${error.message}`);
+      throw new Error(`Failed to generate PDF${isPreview ? ' preview' : ''}: ${error.message}`);
     }
+  }
+
+  /**
+   * Generate PDF from invoice data
+   */
+  async generateInvoicePDF(data) {
+    return await this._generatePdfFromInvoice(data, false);
+  }
+
+  /**
+   * Generate PDF preview (returns base64 string for immediate display)
+   */
+  async generatePdfPreview(data) {
+    return await this._generatePdfFromInvoice(data, true);
   }
 
   /**

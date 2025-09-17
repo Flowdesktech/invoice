@@ -113,7 +113,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <PersonIcon sx={{ color: 'primary.main' }} />
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+          <Typography variant="body1" component="div" sx={{ fontWeight: 600, fontSize: '1.25rem' }}>
             {editMode ? 'Edit Customer' : 'New Customer'}
           </Typography>
         </Box>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      font-size: 11pt;
+      color: #14532d;
+      background: #ffffff;
+      padding: 0;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+    
+      padding: 40px;}
+    
+    /* Eco-friendly header with leaf pattern */
+    .eco-header {
+      background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Leaf decorations */
+    .leaf {
+      position: absolute;
+      font-size: 24pt;
+      color: #16a34a;
+      opacity: 0.1;
+      transform: rotate(-15deg);
+    }
+    
+    .leaf-1 { top: 20px; left: 50px; font-size: 30pt; }
+    .leaf-2 { bottom: 20px; right: 100px; transform: rotate(45deg); }
+    .leaf-3 { top: 60px; right: 200px; font-size: 20pt; }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: flex-start;
+      gap: 40px;
+    }
+    
+    .company-info h1 {
+      font-size: 28pt;
+      color: #16a34a;
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 30px;
+    }
+    
+    .eco-tagline {
+      font-size: 11pt;
+      color: #15803d;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+    
+    .company-details {
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #15803d;
+    }
+    
+    /* Eco badge */
+    .eco-badge {
+      background: white;
+      border: 2px solid #16a34a;
+      padding: 25px 35px;
+      border-radius: 50%;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(22, 163, 74, 0.1);
+    }
+    
+    .eco-badge-icon {
+      font-size: 24pt;
+      margin-bottom: 30px;
+    }
+    
+    .invoice-number-eco {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #14532d;
+    }
+    
+    /* Green accent bar */
+    .nature-bar {
+      height: 30px;
+      background: repeating-linear-gradient(
+        45deg,
+        #16a34a,
+        #16a34a 10px,
+        #4ade80 10px,
+        #4ade80 20px
+      );
+      margin-bottom: 40px;
+    }
+    
+    /* Main content */
+    .content {
+      padding: 40px;
+    }
+    
+    /* Customer section with leaf accent */
+    .customer-card {
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      padding: 30px;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .customer-card::before {
+      content: '🌿';
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 40pt;
+      opacity: 0.1;
+    }
+    
+    .section-title {
+      font-size: 12pt;
+      color: #16a34a;
+      font-weight: 600;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .leaf-icon {
+      font-size: 16pt;
+    }
+    
+    /* Date information eco style */
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .date-card {
+      background: #f0fdf4;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .date-label {
+      font-size: 11pt;
+      color: #15803d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    
+    .date-value {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #14532d;
+    }
+    
+    /* Eco-friendly table */
+    .eco-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 40px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(22, 163, 74, 0.1);
+    }
+    
+    .eco-table th {
+      background: #16a34a;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-size: 11pt;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .eco-table td {
+      padding: 18px 15px;
+      background: #ffffff;
+      border-bottom: 1px solid #f0fdf4;
+    }
+    
+    .eco-table tbody tr:nth-child(even) td {
+      background: #f0fdf4;
+    }
+    
+    .eco-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    /* Eco totals */
+    .totals-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+    
+    .eco-totals {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      padding: 30px;
+      border-radius: 15px;
+      min-width: 350px;
+      position: relative;
+      border: 2px solid #bbf7d0;
+    }
+    
+    .eco-totals::before {
+      content: '♻️';
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 60pt;
+      opacity: 0.05;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .total-row.grand-total {
+      margin-top: 15px;
+      padding-top: 20px;
+      border-top: 2px solid #16a34a;
+      font-size: 14pt;
+      font-weight: 700;
+      color: #14532d;
+    }
+    
+    /* Eco footer */
+    .eco-footer {
+      background: #f0fdf4;
+      padding: 50px 40px;
+      margin: 0 -40px;
+      position: relative;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+    }
+    
+    .eco-message {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      border: 1px solid #bbf7d0;
+      text-align: center;
+    }
+    
+    .eco-message h3 {
+      color: #16a34a;
+      font-size: 12pt;
+      margin-bottom: 30px;
+    }
+    
+    .eco-message p {
+      color: #15803d;
+      font-size: 11pt;
+      line-height: 1.6;
+    }
+    
+    .eco-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      font-size: 20pt;
+    }
+    
+    /* Status indicator */
+    .status-eco {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      background: #16a34a;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status-icon {
+      font-size: 12pt;
+    }
+    
+    /* Notes section */
+    .notes-section {
+      margin-bottom: 30px;
+    }
+    
+    .notes-section h3 {
+      color: #16a34a;
+      font-size: 11pt;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    
+    .notes-section p {
+      color: #15803d;
+      line-height: 1.8;
+      font-size: 11pt;
+    }
+    
+    /* Green paper texture */
+    .paper-texture {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.02;
+      background-image: 
+        repeating-radial-gradient(circle at 0 0, transparent 0, #16a34a 20px),
+        repeating-radial-gradient(circle at 50% 50%, #16a34a 0, transparent 20px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Paper texture overlay -->
+    <div class="paper-texture"></div>
+    
+    <!-- Eco-friendly header -->
+    <div class="eco-header">
+      <div class="leaf leaf-1">🍃</div>
+      <div class="leaf leaf-2">🌿</div>
+      <div class="leaf leaf-3">🍀</div>
+      
+      <div class="header-content">
+        <div class="company-info">
+          <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
+          <p class="eco-tagline">🌍 Eco-Friendly Business Solutions</p>
+          <div class="company-details">
+            {{#if userData.email}}📧 {{userData.email}}<br>{{/if}}
+            {{#if userData.phone}}📱 {{userData.phone}}<br>{{/if}}
+            {{#if userData.address}}
+              📍 {{userData.address.street}}, {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="eco-badge">
+          <div class="eco-badge-icon">🌱</div>
+          <div class="invoice-number-eco">#{{invoice.invoiceNumber}}</div>
+        </div>
+      </div>
+      
+      <div class="status-eco">
+        <span class="status-icon">✓</span>
+        {{invoice.status}}
+      </div>
+    </div>
+    
+    <div class="nature-bar"></div>
+    
+    <!-- Main content -->
+    <div class="content">
+      <!-- Customer card -->
+      <div class="customer-card">
+        <h3 class="section-title">
+          <span class="leaf-icon">🌿</span>
+          Bill To
+        </h3>
+        <div class="customer-info">
+          <strong style="font-size: 12pt;">{{customer.name}}</strong><br>
+          {{#if customer.email}}{{customer.email}}<br>{{/if}}
+          {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+          {{#if customer.address}}
+            {{customer.address.street}}<br>
+            {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+            {{customer.address.country}}
+          {{/if}}
+        </div>
+      </div>
+      
+      <!-- Date grid -->
+      <div class="date-grid">
+        <div class="date-card">
+          <div class="date-label">Issue Date</div>
+          <div class="date-value">{{formatDateShort invoice.date timezone=userData.timezone}}</div>
+        </div>
+        <div class="date-card">
+          <div class="date-label">Due Date</div>
+          <div class="date-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+        </div>
+        <div class="date-card">
+          <div class="date-label">Terms</div>
+          <div class="date-value">{{invoice.paymentTerms}}</div>
+        </div>
+        <div class="date-card">
+          <div class="date-label">Currency</div>
+          <div class="date-value">{{invoice.currency}}</div>
+        </div>
+      </div>
+      
+      <!-- Eco table -->
+      <table class="eco-table">
+        <thead>
+          <tr>
+            <th style="width: 50%">Description</th>
+            <th class="text-center" style="width: 15%">Qty</th>
+            <th class="text-right" style="width: 15%">Rate</th>
+            <th class="text-right" style="width: 20%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoice.lineItems}}
+          <tr>
+            <td>{{this.description}}</td>
+            <td class="text-center">{{this.quantity}}</td>
+            <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+            <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <!-- Eco totals -->
+      <div class="totals-wrapper">
+        <div class="eco-totals">
+          <div class="total-row">
+            <span>Subtotal</span>
+            <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+          </div>
+          {{#if invoice.taxRate}}
+          <div class="total-row">
+            <span>Eco-Tax ({{invoice.taxRate}}%)</span>
+            <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+          </div>
+          {{/if}}
+          <div class="total-row grand-total">
+            <span>Total Due</span>
+            <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Eco footer -->
+    <div class="eco-footer">
+      <div class="footer-content">
+        <div class="notes-section">
+          {{#if invoice.notes}}
+            <h3>Notes</h3>
+            <p>{{invoice.notes}}</p>
+          {{/if}}
+          <h3 style="margin-top: 20px;">Payment Terms</h3>
+          <p>{{invoice.paymentTerms}}</p>
+        </div>
+        
+        <div class="eco-message">
+          <h3>🌱 Green Initiative</h3>
+          <p>This invoice is digitally generated to reduce paper waste</p>
+          <div class="eco-icons">
+            <span>♻️</span>
+            <span>🌍</span>
+            <span>💚</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

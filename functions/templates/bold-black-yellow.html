@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Impact', Arial Black, sans-serif;
+      font-size: 11pt;
+      color: #000000;
+      background: #ffffff;
+      padding: 0;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+    
+      padding: 40px;}
+    
+    /* Bold Black Header */
+    .header {
+      background: #000000;
+      color: #fbbf24;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    
+      margin-bottom: 40px;
+    }
+    
+    .header-content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      align-items: stretch;
+    }
+    
+    .company-section {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .company-name {
+      font-size: 32pt;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+    
+    .company-details {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      font-weight: normal;
+    }
+    
+    .invoice-badge {
+      background: #fbbf24;
+      color: #000000;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .invoice-badge::before {
+      content: '';
+      position: absolute;
+      left: -50px;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      background: #fbbf24;
+      transform: skewX(-15deg);
+    }
+    
+    .invoice-label {
+      font-size: 24pt;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+    }
+    
+    .invoice-number-large {
+      font-size: 36pt;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+    
+    /* Yellow accent bar */
+    .accent-bar {
+      height: 8px;
+      background: #fbbf24;
+    }
+    
+    /* Main content */
+    .content {
+      padding: 40px;
+    }
+    
+    /* Customer info with yellow accent */
+    .customer-section {
+      display: grid;
+      grid-template-columns: 8px 1fr;
+      margin-bottom: 40px;
+    }
+    
+    .customer-accent {
+      background: #fbbf24;
+    }
+    
+    .customer-content {
+      padding-left: 30px;
+    }
+    
+    .section-title {
+      font-size: 18pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+    }
+    
+    .customer-details {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.8;
+      font-weight: normal;
+    }
+    
+    .customer-details strong {
+      font-weight: 700;
+      font-size: 12pt;
+    }
+    
+    /* Date grid with borders */
+    .date-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 3px solid #000000;
+      margin-bottom: 40px;
+    }
+    
+    .date-item {
+      padding: 20px;
+      text-align: center;
+      border-right: 3px solid #000000;
+    }
+    
+    .date-item:last-child {
+      border-right: none;
+    }
+    
+    .date-label {
+      font-size: 11pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+    
+    .date-value {
+      font-size: 14pt;
+      font-weight: 900;
+    }
+    
+    /* Items table with bold design */
+    .items-table {
+      width: 100%;
+      border: 3px solid #000000;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    
+    .items-table th {
+      background: #fbbf24;
+      color: #000000;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 11pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 3px solid #000000;
+    }
+    
+    .items-table td {
+      padding: 20px;
+      border-bottom: 1px solid #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-weight: normal;
+    
+      vertical-align: top;
+    }
+    
+    .items-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .qty-cell {
+      font-weight: 700;
+      font-size: 12pt;
+    }
+    
+    .amount-cell {
+      font-weight: 700;
+      font-size: 12pt;
+    }
+    
+    /* Totals with black background */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+    
+    .totals-box {
+      width: 400px;
+      background: #000000;
+      color: #6b7280;
+      padding: 0;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 30px;
+      border-bottom: 1px solid #333333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .total-row.grand-total {
+      background: #fbbf24;
+      color: #000000;
+      border-bottom: none;
+      padding: 25px 30px;
+      font-size: 16pt;
+      font-weight: 900;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #f9fafb;
+      padding: 40px;
+      border-top: 8px solid #fbbf24;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+    }
+    
+    .notes h3 {
+      font-size: 14pt;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 30px;
+    }
+    
+    .notes p {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-weight: normal;
+      line-height: 1.8;
+      color: #374151;
+    }
+    
+    .payment-block {
+      background: #000000;
+      color: #fbbf24;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .payment-block h4 {
+      font-size: 11pt;
+      margin-bottom: 30px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    
+    .payment-block .amount {
+      font-size: 24pt;
+      font-weight: 900;
+    }
+    
+    /* Status indicator */
+    .status-bar {
+      background: #fbbf24;
+      padding: 10px 40px;
+      text-align: right;
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Bold Header with Yellow Accent -->
+    <div class="header">
+      <div class="header-content">
+        <div class="company-section">
+          <div class="company-name">
+            {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
+          </div>
+          <div class="company-details">
+            {{#if userData.email}}{{userData.email}}<br>{{/if}}
+            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
+            {{#if userData.address}}
+              {{userData.address.street}}<br>
+              {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="invoice-badge">
+          <div class="invoice-label">INVOICE</div>
+          <div class="invoice-number-large">#{{invoice.invoiceNumber}}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="accent-bar"></div>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+      STATUS: {{invoice.status}}
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Customer Section -->
+      <div class="customer-section">
+        <div class="customer-accent"></div>
+        <div class="customer-content">
+          <h2 class="section-title">BILL TO</h2>
+          <div class="customer-details">
+            <strong>{{customer.name}}</strong><br>
+            {{#if customer.email}}{{customer.email}}<br>{{/if}}
+            {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+            {{#if customer.address}}
+              {{customer.address.street}}<br>
+              {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+              {{customer.address.country}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Date Grid -->
+      <div class="date-grid">
+        <div class="date-item">
+          <div class="date-label">Issue Date</div>
+          <div class="date-value">{{formatDateShort invoice.date timezone=userData.timezone}}</div>
+        </div>
+        <div class="date-item">
+          <div class="date-label">Due Date</div>
+          <div class="date-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+        </div>
+        <div class="date-item">
+          <div class="date-label">Terms</div>
+          <div class="date-value">{{invoice.paymentTerms}}</div>
+        </div>
+      </div>
+      
+      <!-- Bold Items Table -->
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th style="width: 50%">DESCRIPTION</th>
+            <th class="text-center" style="width: 15%">QTY</th>
+            <th class="text-right" style="width: 15%">RATE</th>
+            <th class="text-right" style="width: 20%">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoice.lineItems}}
+          <tr>
+            <td>{{this.description}}</td>
+            <td class="text-center qty-cell">{{this.quantity}}</td>
+            <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+            <td class="text-right amount-cell">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <!-- Totals Section -->
+      <div class="totals-section">
+        <div class="totals-box">
+          <div class="total-row">
+            <span>SUBTOTAL</span>
+            <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+          </div>
+          {{#if invoice.taxRate}}
+          <div class="total-row">
+            <span>TAX ({{invoice.taxRate}}%)</span>
+            <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+          </div>
+          {{/if}}
+          <div class="total-row grand-total">
+            <span>TOTAL DUE</span>
+            <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-grid">
+        <div class="notes">
+          {{#if invoice.notes}}
+            <h3>NOTES</h3>
+            <p>{{invoice.notes}}</p>
+          {{/if}}
+          <h3 style="margin-top: 20px;">PAYMENT TERMS</h3>
+          <p>{{invoice.paymentTerms}}</p>
+        </div>
+        
+        <div class="payment-block">
+          <h4>AMOUNT DUE</h4>
+          <div class="amount">{{formatCurrency invoice.total currency=invoice.currency}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

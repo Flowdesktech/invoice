@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      color: #1f2937;
+      background: #ffffff;
+      padding: 0;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+    
+      padding: 40px;}
+    
+    /* Executive header */
+    .executive-header {
+      background: #f9fafb;
+      padding: 50px;
+      border-bottom: 1px solid #e5e7eb;
+      position: relative;
+    }
+    
+    .header-content {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    
+    .executive-branding h1 {
+      font-size: 26pt;
+      color: #1f2937;
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 5px;
+    }
+    
+    .executive-tagline {
+      font-size: 11pt;
+      color: #6b7280;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+    
+    .contact-info {
+      font-size: 11pt;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+    
+    .invoice-plaque {
+      background: #1f2937;
+      color: white;
+      padding: 30px 40px;
+      text-align: center;
+      min-width: 200px;
+    }
+    
+    .invoice-plaque h2 {
+      font-size: 14pt;
+      font-weight: 300;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+    
+    .invoice-plaque .number {
+      font-size: 16pt;
+      font-weight: 400;
+    }
+    
+    /* Executive info bar */
+    .executive-bar {
+      background: #374151;
+      color: white;
+      padding: 20px 50px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+    
+    .exec-item {
+      text-align: center;
+    }
+    
+    .exec-label {
+      font-size: 11pt;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    
+    .exec-value {
+      font-size: 11pt;
+      font-weight: 500;
+    }
+    
+    /* Main content */
+    .executive-content {
+      padding: 50px;
+    }
+    
+    /* Client information */
+    .client-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      margin-bottom: 50px;
+    }
+    
+    .info-card {
+      background: #f9fafb;
+      padding: 30px;
+      border: 1px solid #e5e7eb;
+      position: relative;
+    }
+    
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #6b7280;
+    }
+    
+    .info-card h3 {
+      font-size: 11pt;
+      color: #1f2937;
+      margin-bottom: 30px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .info-content {
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #4b5563;
+    }
+    
+    .info-content strong {
+      color: #1f2937;
+      font-weight: 600;
+    }
+    
+    /* Executive table */
+    .executive-table {
+      width: 100%;
+      margin-bottom: 50px;
+      border: 1px solid #e5e7eb;
+      background: white;
+    }
+    
+    .executive-table thead {
+      background: #f3f4f6;
+    }
+    
+    .executive-table th {
+      padding: 15px 20px;
+      text-align: left;
+      font-size: 11pt;
+      color: #374151;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .executive-table td {
+      padding: 20px;
+      border-bottom: 1px solid #f3f4f6;
+      color: #1f2937;
+    }
+    
+    .executive-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .executive-table tbody tr:hover {
+      background: #f9fafb;
+    }
+    
+    .service-code {
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 11pt;
+      color: #6b7280;
+      margin-right: 10px;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    /* Financial breakdown */
+    .financial-section {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 50px;
+      margin-bottom: 50px;
+    }
+    
+    .summary-notes {
+      padding: 30px;
+      background: #f9fafb;
+      border-left: 4px solid #374151;
+    }
+    
+    .summary-notes h3 {
+      font-size: 11pt;
+      color: #1f2937;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+    
+    .summary-notes p {
+      color: #4b5563;
+      line-height: 1.8;
+      font-size: 11pt;
+    }
+    
+    .financial-summary {
+      background: white;
+      border: 2px solid #1f2937;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+    
+    .summary-label {
+      color: #4b5563;
+      font-weight: 500;
+    }
+    
+    .summary-value {
+      color: #1f2937;
+      font-weight: 600;
+    }
+    
+    .total-row {
+      background: #1f2937;
+      color: white;
+      font-size: 14pt;
+      font-weight: 600;
+    }
+    
+    .total-row .summary-label,
+    .total-row .summary-value {
+      color: white;
+    }
+    
+    /* Executive footer */
+    .executive-footer {
+      background: #f9fafb;
+      padding: 50px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-section h4 {
+      font-size: 11pt;
+      color: #1f2937;
+      margin-bottom: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .footer-section p,
+    .footer-section ul {
+      font-size: 11pt;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-section li {
+      padding: 3px 0;
+    }
+    
+    /* Professional closing */
+    .professional-closing {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .closing-message {
+      font-size: 11pt;
+      color: #4b5563;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+    
+    .company-logo-footer {
+      width: 60px;
+      height: 60px;
+      background: #1f2937;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24pt;
+      font-weight: 300;
+    }
+    
+    /* Status indicator */
+    .status-indicator {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+      padding: 8px 20px;
+      border: 1px solid #6b7280;
+      color: #374151;
+      font-size: 11pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Executive Header -->
+    <div class="executive-header">
+      <div class="status-indicator">{{invoice.status}}</div>
+      
+      <div class="header-content">
+        <div class="executive-branding">
+          <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
+          <p class="executive-tagline">Strategic Consulting Services</p>
+          <div class="contact-info">
+            {{#if userData.email}}{{userData.email}}<br>{{/if}}
+            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
+            {{#if userData.address}}
+              {{userData.address.street}}<br>
+              {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>
+              {{userData.address.country}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="invoice-plaque">
+          <h2>Invoice</h2>
+          <div class="number">#{{invoice.invoiceNumber}}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Executive Info Bar -->
+    <div class="executive-bar">
+      <div class="exec-item">
+        <div class="exec-label">Issue Date</div>
+        <div class="exec-value">{{formatDateShort invoice.date timezone=userData.timezone}}</div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-label">Due Date</div>
+        <div class="exec-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-label">Terms</div>
+        <div class="exec-value">{{invoice.paymentTerms}}</div>
+      </div>
+      <div class="exec-item">
+        <div class="exec-label">Project ID</div>
+        <div class="exec-value">{{invoice.invoiceNumber}}</div>
+      </div>
+    </div>
+    
+    <!-- Executive Content -->
+    <div class="executive-content">
+      <!-- Client Information -->
+      <div class="client-container">
+        <div class="info-card">
+          <h3>Client Details</h3>
+          <div class="info-content">
+            <strong>{{customer.name}}</strong><br>
+            {{#if customer.company}}{{customer.company}}<br>{{/if}}
+            {{#if customer.email}}{{customer.email}}<br>{{/if}}
+            {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+            {{#if customer.address}}
+              {{customer.address.street}}<br>
+              {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+              {{customer.address.country}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="info-card">
+          <h3>Project Information</h3>
+          <div class="info-content">
+            <strong>Invoice Date:</strong> {{formatDate invoice.date timezone=userData.timezone}}<br>
+            <strong>Payment Due:</strong> {{formatDate invoice.dueDate timezone=userData.timezone}}<br>
+            <strong>Payment Terms:</strong> {{invoice.paymentTerms}}<br>
+            <strong>Currency:</strong> {{invoice.currency}}<br>
+            <strong>Status:</strong> {{invoice.status}}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Executive Table -->
+      <table class="executive-table">
+        <thead>
+          <tr>
+            <th style="width: 50%">Service Description</th>
+            <th class="text-center" style="width: 15%">Hours/Units</th>
+            <th class="text-right" style="width: 15%">Rate</th>
+            <th class="text-right" style="width: 20%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoice.lineItems}}
+          <tr>
+            <td>
+              <span class="service-code">[S{{@index}}]</span>
+              {{this.description}}
+            </td>
+            <td class="text-center">{{this.quantity}}</td>
+            <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+            <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <!-- Financial Breakdown -->
+      <div class="financial-section">
+        <div class="summary-notes">
+          {{#if invoice.notes}}
+            <h3>Project Notes</h3>
+            <p>{{invoice.notes}}</p>
+          {{/if}}
+          <h3 {{#if invoice.notes}}style="margin-top: 25px;"{{/if}}>Payment Instructions</h3>
+          <p>{{invoice.paymentTerms}}</p>
+        </div>
+        
+        <div class="financial-summary">
+          <div class="summary-row">
+            <span class="summary-label">Professional Services</span>
+            <span class="summary-value">{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+          </div>
+          {{#if invoice.taxRate}}
+          <div class="summary-row">
+            <span class="summary-label">Tax ({{invoice.taxRate}}%)</span>
+            <span class="summary-value">{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+          </div>
+          {{/if}}
+          <div class="summary-row total-row">
+            <span class="summary-label">Total Amount Due</span>
+            <span class="summary-value">{{formatCurrency invoice.total currency=invoice.currency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Executive Footer -->
+    <div class="executive-footer">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Payment Methods</h4>
+          <ul>
+            <li>• Wire Transfer</li>
+            <li>• ACH Transfer</li>
+            <li>• Company Check</li>
+            <li>• Credit Card (3% fee applies)</li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Banking Information</h4>
+          <p>
+            Bank Name: First National Bank<br>
+            Account Type: Business Checking<br>
+            Routing: XXX-XXX-XXX<br>
+            Account: XXXX-XXXX
+          </p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact Information</h4>
+          <p>
+            Accounts Receivable<br>
+            {{#if userData.email}}{{userData.email}}<br>{{/if}}
+            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
+            Monday - Friday, 9AM - 5PM EST
+          </p>
+        </div>
+      </div>
+      
+      <div class="professional-closing">
+        <p class="closing-message">
+          We appreciate the opportunity to serve your organization and look forward to our continued partnership.
+        </p>
+        <div class="company-logo-footer">
+          {{#if userData.company}}{{userData.company.[0]}}{{else}}{{userData.displayName.[0]}}{{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

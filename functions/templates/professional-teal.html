@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 11pt;
+      color: #134e4a;
+      background: #ffffff;
+      padding: 40px;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+    
+      padding: 40px;}
+    
+    /* Professional header */
+    .professional-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid #0d9488;
+      margin-bottom: 40px;
+    }
+    
+    .company-branding h1 {
+      font-family: 'Cambria', Georgia, serif;
+      font-size: 26pt;
+      color: #0d9488;
+      font-weight: 400;
+      margin-bottom: 30px;
+    }
+    
+    .company-branding p {
+      font-size: 11pt;
+      color: #0f766e;
+      line-height: 1.6;
+    }
+    
+    .invoice-header-box {
+      background: #f0fdfa;
+      border: 2px solid #0d9488;
+      padding: 25px 35px;
+      text-align: center;
+      min-width: 200px;
+    }
+    
+    .invoice-header-box h2 {
+      font-size: 16pt;
+      color: #0d9488;
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    
+    .invoice-header-box .number {
+      font-size: 14pt;
+      color: #134e4a;
+      font-weight: 700;
+    }
+    
+    .invoice-header-box .status {
+      font-size: 11pt;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    
+    /* Business info section */
+    .business-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+      background: #f0fdfa;
+      padding: 30px;
+      border-radius: 8px;
+    }
+    
+    .info-block h3 {
+      font-size: 11pt;
+      color: #0d9488;
+      margin-bottom: 30px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .info-block-icon {
+      width: 24px;
+      height: 24px;
+      background: #0d9488;
+      color: white;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12pt;
+    }
+    
+    .info-block-content {
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #134e4a;
+    }
+    
+    .info-block-content strong {
+      color: #0d9488;
+      font-weight: 600;
+    }
+    
+    /* Key metrics bar */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .metric-item {
+      background: white;
+      border: 1px solid #99f6e4;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .metric-item:hover {
+      background: #f0fdfa;
+      border-color: #0d9488;
+      transform: translateY(-2px);
+    }
+    
+    .metric-label {
+      font-size: 11pt;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    
+    .metric-value {
+      font-size: 12pt;
+      color: #134e4a;
+      font-weight: 700;
+    }
+    
+    /* Professional table */
+    .professional-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(13, 148, 136, 0.1);
+    }
+    
+    .professional-table thead {
+      background: #0d9488;
+      color: white;
+    }
+    
+    .professional-table th {
+      padding: 15px;
+      text-align: left;
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .professional-table td {
+      padding: 18px 15px;
+      border-bottom: 1px solid #f0fdfa;
+      color: #134e4a;
+    }
+    
+    .professional-table tbody tr:hover {
+      background: #f0fdfa;
+    }
+    
+    .professional-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .item-index {
+      font-size: 11pt;
+      color: #0f766e;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    /* Professional totals */
+    .totals-section {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+    
+    .payment-instructions {
+      padding: 25px;
+      background: #f0fdfa;
+      border-radius: 8px;
+      border-left: 4px solid #0d9488;
+    }
+    
+    .payment-instructions h4 {
+      font-size: 11pt;
+      color: #0d9488;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    
+    .payment-instructions p {
+      font-size: 11pt;
+      color: #0f766e;
+      line-height: 1.6;
+    }
+    
+    .totals-box {
+      background: white;
+      border: 2px solid #0d9488;
+      padding: 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .totals-box .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      border-bottom: 1px solid #f0fdfa;
+    }
+    
+    .totals-box .row:last-child {
+      border-bottom: none;
+      background: #0d9488;
+      color: white;
+      font-size: 14pt;
+      font-weight: 700;
+      padding: 20px 25px;
+    }
+    
+    /* Professional footer */
+    .professional-footer {
+      background: #f0fdfa;
+      padding: 40px;
+      border-radius: 8px;
+      margin-top: 60px;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+    
+    .footer-section h4 {
+      font-size: 11pt;
+      color: #0d9488;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    
+    .footer-section p, .footer-section ul {
+      font-size: 11pt;
+      color: #0f766e;
+      line-height: 1.8;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .footer-section li {
+      padding: 5px 0;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .contact-icon {
+      width: 20px;
+      height: 20px;
+      background: #5eead4;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11pt;
+    }
+    
+    /* Thank you message */
+    .thank-you {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #99f6e4;
+    }
+    
+    .thank-you p {
+      font-size: 11pt;
+      color: #0d9488;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Professional Header -->
+    <div class="professional-header">
+      <div class="company-branding">
+        <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
+        <p>
+          Professional Services<br>
+          {{#if userData.email}}{{userData.email}}{{/if}}
+          {{#if userData.phone}} | {{userData.phone}}{{/if}}
+          {{#if userData.address}}
+            <br>{{userData.address.street}} • {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+          {{/if}}
+        </p>
+      </div>
+      
+      <div class="invoice-header-box">
+        <h2>INVOICE</h2>
+        <div class="number">#{{invoice.invoiceNumber}}</div>
+        <div class="status">{{invoice.status}}</div>
+      </div>
+    </div>
+    
+    <!-- Business Info Section -->
+    <div class="business-info">
+      <div class="info-block">
+        <h3>
+          <div class="info-block-icon">📋</div>
+          Bill To
+        </h3>
+        <div class="info-block-content">
+          <strong>{{customer.name}}</strong><br>
+          {{#if customer.company}}{{customer.company}}<br>{{/if}}
+          {{#if customer.email}}{{customer.email}}<br>{{/if}}
+          {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+          {{#if customer.address}}
+            {{customer.address.street}}<br>
+            {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+            {{customer.address.country}}
+          {{/if}}
+        </div>
+      </div>
+      
+      <div class="info-block">
+        <h3>
+          <div class="info-block-icon">📅</div>
+          Invoice Details
+        </h3>
+        <div class="info-block-content">
+          <strong>Invoice Date:</strong> {{formatDate invoice.date timezone=userData.timezone}}<br>
+          <strong>Due Date:</strong> {{formatDate invoice.dueDate timezone=userData.timezone}}<br>
+          <strong>Payment Terms:</strong> {{invoice.paymentTerms}}<br>
+          <strong>Currency:</strong> {{invoice.currency}}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Key Metrics Bar -->
+    <div class="metrics-bar">
+      <div class="metric-item">
+        <div class="metric-label">Invoice Total</div>
+        <div class="metric-value">{{formatCurrency invoice.total currency=invoice.currency}}</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Tax Amount</div>
+        <div class="metric-value">{{formatCurrency invoice.taxAmount currency=invoice.currency}}</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Due Date</div>
+        <div class="metric-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+      </div>
+      <div class="metric-item">
+        <div class="metric-label">Items</div>
+        <div class="metric-value">{{invoice.lineItems.length}}</div>
+      </div>
+    </div>
+    
+    <!-- Professional Table -->
+    <table class="professional-table">
+      <thead>
+        <tr>
+          <th style="width: 50%">Service Description</th>
+          <th class="text-center" style="width: 15%">Quantity</th>
+          <th class="text-right" style="width: 15%">Unit Rate</th>
+          <th class="text-right" style="width: 20%">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each invoice.lineItems}}
+        <tr>
+          <td>
+            <span class="item-index">{{@index}}</span>
+            {{this.description}}
+          </td>
+          <td class="text-center">{{this.quantity}}</td>
+          <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+          <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <!-- Professional Totals -->
+    <div class="totals-section">
+      <div class="payment-instructions">
+        <h4>Payment Instructions</h4>
+        <p>{{invoice.paymentTerms}}</p>
+        {{#if invoice.notes}}
+          <h4 style="margin-top: 20px;">Additional Notes</h4>
+          <p>{{invoice.notes}}</p>
+        {{/if}}
+      </div>
+      
+      <div class="totals-box">
+        <div class="row">
+          <span>Subtotal</span>
+          <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+        </div>
+        {{#if invoice.taxRate}}
+        <div class="row">
+          <span>Tax ({{invoice.taxRate}}%)</span>
+          <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+        </div>
+        {{/if}}
+        <div class="row">
+          <span>Total Amount Due</span>
+          <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Professional Footer -->
+    <div class="professional-footer">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Terms & Conditions</h4>
+          <p>
+            Payment is due within the terms specified above. 
+            Late payments may be subject to additional fees as per our standard terms of service.
+          </p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Payment Methods</h4>
+          <ul>
+            <li>• Bank Transfer</li>
+            <li>• Credit Card</li>
+            <li>• Check</li>
+            <li>• Online Payment</li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <span>{{userData.email}}</span>
+          </div>
+          {{#if userData.phone}}
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <span>{{userData.phone}}</span>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+      
+      <div class="thank-you">
+        <p>Thank you for your business. We value our partnership and look forward to serving you.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -60,7 +60,8 @@ class InvoiceController {
       requestedCurrency: invoiceData.currency,
       profileCurrency: profileData?.invoiceSettings?.currency,
       userCurrency: userData?.invoiceSettings?.currency,
-      defaultCurrency: 'USD'
+      defaultCurrency: 'USD',
+      templateId: invoiceData.templateId || 'default'
     });
 
     // Prepare invoice data for PDF generation in the format expected by PDF service
@@ -75,6 +76,7 @@ class InvoiceController {
         paymentTerms: invoiceData.paymentTerms || 'Due on receipt',
         status: invoiceData.status || 'draft',
         currency: invoiceData.currency || profileData?.invoiceSettings?.currency || userData?.invoiceSettings?.currency || 'USD',
+        templateId: invoiceData.templateId || 'default',
         // Calculate totals
         subtotal: (invoiceData.lineItems || []).reduce((sum, item) => sum + (item.quantity * item.rate), 0),
         taxAmount: 0, // Will be calculated

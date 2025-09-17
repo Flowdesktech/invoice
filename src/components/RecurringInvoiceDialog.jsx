@@ -214,7 +214,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center" gap={1}>
             <ScheduleIcon color="primary" />
-            <Typography variant="h6">
+            <Typography variant="body1" component="div" sx={{ fontWeight: 600, fontSize: '1.25rem' }}>
               {mode === 'edit' ? 'Edit Recurring Invoice' : 'Create Recurring Invoice'}
             </Typography>
           </Box>

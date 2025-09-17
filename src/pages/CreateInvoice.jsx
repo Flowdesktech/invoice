@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import CustomerDialog from '../components/CustomerDialog';
 import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
 import currencyOptions from '../data/currencyOptions.json';
+import { templates } from './InvoiceTemplates';
+import Chip from '@mui/material/Chip';
 import {
   Dialog,
   DialogTitle,
@@ -44,6 +46,8 @@ import {
   Email as EmailIcon,
   Phone as PhoneIcon,
   LocationOn as LocationIcon,
+  Palette as PaletteIcon,
+  Star as StarIcon,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
@@ -76,6 +80,7 @@ const CreateInvoice = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [previewPdf, setPreviewPdf] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const { currentUser, userData, currentProfile } = useAuth();
   const navigate = useNavigate();
 
@@ -109,6 +114,13 @@ const CreateInvoice = () => {
     if (!isEditMode && !isDuplicateMode) {
       generateInvoiceNumber();
     }
+    
+    // Check for selected template from localStorage
+    const savedTemplate = localStorage.getItem('selectedInvoiceTemplate');
+    if (savedTemplate) {
+      setSelectedTemplate(JSON.parse(savedTemplate));
+      // Don't clear localStorage yet - will clear after component is fully loaded
+    }
   }, [currentUser, isEditMode, isDuplicateMode]);
 
   useEffect(() => {
@@ -116,6 +128,19 @@ const CreateInvoice = () => {
       fetchInvoiceData();
     }
   }, [isEditMode, id, customers]);
+
+  // Clear localStorage template after component is fully mounted and template is set
+  useEffect(() => {
+    // Only clear if we have a selected template and it came from localStorage
+    if (selectedTemplate && localStorage.getItem('selectedInvoiceTemplate')) {
+      // Use a small timeout to ensure navigation and state updates are complete
+      const timer = setTimeout(() => {
+        localStorage.removeItem('selectedInvoiceTemplate');
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [selectedTemplate]);
 
   // Handle duplicate data
   useEffect(() => {
@@ -179,6 +204,14 @@ const CreateInvoice = () => {
       
       // Set line items
       setLineItems(invoice.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
+      
+      // Restore selected template if available
+      if (invoice.templateId) {
+        const template = templates.find(t => t.id === invoice.templateId);
+        if (template) {
+          setSelectedTemplate(template);
+        }
+      }
     } catch (error) {
       console.error('Error fetching invoice:', error);
       Swal.fire({
@@ -263,6 +296,7 @@ const CreateInvoice = () => {
         paymentTerms: watch('paymentTerms'),
         status: watch('status') || 'draft',  // Include status for preview
         currency: watch('currency') || 'USD',  // Include currency for preview
+        templateId: selectedTemplate?.id || null,  // Include template ID for preview
       };
       
       // Call backend preview API
@@ -385,6 +419,7 @@ const CreateInvoice = () => {
         status: data.status,
         invoiceNumber: data.invoiceNumber, // Always include invoice number
         currency: data.currency, // Include currency for invoice
+        templateId: selectedTemplate?.id || null, // Only send template ID
       };
 
       if (isEditMode) {
@@ -448,10 +483,15 @@ const CreateInvoice = () => {
     }).format(amount);
   };
 
-  if (loadingCustomers) {
+  if (loadingCustomers || loadingInvoice) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <CircularProgress />
+        <Box textAlign="center">
+          <CircularProgress size={48} />
+          <Typography variant="body1" sx={{ mt: 2, color: 'text.secondary' }}>
+            {loadingInvoice ? 'Loading invoice...' : 'Loading customers...'}
+          </Typography>
+        </Box>
       </Box>
     );
   }
@@ -485,6 +525,88 @@ const CreateInvoice = () => {
         <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
           {/* Customer and Invoice Details */}
           <Grid item xs={12} md={12} lg={8} xl={9}>
+            {/* Template Selection */}
+            <Paper 
+              sx={{ 
+                p: { xs: 2, sm: 3 }, 
+                mb: 3,
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                background: selectedTemplate ? 'linear-gradient(to right, #f3f4f6, #ffffff)' : 'transparent',
+              }}
+            >
+              <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
+                <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                  {/* Template Preview Thumbnail */}
+                  {selectedTemplate && (
+                    <Box
+                      sx={{
+                        width: { xs: 100, sm: 120, md: 140 },
+                        height: { xs: 140, sm: 170, md: 200 },
+                        borderRadius: 1,
+                        overflow: 'hidden',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        bgcolor: '#f8f9fa',
+                        flexShrink: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <img
+                        src={`/template-previews/${selectedTemplate.id}-preview.png`}
+                        alt={`${selectedTemplate.name} preview`}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'contain',
+                          objectPosition: 'center',
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentNode.style.background = selectedTemplate.preview.primaryColor;
+                          e.target.parentNode.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 14px; text-align: center; padding: 10px;">${selectedTemplate.name}</div>`;
+                        }}
+                      />
+                    </Box>
+                  )}
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      Invoice Template
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {selectedTemplate 
+                        ? `${selectedTemplate.name} - ${selectedTemplate.description}`
+                        : 'Using default template'
+                      }
+                    </Typography>
+                    {selectedTemplate?.isPremium && (
+                      <Chip 
+                        label="Premium - Free for Early Adopters" 
+                        size="small" 
+                        color="warning"
+                        icon={<StarIcon sx={{ fontSize: 16 }} />}
+                        sx={{ mt: 1 }}
+                      />
+                    )}
+                  </Box>
+                </Box>
+                <Button
+                  variant="outlined"
+                  startIcon={<PaletteIcon />}
+                  onClick={() => {
+                    const returnPath = isEditMode ? `/invoices/${id}/edit` : '/invoices/create';
+                    navigate('/invoice-templates', { state: { returnPath } });
+                  }}
+                  sx={{ minWidth: 150 }}
+                >
+                  {selectedTemplate ? 'Change Template' : 'Choose Template'}
+                </Button>
+              </Box>
+            </Paper>
+
             <Paper 
               sx={{ 
                 p: { xs: 2, sm: 3, md: 4 }, 
@@ -519,24 +641,28 @@ const CreateInvoice = () => {
                         {...field}
                         options={[{ id: 'new', name: '+ Add New Customer' }, ...customers]}
                         getOptionLabel={(option) => option.name || ''}
-                        renderOption={(props, option) => (
-                          <Box
-                            component="li"
-                            {...props}
-                            sx={{
-                              fontWeight: option.id === 'new' ? 600 : 400,
-                              color: option.id === 'new' ? 'primary.main' : 'inherit',
-                              borderBottom: option.id === 'new' ? '1px solid' : 'none',
-                              borderColor: 'divider',
-                              '&:hover': {
-                                backgroundColor: option.id === 'new' ? 'primary.50' : 'action.hover',
-                              },
-                            }}
-                          >
-                            {option.id === 'new' && <AddIcon sx={{ mr: 1, fontSize: 20 }} />}
-                            {option.name}
-                          </Box>
-                        )}
+                        renderOption={(props, option) => {
+                          const { key, ...otherProps } = props;
+                          return (
+                            <Box
+                              component="li"
+                              key={key}
+                              {...otherProps}
+                              sx={{
+                                fontWeight: option.id === 'new' ? 600 : 400,
+                                color: option.id === 'new' ? 'primary.main' : 'inherit',
+                                borderBottom: option.id === 'new' ? '1px solid' : 'none',
+                                borderColor: 'divider',
+                                '&:hover': {
+                                  backgroundColor: option.id === 'new' ? 'primary.50' : 'action.hover',
+                                },
+                              }}
+                            >
+                              {option.id === 'new' && <AddIcon sx={{ mr: 1, fontSize: 20 }} />}
+                              {option.name}
+                            </Box>
+                          );
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}

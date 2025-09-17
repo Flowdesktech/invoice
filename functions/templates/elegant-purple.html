@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 11pt;
+      color: #1e1b4b;
+      background: #ffffff;
+      padding: 45px 40px;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+    
+      padding: 40px;}
+    
+    /* Watermark */
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 120pt;
+      color: #7c3aed;
+      opacity: 0.03;
+      font-weight: 700;
+      letter-spacing: 20px;
+      z-index: 0;
+      user-select: none;
+      white-space: nowrap;
+    }
+    
+    /* Content wrapper */
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Elegant header */
+    .elegant-header {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+    }
+    
+    .header-flourish {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .flourish-line {
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ddd6fe, transparent);
+    }
+    
+    .flourish-left {
+      left: 0;
+    }
+    
+    .flourish-right {
+      right: 0;
+    }
+    
+    .flourish-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36pt;
+      color: #7c3aed;
+      font-style: normal;
+    }
+    
+    .company-title {
+      font-size: 32pt;
+      font-weight: 400;
+      color: #7c3aed;
+      margin-bottom: 30px;
+      letter-spacing: -1px;
+    }
+    
+    .company-subtitle {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      font-style: italic;
+      margin-bottom: 30px;
+    }
+    
+    .company-details {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      line-height: 1.6;
+    }
+    
+    /* Invoice title section */
+    .invoice-section {
+      background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .invoice-label {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 30px;
+    }
+    
+    .invoice-number-elegant {
+      font-size: 28pt;
+      color: #7c3aed;
+      font-weight: 400;
+      letter-spacing: -1px;
+    }
+    
+    /* Two column layout */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      margin-bottom: 50px;
+    }
+    
+    .info-box {
+      position: relative;
+      padding-left: 30px;
+    }
+    
+    .info-box::before {
+      content: '❦';
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 20pt;
+      color: #7c3aed;
+      opacity: 0.5;
+    }
+    
+    .info-title {
+      font-size: 12pt;
+      color: #7c3aed;
+      margin-bottom: 30px;
+      font-weight: 400;
+    }
+    
+    .info-content {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #1e1b4b;
+    }
+    
+    .info-content strong {
+      color: #7c3aed;
+      font-weight: 600;
+    }
+    
+    /* Elegant table */
+    .elegant-table {
+      width: 100%;
+      margin-bottom: 50px;
+    }
+    
+    .table-header {
+      border-bottom: 2px solid #7c3aed;
+      margin-bottom: 30px;
+    }
+    
+    .table-header th {
+      padding: 15px 0;
+      text-align: left;
+      font-size: 11pt;
+      color: #7c3aed;
+      font-weight: 400;
+      letter-spacing: 1px;
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+    
+    .table-row {
+      border-bottom: 1px solid #e9d5ff;
+    }
+    
+    .table-row td {
+      padding: 20px 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #1e1b4b;
+    }
+    
+    .item-description {
+      font-style: italic;
+      color: #6b21a8;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    /* Elegant totals */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 60px;
+    }
+    
+    .totals-elegant {
+      width: 350px;
+    }
+    
+    .total-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      padding: 12px 0;
+      border-bottom: 1px solid #f3e8ff;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+    }
+    
+    .total-label {
+      color: #6b21a8;
+    }
+    
+    .total-value {
+      text-align: right;
+      color: #1e1b4b;
+      font-weight: 600;
+    }
+    
+    .grand-total {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #7c3aed;
+      border-bottom: none;
+      font-size: 14pt;
+    }
+    
+    .grand-total .total-label {
+      color: #7c3aed;
+      font-weight: 600;
+    }
+    
+    .grand-total .total-value {
+      color: #7c3aed;
+      font-weight: 700;
+    }
+    
+    /* Signature section */
+    .signature-section {
+      margin: 80px 0 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+    
+    .signature-box {
+      text-align: center;
+    }
+    
+    .signature-line {
+      border-bottom: 1px solid #ddd6fe;
+      margin-bottom: 30px;
+      position: relative;
+      height: 60px;
+    }
+    
+    .signature-flourish {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #7c3aed;
+      font-size: 16pt;
+    }
+    
+    .signature-label {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      font-style: italic;
+    }
+    
+    /* Footer */
+    .elegant-footer {
+      text-align: center;
+      padding: 40px;
+      background: #faf5ff;
+      border-radius: 15px;
+      position: relative;
+    }
+    
+    .footer-ornament {
+      font-size: 24pt;
+      color: #7c3aed;
+      margin-bottom: 30px;
+      opacity: 0.5;
+    }
+    
+    .footer-notes {
+      margin-bottom: 30px;
+    }
+    
+    .footer-notes h3 {
+      font-size: 12pt;
+      color: #7c3aed;
+      margin-bottom: 30px;
+      font-weight: 400;
+    }
+    
+    .footer-notes p {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      line-height: 1.8;
+      font-style: italic;
+    }
+    
+    .footer-message {
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      color: #6b21a8;
+      font-style: italic;
+    }
+    
+    /* Status badge */
+    .status-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #7c3aed;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      font-size: 11pt;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Watermark -->
+    <div class="watermark">INVOICE</div>
+    
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+      <!-- Status badge -->
+      <div class="status-badge">{{invoice.status}}</div>
+      
+      <!-- Elegant header -->
+      <div class="elegant-header">
+        <div class="header-flourish">
+          <div class="flourish-line flourish-left"></div>
+          <div class="flourish-center">❦</div>
+          <div class="flourish-line flourish-right"></div>
+        </div>
+        
+        <h1 class="company-title">
+          {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
+        </h1>
+        <p class="company-subtitle">Excellence in Every Detail</p>
+        <div class="company-details">
+          {{#if userData.email}}{{userData.email}}{{/if}}
+          {{#if userData.phone}} • {{userData.phone}}{{/if}}
+          {{#if userData.address}}
+            <br>{{userData.address.street}} • {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+          {{/if}}
+        </div>
+      </div>
+      
+      <!-- Invoice section -->
+      <div class="invoice-section">
+        <div class="invoice-label">Invoice</div>
+        <div class="invoice-number-elegant">#{{invoice.invoiceNumber}}</div>
+      </div>
+      
+      <!-- Info grid -->
+      <div class="info-grid">
+        <div class="info-box">
+          <h3 class="info-title">Bill To</h3>
+          <div class="info-content">
+            <strong>{{customer.name}}</strong><br>
+            {{#if customer.email}}{{customer.email}}<br>{{/if}}
+            {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+            {{#if customer.address}}
+              {{customer.address.street}}<br>
+              {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+              {{customer.address.country}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="info-box">
+          <h3 class="info-title">Invoice Details</h3>
+          <div class="info-content">
+            <strong>Date:</strong> {{formatDate invoice.date timezone=userData.timezone}}<br>
+            <strong>Due Date:</strong> {{formatDate invoice.dueDate timezone=userData.timezone}}<br>
+            <strong>Terms:</strong> {{invoice.paymentTerms}}<br>
+            <strong>Currency:</strong> {{invoice.currency}}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Elegant table -->
+      <table class="elegant-table">
+        <thead class="table-header">
+          <tr>
+            <th style="width: 50%">Description</th>
+            <th class="text-center" style="width: 15%">Quantity</th>
+            <th class="text-right" style="width: 15%">Rate</th>
+            <th class="text-right" style="width: 20%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoice.lineItems}}
+          <tr class="table-row">
+            <td class="item-description">{{this.description}}</td>
+            <td class="text-center">{{this.quantity}}</td>
+            <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+            <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <!-- Totals section -->
+      <div class="totals-section">
+        <div class="totals-elegant">
+          <div class="total-row">
+            <div class="total-label">Subtotal</div>
+            <div class="total-value">{{formatCurrency invoice.subtotal currency=invoice.currency}}</div>
+          </div>
+          {{#if invoice.taxRate}}
+          <div class="total-row">
+            <div class="total-label">Tax ({{invoice.taxRate}}%)</div>
+            <div class="total-value">{{formatCurrency invoice.taxAmount currency=invoice.currency}}</div>
+          </div>
+          {{/if}}
+          <div class="total-row grand-total">
+            <div class="total-label">Total Amount Due</div>
+            <div class="total-value">{{formatCurrency invoice.total currency=invoice.currency}}</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Signature section -->
+      <div class="signature-section">
+        <div class="signature-box">
+          <div class="signature-line">
+            <div class="signature-flourish">❦</div>
+          </div>
+          <div class="signature-label">Authorized Signature</div>
+        </div>
+        <div class="signature-box">
+          <div class="signature-line">
+            <div class="signature-flourish">❦</div>
+          </div>
+          <div class="signature-label">Date</div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div class="elegant-footer">
+        <div class="footer-ornament">❦ ❦ ❦</div>
+        {{#if invoice.notes}}
+        <div class="footer-notes">
+          <h3>Notes</h3>
+          <p>{{invoice.notes}}</p>
+        </div>
+        {{/if}}
+        <p class="footer-message">Thank you for your valued business</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

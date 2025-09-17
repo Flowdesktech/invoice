@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 11pt;
+      color: #1e1b4b;
+      background: #ffffff;
+      padding: 0;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+    
+      padding: 40px;}
+    
+    /* Tech gradient header */
+    .tech-header {
+      background: linear-gradient(90deg, #6366f1 0%, #818cf8 50%, #a5b4fc 100%);
+      padding: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Grid pattern overlay */
+    .grid-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.03) 3px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.03) 3px);
+      background-size: 20px 20px;
+    }
+    
+    /* Floating tech elements */
+    .tech-element {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .tech-element-1 {
+      width: 60px;
+      height: 60px;
+      top: 20px;
+      right: 100px;
+      animation-delay: 0s;
+    }
+    
+    .tech-element-2 {
+      width: 40px;
+      height: 40px;
+      bottom: 30px;
+      left: 80px;
+      animation-delay: 2s;
+    }
+    
+    .tech-element-3 {
+      width: 80px;
+      height: 80px;
+      top: 60px;
+      left: 200px;
+      animation-delay: 4s;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+    }
+    
+    .company-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 15px 25px;
+      border-radius: 50px;
+      margin-bottom: 30px;
+    }
+    
+    .company-logo {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #6366f1;
+    }
+    
+    .company-name {
+      font-size: 14pt;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+    }
+    
+    .invoice-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    
+    .invoice-title {
+      font-size: 42pt;
+      font-weight: 800;
+      letter-spacing: -3px;
+      margin-bottom: 5px;
+    }
+    
+    .invoice-code {
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 11pt;
+      opacity: 0.8;
+      letter-spacing: 1px;
+    }
+    
+    .tech-badge {
+      background: white;
+      color: #6366f1;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+    
+    .tech-badge-label {
+      font-size: 11pt;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    
+    .tech-badge-value {
+      font-size: 16pt;
+      font-weight: 700;
+      font-family: 'SF Mono', monospace;
+    }
+    
+    /* Main content */
+    .content {
+      padding: 50px;
+    }
+    
+    /* Customer info card */
+    .info-card {
+      background: #f5f3ff;
+      border: 1px solid #e0e7ff;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    
+    .info-section h3 {
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6366f1;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .info-icon {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12pt;
+    }
+    
+    .info-content {
+      line-height: 1.8;
+      color: #4c1d95;
+    }
+    
+    .info-content strong {
+      color: #1e1b4b;
+      font-weight: 600;
+    }
+    
+    /* Tech data grid */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .data-cell {
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .data-cell::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+    }
+    
+    .data-label {
+      font-size: 11pt;
+      color: #6366f1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+    
+    .data-value {
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e1b4b;
+    }
+    
+    /* Modern table */
+    .modern-table {
+      background: #fafafa;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    
+    .table-header {
+      background: linear-gradient(90deg, #6366f1 0%, #818cf8 100%);
+      color: white;
+      display: grid;
+      grid-template-columns: 2fr 0.5fr 1fr 1fr;
+      padding: 20px 30px;
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .table-row {
+      display: grid;
+      grid-template-columns: 2fr 0.5fr 1fr 1fr;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e5e7eb;
+      transition: all 0.3s ease;
+    }
+    
+    .table-row:hover {
+      background: #f5f3ff;
+      transform: translateX(5px);
+    }
+    
+    .table-row:last-child {
+      border-bottom: none;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    /* Tech totals */
+    .totals-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+    
+    .totals-card {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      min-width: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .totals-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.03) 10px,
+        rgba(255, 255, 255, 0.03) 20px
+      );
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      position: relative;
+      z-index: 1;
+      font-size: 11pt;
+    }
+    
+    .total-row.final {
+      margin-top: 20px;
+      padding-top: 25px;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+      font-size: 16pt;
+      font-weight: 700;
+    }
+    
+    /* Footer */
+    .tech-footer {
+      background: #f5f3ff;
+      padding: 40px 50px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+      border-top: 3px solid transparent;
+      border-image: linear-gradient(90deg, #6366f1 0%, #818cf8 100%) 1;
+    }
+    
+    .footer-notes h3 {
+      font-size: 11pt;
+      color: #6366f1;
+      margin-bottom: 30px;
+      font-weight: 600;
+    }
+    
+    .footer-notes p {
+      color: #4c1d95;
+      line-height: 1.8;
+    }
+    
+    .qr-placeholder {
+      background: white;
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .qr-box {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(45deg, #6366f1 25%, transparent 25%, transparent 75%, #6366f1 75%, #6366f1),
+                  linear-gradient(45deg, #6366f1 25%, transparent 25%, transparent 75%, #6366f1 75%, #6366f1);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      margin: 0 auto 10px;
+      border-radius: 8px;
+    }
+    
+    .qr-label {
+      font-size: 11pt;
+      color: #6366f1;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Tech Gradient Header -->
+    <div class="tech-header">
+      
+      <div class="tech-element tech-element-1"></div>
+      <div class="tech-element tech-element-2"></div>
+      <div class="tech-element tech-element-3"></div>
+      
+      <div class="header-content">
+        <div class="company-badge">
+          <div class="company-logo">
+            {{#if userData.company}}{{userData.company.[0]}}{{else}}{{userData.displayName.[0]}}{{/if}}
+          </div>
+          <div class="company-name">
+            {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
+          </div>
+        </div>
+        
+        <div class="invoice-meta">
+          <div>
+            <h1 class="invoice-title">INVOICE</h1>
+            <div class="invoice-code">&lt;invoice id="{{invoice.invoiceNumber}}" /&gt;</div>
+          </div>
+          
+          <div class="tech-badge">
+            <div class="tech-badge-label">Reference</div>
+            <div class="tech-badge-value">#{{invoice.invoiceNumber}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Customer Info Card -->
+      <div class="info-card">
+        <div class="info-section">
+          <h3><div class="info-icon">👤</div> Client Details</h3>
+          <div class="info-content">
+            <strong>{{customer.name}}</strong><br>
+            {{#if customer.email}}{{customer.email}}<br>{{/if}}
+            {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+            {{#if customer.address}}
+              {{customer.address.street}}<br>
+              {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+              {{customer.address.country}}
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="info-section">
+          <h3><div class="info-icon">📍</div> From</h3>
+          <div class="info-content">
+            <strong>{{userData.displayName}}</strong><br>
+            {{#if userData.email}}{{userData.email}}<br>{{/if}}
+            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
+            {{#if userData.address}}
+              {{userData.address.street}}<br>
+              {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tech Data Grid -->
+      <div class="data-grid">
+        <div class="data-cell">
+          <div class="data-label">Issue Date</div>
+          <div class="data-value">{{formatDateShort invoice.date timezone=userData.timezone}}</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">Due Date</div>
+          <div class="data-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">Status</div>
+          <div class="data-value">{{invoice.status}}</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">Terms</div>
+          <div class="data-value">{{invoice.paymentTerms}}</div>
+        </div>
+      </div>
+      
+      <!-- Modern Table -->
+      <div class="modern-table">
+        <div class="table-header">
+          <div>Service</div>
+          <div class="text-center">Qty</div>
+          <div class="text-right">Rate</div>
+          <div class="text-right">Total</div>
+        </div>
+        
+        {{#each invoice.lineItems}}
+        <div class="table-row">
+          <div>{{this.description}}</div>
+          <div class="text-center">{{this.quantity}}</div>
+          <div class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</div>
+          <div class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</div>
+        </div>
+        {{/each}}
+      </div>
+      
+      <!-- Tech Totals -->
+      <div class="totals-container">
+        <div class="totals-card">
+          <div class="total-row">
+            <span>Subtotal</span>
+            <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+          </div>
+          {{#if invoice.taxRate}}
+          <div class="total-row">
+            <span>Tax ({{invoice.taxRate}}%)</span>
+            <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+          </div>
+          {{/if}}
+          <div class="total-row final">
+            <span>Total Amount</span>
+            <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tech Footer -->
+    <div class="tech-footer">
+      <div class="footer-notes">
+        {{#if invoice.notes}}
+          <h3>Additional Information</h3>
+          <p>{{invoice.notes}}</p>
+        {{/if}}
+        <h3 style="margin-top: 20px;">Payment Terms</h3>
+        <p>{{invoice.paymentTerms}}</p>
+      </div>
+      
+      <div class="qr-placeholder">
+        <div class="qr-box"></div>
+        <div class="qr-label">Scan to Pay</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

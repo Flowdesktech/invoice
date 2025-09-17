@@ -119,6 +119,7 @@ class InvoiceService {
       notes: invoiceData.notes || '',
       paymentTerms: invoiceData.paymentTerms || userData.invoiceSettings?.paymentTerms || 'Due on receipt',
       currency: invoiceData.currency || userData.invoiceSettings?.currency || 'USD',
+      templateId: invoiceData.templateId || 'default',
       createdAt: Date.now(),
       updatedAt: Date.now()
     };

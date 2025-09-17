@@ -72,7 +72,7 @@ const ProfileDialog = ({ open, onClose }) => {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center" gap={1}>
             <BusinessIcon color="primary" />
-            <Typography variant="h6">Add Business Profile</Typography>
+            <Typography variant="body1" component="div" sx={{ fontWeight: 600, fontSize: '1.25rem' }}>Add Business Profile</Typography>
           </Box>
           <IconButton 
             edge="end" 

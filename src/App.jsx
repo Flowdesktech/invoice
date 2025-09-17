@@ -25,6 +25,7 @@ import TermsOfService from './pages/TermsOfService';
 import Documentation from './pages/Documentation';
 import About from './pages/About';
 import Blog from './pages/Blog';
+import InvoiceTemplates from './pages/InvoiceTemplates';
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -251,6 +252,10 @@ const router = createBrowserRouter([
           {
             path: 'profile',
             element: <Profile />,
+          },
+          {
+            path: '/invoice-templates',
+            element: <InvoiceTemplates />,
           },
           {
             path: 'customers',

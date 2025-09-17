@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Book Antiqua', 'Palatino Linotype', Palatino, serif;
+      font-size: 11pt;
+      color: #1e3a8a;
+      background: #ffffff;
+      padding: 40px;
+      margin: 0;
+    
+      line-height: 1.6;
+    }
+    
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 2px solid #1e3a8a;
+      position: relative;
+    
+      padding: 40px;}
+    
+    /* Formal header */
+    .formal-header {
+      background: #1e3a8a;
+      color: white;
+      padding: 30px 40px;
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .firm-info h1 {
+      font-size: 22pt;
+      font-weight: normal;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+    
+    .firm-subtitle {
+      font-size: 11pt;
+      font-style: italic;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+    
+    .firm-details {
+      font-size: 11pt;
+      line-height: 1.6;
+    }
+    
+    .invoice-stamp {
+      background: white;
+      color: #1e3a8a;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid #dbeafe;
+      position: relative;
+    }
+    
+    .invoice-stamp::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border: 1px solid #93c5fd;
+      pointer-events: none;
+    }
+    
+    .invoice-stamp h2 {
+      font-size: 11pt;
+      font-weight: normal;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+    
+    .invoice-stamp .number {
+      font-size: 13pt;
+      font-weight: bold;
+    }
+    
+    /* Document info bar */
+    .document-bar {
+      background: #dbeafe;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11pt;
+      border-bottom: 1px solid #93c5fd;
+    }
+    
+    .doc-item {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .doc-label {
+      color: #1e40af;
+      font-weight: bold;
+    }
+    
+    /* Main content */
+    .formal-content {
+      padding: 40px;
+    }
+    
+    /* Client section */
+    .client-section {
+      margin-bottom: 40px;
+    }
+    
+    .section-header {
+      font-size: 12pt;
+      color: #1e3a8a;
+      font-weight: bold;
+      margin-bottom: 30px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #dbeafe;
+    }
+    
+    .client-box {
+      background: #f0f9ff;
+      border: 1px solid #dbeafe;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    
+    .client-info {
+      line-height: 1.8;
+    }
+    
+    .client-info strong {
+      color: #1e3a8a;
+      font-size: 11pt;
+    }
+    
+    .invoice-details {
+      font-size: 11pt;
+    }
+    
+    .invoice-details dt {
+      color: #1e40af;
+      font-weight: bold;
+      float: left;
+      width: 120px;
+      margin-bottom: 8px;
+    }
+    
+    .invoice-details dd {
+      margin-left: 130px;
+      margin-bottom: 8px;
+    }
+    
+    /* Accounting table */
+    .accounting-table {
+      width: 100%;
+      border: 1px solid #93c5fd;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: white;
+    }
+    
+    .accounting-table thead {
+      background: #f0f9ff;
+    }
+    
+    .accounting-table th {
+      border: 1px solid #93c5fd;
+      padding: 12px;
+      text-align: left;
+      font-size: 11pt;
+      color: #1e3a8a;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .accounting-table td {
+      border: 1px solid #dbeafe;
+      padding: 12px;
+      color: #1e40af;
+    }
+    
+    .accounting-table tbody tr:hover {
+      background: #f0f9ff;
+    }
+    
+    .line-number {
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    
+    .text-right {
+      text-align: right;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    /* Financial summary */
+    .financial-summary {
+      margin-bottom: 50px;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 40px;
+    }
+    
+    .notes-box {
+      background: #f0f9ff;
+      border: 1px solid #dbeafe;
+      padding: 20px;
+    }
+    
+    .notes-box h3 {
+      font-size: 11pt;
+      color: #1e3a8a;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    
+    .notes-box p {
+      font-size: 11pt;
+      color: #1e40af;
+      line-height: 1.6;
+    }
+    
+    .totals-table {
+      width: 100%;
+      border: 2px solid #1e3a8a;
+      border-collapse: collapse;
+    }
+    
+    .totals-table tr {
+      border-bottom: 1px solid #93c5fd;
+    }
+    
+    .totals-table td {
+      padding: 10px 15px;
+      font-size: 11pt;
+    }
+    
+    .totals-table .label {
+      color: #1e40af;
+      font-weight: bold;
+    }
+    
+    .totals-table .value {
+      text-align: right;
+      color: #1e3a8a;
+      font-weight: bold;
+    }
+    
+    .totals-table .grand-total {
+      background: #1e3a8a;
+      color: white;
+      font-size: 12pt;
+    }
+    
+    .totals-table .grand-total td {
+      padding: 15px;
+    }
+    
+    /* Legal footer */
+    .legal-footer {
+      background: #f0f9ff;
+      padding: 30px 40px;
+      border-top: 2px solid #1e3a8a;
+      font-size: 11pt;
+      color: #1e40af;
+      line-height: 1.6;
+    }
+    
+    .legal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+    
+    .legal-section h4 {
+      font-size: 11pt;
+      color: #1e3a8a;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    
+    .signature-line {
+      border-bottom: 1px solid #1e3a8a;
+      margin: 30px 0 5px;
+      width: 250px;
+    }
+    
+    .signature-label {
+      font-size: 11pt;
+      color: #1e40af;
+    }
+    
+    .certification {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border: 1px solid #93c5fd;
+    }
+    
+    .certification p {
+      font-style: italic;
+      color: #1e3a8a;
+    }
+    
+    /* Status watermark */
+    .status-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 80pt;
+      color: #6b7280;
+      text-transform: uppercase;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+      font-weight: bold;
+      letter-spacing: 20px;
+    }
+    
+    /* Content should be above watermark */
+    .invoice-container > * {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <!-- Status watermark -->
+    <div class="status-watermark">{{invoice.status}}</div>
+    
+    <!-- Formal Header -->
+    <div class="formal-header">
+      <div class="firm-info">
+        <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
+        <p class="firm-subtitle">Certified Public Accountants</p>
+        <div class="firm-details">
+          {{#if userData.email}}{{userData.email}}<br>{{/if}}
+          {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
+          {{#if userData.address}}
+            {{userData.address.street}}<br>
+            {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>
+            {{userData.address.country}}
+          {{/if}}
+        </div>
+      </div>
+      
+      <div class="invoice-stamp">
+        <h2>INVOICE</h2>
+        <div class="number">No. {{invoice.invoiceNumber}}</div>
+      </div>
+    </div>
+    
+    <!-- Document Bar -->
+    <div class="document-bar">
+      <div class="doc-item">
+        <span class="doc-label">Date:</span>
+        <span>{{formatDate invoice.date timezone=userData.timezone}}</span>
+      </div>
+      <div class="doc-item">
+        <span class="doc-label">Due Date:</span>
+        <span>{{formatDate invoice.dueDate timezone=userData.timezone}}</span>
+      </div>
+      <div class="doc-item">
+        <span class="doc-label">Terms:</span>
+        <span>{{invoice.paymentTerms}}</span>
+      </div>
+    </div>
+    
+    <!-- Formal Content -->
+    <div class="formal-content">
+      <!-- Client Section -->
+      <div class="client-section">
+        <h2 class="section-header">CLIENT INFORMATION & INVOICE DETAILS</h2>
+        <div class="client-box">
+          <div class="client-info">
+            <strong>{{customer.name}}</strong><br>
+            {{#if customer.company}}{{customer.company}}<br>{{/if}}
+            {{#if customer.email}}{{customer.email}}<br>{{/if}}
+            {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
+            {{#if customer.address}}
+              {{customer.address.street}}<br>
+              {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
+              {{customer.address.country}}
+            {{/if}}
+          </div>
+          
+          <dl class="invoice-details">
+            <dt>Invoice No:</dt>
+            <dd>{{invoice.invoiceNumber}}</dd>
+            
+            <dt>Invoice Date:</dt>
+            <dd>{{formatDate invoice.date timezone=userData.timezone}}</dd>
+            
+            <dt>Payment Due:</dt>
+            <dd>{{formatDate invoice.dueDate timezone=userData.timezone}}</dd>
+            
+            <dt>Account Status:</dt>
+            <dd style="text-transform: uppercase;">{{invoice.status}}</dd>
+            
+            <dt>Currency:</dt>
+            <dd>{{invoice.currency}}</dd>
+          </dl>
+        </div>
+      </div>
+      
+      <!-- Accounting Table -->
+      <h2 class="section-header">ITEMIZED STATEMENT</h2>
+      <table class="accounting-table">
+        <thead>
+          <tr>
+            <th style="width: 8%">Line</th>
+            <th style="width: 42%">Description</th>
+            <th class="text-center" style="width: 15%">Quantity</th>
+            <th class="text-right" style="width: 15%">Unit Rate</th>
+            <th class="text-right" style="width: 20%">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each invoice.lineItems}}
+          <tr>
+            <td class="line-number">{{@index}}</td>
+            <td>{{this.description}}</td>
+            <td class="text-center">{{this.quantity}}</td>
+            <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
+            <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      
+      <!-- Financial Summary -->
+      <div class="financial-summary">
+        <div class="summary-grid">
+          <div class="notes-box">
+            {{#if invoice.notes}}
+              <h3>NOTES & REMARKS</h3>
+              <p>{{invoice.notes}}</p>
+            {{/if}}
+            <h3 {{#if invoice.notes}}style="margin-top: 20px;"{{/if}}>PAYMENT INSTRUCTIONS</h3>
+            <p>{{invoice.paymentTerms}}</p>
+          </div>
+          
+          <table class="totals-table">
+            <tr>
+              <td class="label">Subtotal:</td>
+              <td class="value">{{formatCurrency invoice.subtotal currency=invoice.currency}}</td>
+            </tr>
+            {{#if invoice.taxRate}}
+            <tr>
+              <td class="label">Tax ({{invoice.taxRate}}%):</td>
+              <td class="value">{{formatCurrency invoice.taxAmount currency=invoice.currency}}</td>
+            </tr>
+            {{/if}}
+            <tr class="grand-total">
+              <td>TOTAL DUE:</td>
+              <td class="text-right">{{formatCurrency invoice.total currency=invoice.currency}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Legal Footer -->
+    <div class="legal-footer">
+      <div class="legal-grid">
+        <div class="legal-section">
+          <h4>TERMS AND CONDITIONS</h4>
+          <p>
+            Payment is due within the terms specified above. Interest may be charged on overdue accounts at the rate of 1.5% per month.
+            This invoice is subject to our standard terms and conditions.
+          </p>
+          <div class="signature-line"></div>
+          <p class="signature-label">Authorized Signature</p>
+        </div>
+        
+        <div class="legal-section">
+          <h4>REMITTANCE INFORMATION</h4>
+          <p>
+            Please include invoice number with payment.<br>
+            Make checks payable to: {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}<br>
+            For questions regarding this invoice, please contact our accounting department.
+          </p>
+          <div class="signature-line"></div>
+          <p class="signature-label">Date</p>
+        </div>
+      </div>
+      
+      <div class="certification">
+        <p>This is a computer-generated document. No signature is required.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
