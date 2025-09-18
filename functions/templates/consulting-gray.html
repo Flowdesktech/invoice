@@ -348,27 +348,12 @@
       font-weight: 300;
     }
     
-    /* Status indicator */
-    .status-indicator {
-      position: absolute;
-      top: 50px;
-      right: 50px;
-      padding: 8px 20px;
-      border: 1px solid #6b7280;
-      color: #374151;
-      font-size: 10pt;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
   <div class="invoice-container">
     <!-- Executive Header -->
     <div class="executive-header">
-      <div class="status-indicator">{{invoice.status}}</div>
-      
       <div class="header-content">
         <div class="executive-branding">
           <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
@@ -437,7 +422,6 @@
             <strong>Payment Due:</strong> {{formatDate invoice.dueDate timezone=userData.timezone}}<br>
             <strong>Payment Terms:</strong> {{invoice.paymentTerms}}<br>
             <strong>Currency:</strong> {{invoice.currency}}<br>
-            <strong>Status:</strong> {{invoice.status}}
           </div>
         </div>
       </div>

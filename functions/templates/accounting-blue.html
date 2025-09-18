@@ -325,34 +325,10 @@
       color: #1e3a8a;
     }
     
-    /* Status watermark */
-    .status-watermark {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      font-size: 80pt;
-      color: #dbeafe;
-      text-transform: uppercase;
-      opacity: 0.5;
-      pointer-events: none;
-      z-index: 0;
-      font-weight: bold;
-      letter-spacing: 20px;
-    }
-    
-    /* Content should be above watermark */
-    .invoice-container > * {
-      position: relative;
-      z-index: 1;
-    }
   </style>
 </head>
 <body>
   <div class="invoice-container">
-    <!-- Status watermark -->
-    <div class="status-watermark">{{invoice.status}}</div>
-    
     <!-- Formal Header -->
     <div class="formal-header">
       <div class="firm-info">
@@ -418,9 +394,6 @@
             
             <dt>Payment Due:</dt>
             <dd>{{formatDate invoice.dueDate timezone=userData.timezone}}</dd>
-            
-            <dt>Account Status:</dt>
-            <dd style="text-transform: uppercase;">{{invoice.status}}</dd>
             
             <dt>Currency:</dt>
             <dd>{{invoice.currency}}</dd>

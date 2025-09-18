@@ -306,37 +306,6 @@
       color: #1e40af;
     }
     
-    /* Enhanced status badges */
-    .status-badge {
-      display: inline-block;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 10pt;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-top: 5px;
-    }
-    
-    .status-paid {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    
-    .status-pending {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-    
-    .status-overdue {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-    
-    .status-draft {
-      background: #e5e7eb;
-      color: #374151;
-    }
   </style>
 </head>
 <body>
@@ -366,8 +335,6 @@
             <strong>Due Date</strong>
             {{formatDate invoice.dueDate timezone=userData.timezone}}
             
-            <strong>Status</strong>
-            <span class="status-badge status-{{invoice.status}}">{{invoice.status}}</span>
           </div>
         </div>
       </div>

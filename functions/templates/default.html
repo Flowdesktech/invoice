@@ -195,36 +195,6 @@
       color: #374151;
     }
     
-    /* Status indicator */
-    .status {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-size: 11pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .status-paid {
-      background: #10b981;
-      color: white;
-    }
-    
-    .status-pending {
-      background: #3b82f6;
-      color: white;
-    }
-    
-    .status-overdue {
-      background: #ef4444;
-      color: white;
-    }
-    
-    .status-draft {
-      background: #6b7280;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -251,7 +221,6 @@
             <strong>Invoice #:</strong> {{invoice.invoiceNumber}}<br>
             <strong>Date:</strong> {{formatDate invoice.date timezone=userData.timezone}}<br>
             <strong>Due Date:</strong> {{formatDate invoice.dueDate timezone=userData.timezone}}<br>
-            <strong>Status:</strong> <span class="status status-{{invoice.status}}">{{invoice.status}}</span>
           </p>
         </div>
       </div>

@@ -311,27 +311,6 @@
       font-size: 20pt;
     }
     
-    /* Status indicator */
-    .status-eco {
-      position: absolute;
-      top: 40px;
-      right: 40px;
-      background: #16a34a;
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 10pt;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .status-icon {
-      font-size: 12pt;
-    }
     
     /* Notes section */
     .notes-section {
@@ -397,11 +376,6 @@
           <div class="eco-badge-icon">🌱</div>
           <div class="invoice-number-eco">#{{invoice.invoiceNumber}}</div>
         </div>
-      </div>
-      
-      <div class="status-eco">
-        <span class="status-icon">✓</span>
-        {{invoice.status}}
       </div>
     </div>
     

@@ -262,53 +262,10 @@
       background: #f8fafc;
     }
     
-    /* Status stamp */
-    .status-stamp {
-      position: absolute;
-      top: 40px;
-      right: 40px;
-      width: 120px;
-      height: 120px;
-      border: 3px solid;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: rotate(-15deg);
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 14pt;
-    }
-    
-    .status-paid {
-      border-color: #10b981;
-      color: #10b981;
-    }
-    
-    .status-pending {
-      border-color: #3b82f6;
-      color: #3b82f6;
-    }
-    
-    .status-overdue {
-      border-color: #ef4444;
-      color: #ef4444;
-    }
-    
-    .status-draft {
-      border-color: #6b7280;
-      color: #6b7280;
-    }
   </style>
 </head>
 <body>
   <div class="invoice-container">
-    <!-- Status stamp -->
-    <div class="status-stamp status-{{invoice.status}}">
-      {{invoice.status}}
-    </div>
-    
     <!-- Classic header -->
     <div class="classic-header">
       <div class="header-grid">
