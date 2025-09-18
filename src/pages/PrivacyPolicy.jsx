@@ -10,6 +10,7 @@ import {
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
@@ -23,14 +24,9 @@ const PrivacyPolicy = () => {
       <link rel="canonical" href="https://flowdesk.tech/privacy" />
       <meta name="robots" content="index, follow" />
       
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4, pb: 30 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/')}
-          sx={{ mb: 2 }}
-        >
-          Back to App
-        </Button>
+      <Header />
+      
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4, pb: 30, pt: 10 }}>
       
       <Paper sx={{ p: { xs: 3, sm: 6 } }}>
         <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>

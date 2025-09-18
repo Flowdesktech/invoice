@@ -24,6 +24,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -356,14 +357,9 @@ const Blog = () => {
         })}
       </script>
       
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4, pb: 30 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/')}
-          sx={{ mb: 2 }}
-        >
-          Back to App
-        </Button>
+      <Header />
+      
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4, pb: 30, pt: 10 }}>
 
       {/* Header */}
       <Paper sx={{ 

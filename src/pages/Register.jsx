@@ -25,6 +25,8 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -73,7 +75,9 @@ const Register = () => {
       <meta name="keywords" content="flowdesk register, create invoice account, free invoice software signup, business management registration" />
       <link rel="canonical" href="https://flowdesk.tech/register" />
       
-      <Container component="main" maxWidth="sm">
+      <Header />
+      
+      <Container component="main" maxWidth="sm" sx={{ pt: 10 }}>
         <Box
           sx={{
             marginTop: 4,
@@ -256,16 +260,13 @@ const Register = () => {
                   Sign in
                 </Link>
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                <Link to="/" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                  ← Back to Home
-                </Link>
-              </Typography>
             </Box>
           </Box>
         </Paper>
       </Box>
     </Container>
+    
+    <Footer />
     </>
   );
 };

@@ -21,6 +21,8 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,7 +63,9 @@ const Login = () => {
       <meta name="keywords" content="flowdesk login, invoice management login, business software login, sign in" />
       <link rel="canonical" href="https://flowdesk.tech/login" />
       
-      <Container component="main" maxWidth="xs">
+      <Header />
+      
+      <Container component="main" maxWidth="xs" sx={{ pt: 10 }}style={{ minHeight: '800px' }}>
         <Box
           sx={{
             marginTop: 8,
@@ -181,16 +185,13 @@ const Login = () => {
                   Sign up
                 </Link>
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                <Link to="/" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                  ← Back to Home
-                </Link>
-              </Typography>
             </Box>
           </Box>
         </Paper>
       </Box>
     </Container>
+    
+    <Footer />
     </>
   );
 };
