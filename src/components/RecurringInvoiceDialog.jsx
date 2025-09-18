@@ -233,14 +233,14 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
         <DialogContent>
           <Grid container spacing={3}>
             {mode === 'create' && invoice && (
-              <Grid item size={12}>
+              <Grid size={12}>
                 <Alert severity="info">
                   Creating recurring invoice from: <strong>{invoice.invoiceNumber}</strong> - {invoice.customerName}
                 </Alert>
               </Grid>
             )}
             
-            <Grid item size={12}>
+            <Grid size={12}>
               <Controller
                 name="frequency"
                 control={control}
@@ -266,7 +266,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
               </Typography>
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="startDate"
                 control={control}
@@ -275,20 +275,19 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
                   <DatePicker
                     {...field}
                     label="Start Date"
-                    renderInput={(params) => (
-                      <TextField 
-                        {...params} 
-                        fullWidth 
-                        error={!!errors.startDate}
-                        helperText={errors.startDate?.message || 'When to start generating invoices'}
-                      />
-                    )}
+                    slotProps={{ 
+                      textField: { 
+                        fullWidth: true,
+                        error: !!errors.startDate,
+                        helperText: errors.startDate?.message || 'When to start generating invoices'
+                      } 
+                    }}
                   />
                 )}
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="endDate"
                 control={control}
@@ -296,20 +295,19 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
                   <DatePicker
                     {...field}
                     label="End Date (Optional)"
-                    renderInput={(params) => (
-                      <TextField 
-                        {...params} 
-                        fullWidth 
-                        helperText="Leave empty for indefinite recurrence"
-                      />
-                    )}
+                    slotProps={{ 
+                      textField: { 
+                        fullWidth: true,
+                        helperText: "Leave empty for indefinite recurrence"
+                      } 
+                    }}
                     minDate={watch('startDate')}
                   />
                 )}
               />
             </Grid>
             
-            <Grid item size={12}>
+            <Grid size={12}>
               <Controller
                 name="notes"
                 control={control}
@@ -328,7 +326,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
             
             {mode === 'create' && (
               <>
-                <Grid item size={12}>
+                <Grid size={12}>
                   <Alert severity="info">
                     <Typography variant="body2" gutterBottom>
                       <strong>Dynamic Description Templates</strong>
@@ -346,7 +344,7 @@ const RecurringInvoiceDialog = ({ open, onClose, invoice, invoiceData, recurring
                   </Alert>
                 </Grid>
                 
-                <Grid item size={12}>
+                <Grid size={12}>
                   <Alert severity="success">
                     <Typography variant="body2" gutterBottom>
                       <strong>Example for {frequency} invoices:</strong>

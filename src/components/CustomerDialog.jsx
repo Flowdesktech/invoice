@@ -137,13 +137,13 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
         <DialogContent sx={{ pt: 3 }}>
           <Grid container spacing={3}>
             {/* Basic Information */}
-            <Grid item size={12}>
+            <Grid size={12}>
               <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600, color: 'text.secondary' }}>
                 Basic Information
               </Typography>
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="name"
                 control={control}
@@ -162,7 +162,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="email"
                 control={control}
@@ -188,7 +188,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="phone"
                 control={control}
@@ -203,7 +203,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="company"
                 control={control}
@@ -219,13 +219,13 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
             </Grid>
             
             {/* Address */}
-            <Grid item size={12}>
+            <Grid size={12}>
               <Typography variant="subtitle2" sx={{ mb: 2, mt: 1, fontWeight: 600, color: 'text.secondary' }}>
                 Address (Optional)
               </Typography>
             </Grid>
             
-            <Grid item size={12}>
+            <Grid size={12}>
               <Controller
                 name="address.street"
                 control={control}
@@ -240,7 +240,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="address.city"
                 control={control}
@@ -255,7 +255,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="address.state"
                 control={control}
@@ -270,7 +270,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="address.zipCode"
                 control={control}
@@ -285,7 +285,7 @@ const CustomerDialog = ({ open, onClose, onCustomerCreated, onCustomerUpdated, c
               />
             </Grid>
             
-            <Grid item size={{ xs: 12, sm: 6 }}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <Controller
                 name="address.country"
                 control={control}

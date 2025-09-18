@@ -242,12 +242,15 @@ const InvoiceTemplates = () => {
     : templates.filter(t => t.category === selectedCategory);
 
   const handleSelectTemplate = (template) => {
-    // Store selected template in localStorage
-    localStorage.setItem('selectedInvoiceTemplate', JSON.stringify(template));
-    
-    // Navigate back to the return path if provided, otherwise go to create invoice
+    // Navigate back to the return path with template ID as query parameter
     const returnPath = location.state?.returnPath || '/invoices/create';
-    navigate(returnPath);
+    
+    // Parse the return path to handle both create and edit URLs
+    const url = new URL(returnPath, window.location.origin);
+    url.searchParams.set('templateId', template.id);
+    
+    // Navigate with the template ID in query params
+    navigate(url.pathname + url.search);
   };
 
   const handlePreview = (template) => {

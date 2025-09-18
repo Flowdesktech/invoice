@@ -50,7 +50,7 @@ import {
   Star as StarIcon,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, useSearchParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
 import { customerAPI, invoiceAPI } from '../utils/api';
@@ -62,6 +62,7 @@ import { formatInvoiceNumber } from '../utils/formatters';
 const CreateInvoice = () => {
   const { id } = useParams();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const isEditMode = !!id;
   const isDuplicateMode = !!location.state?.duplicateData;
   const [customers, setCustomers] = useState([]);
@@ -114,33 +115,25 @@ const CreateInvoice = () => {
     if (!isEditMode && !isDuplicateMode) {
       generateInvoiceNumber();
     }
-    
-    // Check for selected template from localStorage
-    const savedTemplate = localStorage.getItem('selectedInvoiceTemplate');
-    if (savedTemplate) {
-      setSelectedTemplate(JSON.parse(savedTemplate));
-      // Don't clear localStorage yet - will clear after component is fully loaded
-    }
   }, [currentUser, isEditMode, isDuplicateMode]);
+
+  // Check for template ID in URL query parameters
+  useEffect(() => {
+    const templateId = searchParams.get('templateId');
+    if (templateId) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        setSelectedTemplate(template);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isEditMode && customers.length > 0) {
       fetchInvoiceData();
     }
-  }, [isEditMode, id, customers]);
+  }, [isEditMode, id, customers, searchParams]);
 
-  // Clear localStorage template after component is fully mounted and template is set
-  useEffect(() => {
-    // Only clear if we have a selected template and it came from localStorage
-    if (selectedTemplate && localStorage.getItem('selectedInvoiceTemplate')) {
-      // Use a small timeout to ensure navigation and state updates are complete
-      const timer = setTimeout(() => {
-        localStorage.removeItem('selectedInvoiceTemplate');
-      }, 100);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [selectedTemplate]);
 
   // Handle duplicate data
   useEffect(() => {
@@ -206,7 +199,9 @@ const CreateInvoice = () => {
       setLineItems(invoice.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
       
       // Restore selected template if available
-      if (invoice.templateId) {
+      // Only set template from invoice data if there's no templateId in query params
+      const queryTemplateId = searchParams.get('templateId');
+      if (!queryTemplateId && invoice.templateId) {
         const template = templates.find(t => t.id === invoice.templateId);
         if (template) {
           setSelectedTemplate(template);
@@ -524,7 +519,7 @@ const CreateInvoice = () => {
 
         <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
           {/* Customer and Invoice Details */}
-          <Grid item xs={12} md={12} lg={8} xl={9}>
+          <Grid size={{ xs: 12, md: 12, lg: 8, xl: 9 }}>
             {/* Template Selection */}
             <Paper 
               sx={{ 
@@ -597,7 +592,17 @@ const CreateInvoice = () => {
                   variant="outlined"
                   startIcon={<PaletteIcon />}
                   onClick={() => {
-                    const returnPath = isEditMode ? `/invoices/${id}/edit` : '/invoices/create';
+                    // Construct the return path with current query params preserved
+                    let returnPath = isEditMode ? `/invoices/${id}/edit` : '/invoices/create';
+                    
+                    // Preserve existing query parameters (except templateId which will be updated)
+                    const currentParams = new URLSearchParams(window.location.search);
+                    currentParams.delete('templateId'); // Remove old templateId if exists
+                    
+                    if (currentParams.toString()) {
+                      returnPath += '?' + currentParams.toString();
+                    }
+                    
                     navigate('/invoice-templates', { state: { returnPath } });
                   }}
                   sx={{ minWidth: 150 }}
@@ -711,7 +716,7 @@ const CreateInvoice = () => {
                       </Box>
                       
                       <Grid container spacing={2}>
-                        <Grid item xs={12} sm={12} md={6}>
+                        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                           <Box display="flex" alignItems="center" gap={1} mb={1}>
                             <BusinessIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                             <Typography variant="body2" color="text.secondary">
@@ -728,7 +733,7 @@ const CreateInvoice = () => {
                           )}
                         </Grid>
                         
-                        <Grid item xs={12} sm={12} md={6}>
+                        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
                           <Box display="flex" alignItems="center" gap={1} mb={1}>
                             <EmailIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                             <Typography variant="body2" color="text.secondary">
@@ -749,7 +754,7 @@ const CreateInvoice = () => {
                         </Grid>
                         
                         {selectedCustomer.address && (
-                          <Grid item xs={12}>
+                          <Grid size={12}>
                             <Box display="flex" alignItems="flex-start" gap={1} mb={1}>
                               <LocationIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
                               <Box>
@@ -801,7 +806,7 @@ const CreateInvoice = () => {
               
               <Grid container spacing={{ xs: 2, sm: 3 }}>
                 {/* Invoice Details Row */}
-                <Grid item xs={12} sm={6} md={3} lg={3} xl={2}>
+                <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 2 }}>
                   <Controller
                     name="invoiceNumber"
                     control={control}
@@ -855,7 +860,7 @@ const CreateInvoice = () => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}>
                   <Controller
                     name="date"
                     control={control}
@@ -875,13 +880,13 @@ const CreateInvoice = () => {
                               setValue('dueDate', newDueDate);
                             }
                           }}
-                          renderInput={(params) => <TextField {...params} fullWidth />}
+                          slotProps={{ textField: { fullWidth: true } }}
                         />
                       );
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={4} xl={3}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}>
                   <Controller
                     name="dueDate"
                     control={control}
@@ -890,12 +895,12 @@ const CreateInvoice = () => {
                         label="Due Date *"
                         value={field.value}
                         onChange={field.onChange}
-                        renderInput={(params) => <TextField {...params} fullWidth />}
+                        slotProps={{ textField: { fullWidth: true } }}
                       />
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+                <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}>
                   <Controller
                     name="status"
                     control={control}
@@ -1051,7 +1056,7 @@ const CreateInvoice = () => {
           </Grid>
 
           {/* Summary and Actions */}
-          <Grid item xs={12} sm={12} md={6} lg={4} xl={3} sx={{ 
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }} sx={{ 
             order: { xs: -1, sm: -1, md: 2, lg: 2 } 
           }}>
             <Box sx={{ 
@@ -1139,7 +1144,7 @@ const CreateInvoice = () => {
               <Divider sx={{ my: { xs: 1.5, sm: 2 }, display: { xs: 'none', sm: 'block' } }} />
 
               <Grid container spacing={2} mb={{ xs: 2, sm: 3 }}>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller
                     name="currency"
                     control={control}
@@ -1175,7 +1180,7 @@ const CreateInvoice = () => {
                     )}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <Controller
                     name="taxRate"
                     control={control}
