@@ -10,129 +10,105 @@
     }
     
     body {
-      font-family: 'Times New Roman', serif;
-      font-size: 11pt;
-      color: #111827;
-      background: #ffffff;
-      padding: 0;
-      margin: 0;
-    
+      font-family: 'Arial', 'Helvetica', sans-serif;
+      font-size: 10pt;
       line-height: 1.6;
+      color: #1f2937;
+      background: #f3f4f6;
     }
     
     .invoice-container {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      min-height: 100vh;
+      max-width: 850px;
+      margin: 0;
       background: #ffffff;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
     
-      padding: 40px;}
-    
-    /* Dark Sidebar */
+    /* Dark sidebar */
     .sidebar {
       background: #111827;
-      color: #6b7280;
-      padding: 40px 30px;
+      color: #d1d5db;
+      padding: 50px 40px;
       position: relative;
     }
     
     .company-logo {
-      width: 100%;
-      height: 80px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 40px;
       font-size: 24pt;
       font-weight: 700;
+      color: #f3f4f6;
+      margin-bottom: 50px;
       letter-spacing: -1px;
-    }
-    
-    .sidebar h2 {
-      font-size: 11pt;
-      font-weight: 400;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 30px;
-      opacity: 0.7;
     }
     
     .sidebar-section {
       margin-bottom: 40px;
     }
     
-    .sidebar-section div {
+    .sidebar-section h3 {
+      font-size: 9pt;
+      font-weight: 400;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 15px;
+    }
+    
+    .sidebar-section p {
+      font-size: 10pt;
+      color: #d1d5db;
       line-height: 1.8;
-      font-size: 11pt;
-      opacity: 0.9;
     }
     
-    .invoice-meta {
+    .invoice-badge {
       position: absolute;
-      bottom: 40px;
-      left: 30px;
-      right: 30px;
-    }
-    
-    .invoice-number-box {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 8px;
+      bottom: 50px;
+      left: 40px;
+      right: 40px;
+      background: #1f2937;
+      padding: 30px;
       text-align: center;
+      border-radius: 8px;
     }
     
-    .invoice-number-box h3 {
-      font-size: 11pt;
-      font-weight: 300;
-      margin-bottom: 5px;
-      opacity: 0.8;
+    .invoice-label {
+      font-size: 9pt;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
     }
     
     .invoice-number {
-      font-size: 18pt;
+      font-size: 20pt;
       font-weight: 700;
+      color: #f3f4f6;
     }
     
-    .status-indicator {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-    
-    .status-paid { background: #10b981; }
-    .status-pending { background: #3b82f6; }
-    .status-overdue { background: #ef4444; }
-    .status-draft { background: #6b7280; }
-    
-    /* Main Content */
+    /* Main content area */
     .main-content {
-      padding: 40px 50px;
+      padding: 50px 60px;
       background: #ffffff;
-    }
-    
-    .content-header {
-      margin-bottom: 50px;
     }
     
     .page-title {
       font-size: 36pt;
       font-weight: 300;
-      letter-spacing: -2px;
-      margin-bottom: 30px;
       color: #111827;
+      margin-bottom: 50px;
+      letter-spacing: -2px;
     }
     
+    /* Date bar */
     .date-bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 30px;
-      padding: 20px;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
+      padding: 25px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 50px;
     }
     
     .date-item {
@@ -140,62 +116,72 @@
     }
     
     .date-label {
-      font-size: 11pt;
+      font-size: 9pt;
       color: #6b7280;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     
     .date-value {
       font-size: 11pt;
+      color: #111827;
       font-weight: 600;
-      color: #111827;
     }
     
-    /* Bill To Section */
-    .bill-to {
-      margin: 40px 0;
-      padding: 30px;
-      background: #f9fafb;
-      border-left: 4px solid #111827;
+    /* Dark billing section */
+    .billing-section {
+      background: #1f2937;
+      color: #f3f4f6;
+      padding: 40px;
+      margin-bottom: 50px;
+      border-left: 5px solid #3730a3;
     }
     
-    .bill-to h3 {
-      font-size: 12pt;
-      margin-bottom: 30px;
-      color: #111827;
+    .billing-header {
+      font-size: 11pt;
+      font-weight: 400;
+      color: #9ca3af;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
     }
     
-    .bill-to div {
+    .billing-info {
+      font-size: 11pt;
+      color: #f3f4f6;
       line-height: 1.8;
-      color: #4b5563;
     }
     
-    /* Items Table */
+    .billing-info strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+    
+    /* Corporate table */
     .items-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 40px 0;
+      margin-bottom: 50px;
     }
     
     .items-table th {
-      background: #1f2937;
-      color: #6b7280;
-      padding: 16px 20px;
+      background: #111827;
+      color: #d1d5db;
+      padding: 20px;
       text-align: left;
-      font-size: 11pt;
+      font-size: 9pt;
       font-weight: 400;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
     
     .items-table td {
-      padding: 20px;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 25px 20px;
+      font-size: 11pt;
       color: #374151;
-    
+      border-bottom: 1px solid #e5e7eb;
       vertical-align: top;
     }
     
@@ -203,10 +189,8 @@
       background: #f9fafb;
     }
     
-    .item-number {
-      font-size: 11pt;
-      color: #9ca3af;
-      margin-right: 10px;
+    .items-table tbody tr:last-child td {
+      border-bottom: 2px solid #111827;
     }
     
     .text-right {
@@ -217,79 +201,132 @@
       text-align: center;
     }
     
-    /* Totals Section */
-    .totals-wrapper {
+    /* Dark totals box */
+    .totals-section {
       display: flex;
       justify-content: flex-end;
-      margin: 40px 0;
+      margin-bottom: 60px;
     }
     
     .totals-box {
       width: 400px;
-      background: #1f2937;
-      color: #6b7280;
-      padding: 30px;
+      background: #111827;
+      color: #f3f4f6;
+      padding: 40px;
     }
     
     .total-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      padding: 15px 0;
+      font-size: 11pt;
+      border-bottom: 1px solid #374151;
     }
     
     .total-row:last-child {
       border-bottom: none;
+      border-top: 2px solid #f3f4f6;
+      margin-top: 15px;
       padding-top: 20px;
-      margin-top: 10px;
-      border-top: 2px solid #ffffff;
-      font-size: 14pt;
+      font-size: 16pt;
       font-weight: 700;
     }
     
-    /* Footer */
-    .footer-section {
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 1px solid #e5e7eb;
+    .total-label {
+      color: #9ca3af;
     }
     
-    .footer-grid {
+    .total-value {
+      color: #f3f4f6;
+      font-weight: 400;
+    }
+    
+    .total-row:last-child .total-label,
+    .total-row:last-child .total-value {
+      color: #ffffff;
+    }
+    
+    /* Corporate footer */
+    .footer {
+      padding: 60px;
+      background: #f9fafb;
+      border-top: 3px solid #111827;
+    }
+    
+    .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 40px;
+      gap: 50px;
     }
     
-    .notes h3 {
+    .notes-section h3 {
       font-size: 11pt;
-      margin-bottom: 30px;
-      color: #111827;
+      font-weight: 400;
+      color: #374151;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
     }
     
-    .notes p {
+    .notes-section p {
+      font-size: 11pt;
       color: #6b7280;
       line-height: 1.8;
     }
     
     .payment-box {
-      background: #f9fafb;
-      padding: 20px;
+      background: #1f2937;
+      color: #f3f4f6;
+      padding: 30px;
       text-align: center;
-      border: 1px solid #e5e7eb;
+      border-radius: 8px;
     }
     
     .payment-box h4 {
-      font-size: 11pt;
-      color: #6b7280;
-      margin-bottom: 30px;
+      font-size: 9pt;
+      font-weight: 400;
+      color: #9ca3af;
+      margin-bottom: 15px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.5px;
     }
     
     .payment-box p {
-      font-size: 11pt;
+      font-size: 14pt;
       font-weight: 600;
-      color: #111827;
+      color: #ffffff;
+    }
+    
+    /* Status badges */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 9pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .status-paid {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status-pending {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .status-overdue {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .status-draft {
+      background: #e5e7eb;
+      color: #374151;
     }
   </style>
 </head>
@@ -298,71 +335,52 @@
     <!-- Dark Sidebar -->
     <div class="sidebar">
       <div class="company-logo">
-        {{#if userData.company}}{{userData.company}}{{else}}CORP{{/if}}
+        {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
       </div>
       
       <div class="sidebar-section">
-        <h2>From</h2>
-        <div>
-          {{userData.displayName}}<br>
-          {{#if userData.email}}{{userData.email}}<br>{{/if}}
-          {{#if userData.phone}}{{userData.phone}}{{/if}}
-        </div>
-      </div>
-      
-      <div class="sidebar-section">
-        <h2>Address</h2>
-        <div>
+        <h3>From</h3>
+        <p>
+          {{#if userData.displayName}}{{userData.displayName}}<br>{{/if}}
           {{#if userData.address}}
             {{userData.address.street}}<br>
-            {{userData.address.city}}, {{userData.address.state}}<br>
-            {{userData.address.zipCode}}<br>
-            {{userData.address.country}}
+            {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>
           {{/if}}
-        </div>
+          {{#if userData.email}}{{userData.email}}<br>{{/if}}
+          {{#if userData.phone}}{{userData.phone}}{{/if}}
+        </p>
       </div>
       
-      <div class="invoice-meta">
-        <div class="invoice-number-box">
-          <h3>INVOICE NUMBER</h3>
-          <div class="invoice-number">{{invoice.invoiceNumber}}</div>
-        </div>
-        <div style="margin-top: 20px; text-align: center;">
-          <span class="status-indicator status-{{invoice.status}}"></span>
-          <span style="text-transform: uppercase; font-size: 11pt; opacity: 0.8;">{{invoice.status}}</span>
-        </div>
+      <div class="invoice-badge">
+        <div class="invoice-label">Invoice Number</div>
+        <div class="invoice-number">{{invoice.invoiceNumber}}</div>
       </div>
     </div>
     
     <!-- Main Content Area -->
     <div class="main-content">
-      <div class="content-header">
-        <h1 class="page-title">INVOICE</h1>
-        
-        <div class="date-bar">
-          <div class="date-item">
-            <span class="date-label">Invoice Date</span>
-            <span class="date-value">{{formatDateShort invoice.date timezone=userData.timezone}}</span>
-          </div>
-          <div class="date-item">
-            <span class="date-label">Due Date</span>
-            <span class="date-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</span>
-          </div>
-          <div class="date-item">
-            <span class="date-label">Terms</span>
-            <span class="date-value">{{invoice.paymentTerms}}</span>
-          </div>
-          <div class="date-item">
-            <span class="date-label">Amount Due</span>
-            <span class="date-value">{{formatCurrency invoice.total currency=invoice.currency}}</span>
-          </div>
+      <h1 class="page-title">INVOICE</h1>
+      
+      <!-- Date Bar -->
+      <div class="date-bar">
+        <div class="date-item">
+          <span class="date-label">Issue Date</span>
+          <span class="date-value">{{formatDate invoice.date timezone=userData.timezone}}</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Due Date</span>
+          <span class="date-value">{{formatDate invoice.dueDate timezone=userData.timezone}}</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Payment Terms</span>
+          <span class="date-value">{{invoice.paymentTerms}}</span>
         </div>
       </div>
-      
-      <!-- Bill To Section -->
-      <div class="bill-to">
-        <h3>BILL TO</h3>
-        <div>
+    
+      <!-- Dark Billing Section -->
+      <div class="billing-section">
+        <h2 class="billing-header">Bill To</h2>
+        <div class="billing-info">
           <strong>{{customer.name}}</strong><br>
           {{#if customer.email}}{{customer.email}}<br>{{/if}}
           {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
@@ -374,23 +392,20 @@
         </div>
       </div>
       
-      <!-- Items Table -->
+      <!-- Corporate Table -->
       <table class="items-table">
         <thead>
           <tr>
-            <th style="width: 50%">DESCRIPTION</th>
-            <th class="text-center" style="width: 15%">QTY</th>
-            <th class="text-right" style="width: 15%">RATE</th>
-            <th class="text-right" style="width: 20%">AMOUNT</th>
+            <th style="width: 50%">Description</th>
+            <th class="text-center" style="width: 15%">Quantity</th>
+            <th class="text-right" style="width: 15%">Rate</th>
+            <th class="text-right" style="width: 20%">Amount</th>
           </tr>
         </thead>
         <tbody>
           {{#each invoice.lineItems}}
           <tr>
-            <td>
-              <span class="item-number">#{{@index}}</span>
-              {{this.description}}
-            </td>
+            <td>{{this.description}}</td>
             <td class="text-center">{{this.quantity}}</td>
             <td class="text-right">{{formatCurrency this.rate currency=../invoice.currency}}</td>
             <td class="text-right">{{formatCurrency this.amount currency=../invoice.currency}}</td>
@@ -398,41 +413,41 @@
           {{/each}}
         </tbody>
       </table>
-      
-      <!-- Totals Section -->
-      <div class="totals-wrapper">
+    
+      <!-- Dark Totals Box -->
+      <div class="totals-section">
         <div class="totals-box">
           <div class="total-row">
-            <span>Subtotal</span>
-            <span>{{formatCurrency invoice.subtotal currency=invoice.currency}}</span>
+            <div class="total-label">Subtotal</div>
+            <div class="total-value">{{formatCurrency invoice.subtotal currency=invoice.currency}}</div>
           </div>
           {{#if invoice.taxRate}}
           <div class="total-row">
-            <span>Tax ({{invoice.taxRate}}%)</span>
-            <span>{{formatCurrency invoice.taxAmount currency=invoice.currency}}</span>
+            <div class="total-label">Tax ({{invoice.taxRate}}%)</div>
+            <div class="total-value">{{formatCurrency invoice.taxAmount currency=invoice.currency}}</div>
           </div>
           {{/if}}
           <div class="total-row">
-            <span>TOTAL DUE</span>
-            <span>{{formatCurrency invoice.total currency=invoice.currency}}</span>
+            <div class="total-label">Total Due</div>
+            <div class="total-value">{{formatCurrency invoice.total currency=invoice.currency}}</div>
           </div>
         </div>
       </div>
-      
-      <!-- Footer Section -->
-      <div class="footer-section">
-        <div class="footer-grid">
-          <div class="notes">
-            {{#if invoice.notes}}
-              <h3>Notes & Terms</h3>
-              <p>{{invoice.notes}}</p>
-            {{/if}}
-          </div>
-          
-          <div class="payment-box">
-            <h4>Payment Due</h4>
-            <p>{{formatDate invoice.dueDate timezone=userData.timezone}}</p>
-          </div>
+    </div>
+    
+    <!-- Corporate Footer -->
+    <div class="footer">
+      <div class="footer-content">
+        {{#if invoice.notes}}
+        <div class="notes-section">
+          <h3>Notes & Terms</h3>
+          <p>{{invoice.notes}}</p>
+        </div>
+        {{/if}}
+        
+        <div class="payment-box">
+          <h4>Payment Due</h4>
+          <p>{{formatDate invoice.dueDate timezone=userData.timezone}}</p>
         </div>
       </div>
     </div>

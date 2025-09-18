@@ -10,22 +10,22 @@
     }
     
     body {
-      font-family: 'Impact', Arial Black, sans-serif;
-      font-size: 11pt;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      font-size: 10pt;
+      line-height: 1.6;
       color: #000000;
-      background: #ffffff;
+      background: #f9fafb;
       padding: 0;
       margin: 0;
-    
-      line-height: 1.6;
     }
     
     .invoice-container {
       max-width: 850px;
-      margin: 0 auto;
+      margin: 20px auto;
       background: #ffffff;
-    
-      padding: 40px;}
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      border: 3px solid #000000;
+    }
     
     /* Bold Black Header */
     .header {
@@ -34,8 +34,6 @@
       padding: 0;
       position: relative;
       overflow: hidden;
-    
-      margin-bottom: 40px;
     }
     
     .header-content {
@@ -52,18 +50,18 @@
     }
     
     .company-name {
-      font-size: 32pt;
+      font-size: 28pt;
       font-weight: 900;
       letter-spacing: -2px;
       line-height: 1;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-transform: uppercase;
     }
     
     .company-details {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      font-size: 11pt;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.8;
       font-weight: normal;
     }
     
@@ -90,14 +88,14 @@
     }
     
     .invoice-label {
-      font-size: 24pt;
+      font-size: 20pt;
       font-weight: 900;
       letter-spacing: 3px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
     
     .invoice-number-large {
-      font-size: 36pt;
+      font-size: 30pt;
       font-weight: 900;
       letter-spacing: -2px;
     }
@@ -129,23 +127,23 @@
     }
     
     .section-title {
-      font-size: 18pt;
+      font-size: 16pt;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
     .customer-details {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      font-size: 11pt;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
       line-height: 1.8;
       font-weight: normal;
     }
     
     .customer-details strong {
       font-weight: 700;
-      font-size: 12pt;
+      font-size: 11pt;
     }
     
     /* Date grid with borders */
@@ -167,7 +165,7 @@
     }
     
     .date-label {
-      font-size: 11pt;
+      font-size: 10pt;
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 5px;
@@ -175,7 +173,7 @@
     }
     
     .date-value {
-      font-size: 14pt;
+      font-size: 12pt;
       font-weight: 900;
     }
     
@@ -192,7 +190,7 @@
       color: #000000;
       padding: 16px 20px;
       text-align: left;
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -202,9 +200,9 @@
     .items-table td {
       padding: 20px;
       border-bottom: 1px solid #e5e7eb;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-weight: normal;
-    
+      font-size: 10pt;
       vertical-align: top;
     }
     
@@ -222,12 +220,12 @@
     
     .qty-cell {
       font-weight: 700;
-      font-size: 12pt;
+      font-size: 11pt;
     }
     
     .amount-cell {
       font-weight: 700;
-      font-size: 12pt;
+      font-size: 11pt;
     }
     
     /* Totals with black background */
@@ -240,7 +238,7 @@
     .totals-box {
       width: 400px;
       background: #000000;
-      color: #6b7280;
+      color: #fbbf24;
       padding: 0;
     }
     
@@ -249,7 +247,7 @@
       justify-content: space-between;
       padding: 20px 30px;
       border-bottom: 1px solid #333333;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
     .total-row.grand-total {
@@ -257,7 +255,7 @@
       color: #000000;
       border-bottom: none;
       padding: 25px 30px;
-      font-size: 16pt;
+      font-size: 14pt;
       font-weight: 900;
     }
     
@@ -275,16 +273,17 @@
     }
     
     .notes h3 {
-      font-size: 14pt;
+      font-size: 12pt;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
     .notes p {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-weight: normal;
+      font-size: 10pt;
       line-height: 1.8;
       color: #374151;
     }
@@ -297,14 +296,14 @@
     }
     
     .payment-block h4 {
-      font-size: 11pt;
-      margin-bottom: 30px;
+      font-size: 10pt;
+      margin-bottom: 20px;
       font-weight: 700;
       letter-spacing: 1px;
     }
     
     .payment-block .amount {
-      font-size: 24pt;
+      font-size: 20pt;
       font-weight: 900;
     }
     
@@ -313,7 +312,7 @@
       background: #fbbf24;
       padding: 10px 40px;
       text-align: right;
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 2px;

@@ -25,6 +25,7 @@ import {
   Toolbar,
   Tooltip,
   Skeleton,
+  Avatar,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -46,6 +47,7 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { formatInvoiceNumber } from '../utils/formatters';
+import { templates } from './InvoiceTemplates';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -400,17 +402,23 @@ const Invoices = () => {
     );
 
     // Define CSV headers
-    const headers = ['Invoice #', 'Customer', 'Date', 'Due Date', 'Amount', 'Status'];
+    const headers = ['Invoice #', 'Customer', 'Template', 'Date', 'Due Date', 'Amount', 'Status'];
     
     // Convert data to CSV format
-    const csvData = selectedInvoiceData.map(invoice => [
-      formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix),
-      invoice.customerName,
-      invoice.date ? format(new Date(invoice.date), 'yyyy-MM-dd') : '',
-      invoice.dueDate ? format(new Date(invoice.dueDate), 'yyyy-MM-dd') : '',
-      invoice.total || 0,
-      invoice.status
-    ]);
+    const csvData = selectedInvoiceData.map(invoice => {
+      const template = templates.find(t => t.id === (invoice.templateId || 'default'));
+      const templateName = template ? template.name : 'Default';
+      
+      return [
+        formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix),
+        invoice.customerName,
+        templateName,
+        invoice.date ? format(new Date(invoice.date), 'yyyy-MM-dd') : '',
+        invoice.dueDate ? format(new Date(invoice.dueDate), 'yyyy-MM-dd') : '',
+        invoice.total || 0,
+        invoice.status
+      ];
+    });
 
     // Combine headers and data
     const csvContent = [
@@ -455,7 +463,7 @@ const Invoices = () => {
                   <TableCell padding="checkbox">
                     <Skeleton variant="rectangular" width={20} height={20} />
                   </TableCell>
-                  {['Invoice #', 'Customer', 'Date', 'Due Date', 'Amount', 'Status', 'Actions'].map((header) => (
+                  {['Invoice #', 'Customer', 'Template', 'Date', 'Due Date', 'Amount', 'Status', 'Actions'].map((header) => (
                     <TableCell key={header}>
                       <Skeleton variant="text" width={header === 'Actions' ? 150 : 80} />
                     </TableCell>
@@ -470,6 +478,7 @@ const Invoices = () => {
                     </TableCell>
                     <TableCell><Skeleton variant="text" width={100} /></TableCell>
                     <TableCell><Skeleton variant="text" width={120} /></TableCell>
+                    <TableCell><Skeleton variant="rectangular" width={80} height={24} /></TableCell>
                     <TableCell><Skeleton variant="text" width={80} /></TableCell>
                     <TableCell><Skeleton variant="text" width={80} /></TableCell>
                     <TableCell><Skeleton variant="text" width={60} /></TableCell>
@@ -626,6 +635,7 @@ const Invoices = () => {
                     </TableCell>
                     <TableCell>Invoice #</TableCell>
                     <TableCell>Customer</TableCell>
+                    <TableCell>Template</TableCell>
                     <TableCell>Date</TableCell>
                     <TableCell>Due Date</TableCell>
                     <TableCell>Amount</TableCell>
@@ -669,6 +679,52 @@ const Invoices = () => {
                           </Box>
                         </TableCell>
                         <TableCell>{invoice.customerName}</TableCell>
+                        <TableCell>
+                          {(() => {
+                            const template = templates.find(t => t.id === (invoice.templateId || 'default'));
+                            const templateId = invoice.templateId || 'default';
+                            const templateName = template ? template.name : 'Default';
+                            
+                            return (
+                              <Tooltip 
+                                title={
+                                  <Box sx={{ p: 1 }}>
+                                    <img 
+                                      src={`/template-previews/${templateId}-preview.png`}
+                                      alt={templateName}
+                                      style={{ 
+                                        width: 200, 
+                                        height: 'auto',
+                                        borderRadius: 4,
+                                        border: '1px solid #e0e0e0'
+                                      }}
+                                      onError={(e) => {
+                                        e.target.style.display = 'none';
+                                      }}
+                                    />
+                                    <Typography variant="caption" display="block" align="center" sx={{ mt: 1 }}>
+                                      {templateName}
+                                    </Typography>
+                                  </Box>
+                                }
+                                arrow
+                                placement="left"
+                              >
+                                <Chip 
+                                  label={templateName}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{ 
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                      backgroundColor: 'action.hover'
+                                    }
+                                  }}
+                                />
+                              </Tooltip>
+                            );
+                          })()}
+                        </TableCell>
                         <TableCell>
 
                           {invoice.date && !isNaN(new Date(invoice.date).getTime())

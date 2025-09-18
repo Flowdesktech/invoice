@@ -10,24 +10,24 @@
     }
     
     body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 11pt;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.6;
       color: #831843;
-      background: #ffffff;
+      background: #fdf2f8;
       padding: 0;
       margin: 0;
-    
-      line-height: 1.6;
     }
     
     .invoice-container {
       max-width: 900px;
-      margin: 0 auto;
+      margin: 20px auto;
       background: #ffffff;
       position: relative;
       overflow: hidden;
-    
-      padding: 40px;}
+      box-shadow: 0 15px 40px rgba(219, 39, 119, 0.1);
+      border-radius: 24px;
+    }
     
     /* Dynamic startup header */
     .startup-header {
@@ -95,15 +95,15 @@
     }
     
     .company-name {
-      font-size: 28pt;
+      font-size: 26pt;
       font-weight: 700;
       letter-spacing: -1px;
     }
     
     .tagline {
-      font-size: 11pt;
+      font-size: 10pt;
       opacity: 0.9;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
     .invoice-bubble {
@@ -131,12 +131,12 @@
     }
     
     .invoice-bubble h2 {
-      font-size: 12pt;
+      font-size: 11pt;
       margin-bottom: 5px;
     }
     
     .invoice-bubble .number {
-      font-size: 18pt;
+      font-size: 16pt;
       font-weight: 700;
     }
     
@@ -195,7 +195,7 @@
     }
     
     .card-title {
-      font-size: 14pt;
+      font-size: 13pt;
       color: #831843;
       font-weight: 600;
     }
@@ -224,7 +224,7 @@
     }
     
     .date-pill-label {
-      font-size: 11pt;
+      font-size: 9pt;
       color: #be185d;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -232,7 +232,7 @@
     }
     
     .date-pill-value {
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 700;
       color: #831843;
     }
@@ -253,7 +253,7 @@
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 20px;
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -324,7 +324,7 @@
       margin-top: 20px;
       padding-top: 25px;
       border-top: 2px solid rgba(255, 255, 255, 0.3);
-      font-size: 16pt;
+      font-size: 14pt;
       font-weight: 700;
     }
     
@@ -344,8 +344,8 @@
     
     .footer-notes h3 {
       color: #db2777;
-      font-size: 12pt;
-      margin-bottom: 30px;
+      font-size: 11pt;
+      margin-bottom: 20px;
       font-weight: 600;
     }
     
@@ -364,8 +364,8 @@
     
     .social-box h4 {
       color: #db2777;
-      font-size: 11pt;
-      margin-bottom: 30px;
+      font-size: 10pt;
+      margin-bottom: 20px;
     }
 
     .social-icon {
@@ -394,7 +394,7 @@
       color: #db2777;
       padding: 10px 25px;
       border-radius: 20px;
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -441,7 +441,7 @@
           <h3 class="card-title">Customer Information</h3>
         </div>
         <div class="customer-info">
-          <strong style="font-size: 14pt;">{{customer.name}}</strong><br>
+          <strong style="font-size: 13pt;">{{customer.name}}</strong><br>
           {{#if customer.email}}{{customer.email}}<br>{{/if}}
           {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
           {{#if customer.address}}
@@ -456,11 +456,11 @@
       <div class="date-container">
         <div class="date-pill">
           <div class="date-pill-label">Issued</div>
-          <div class="date-pill-value">{{formatDateShort invoice.date timezone=userData.timezone}}</div>
+          <div class="date-pill-value">{{formatDate invoice.date timezone=userData.timezone}}</div>
         </div>
         <div class="date-pill">
           <div class="date-pill-label">Due</div>
-          <div class="date-pill-value">{{formatDateShort invoice.dueDate timezone=userData.timezone}}</div>
+          <div class="date-pill-value">{{formatDate invoice.dueDate timezone=userData.timezone}}</div>
         </div>
         <div class="date-pill">
           <div class="date-pill-label">Terms</div>
@@ -526,7 +526,7 @@
             <div class="social-icon">💬</div>
             <div class="social-icon">🌐</div>
           </div>
-          <p style="margin-top: 15px; color: #be185d; font-size: 11pt;">Thank you for your business! 🎉</p>
+          <p style="margin-top: 15px; color: #be185d; font-size: 10pt;">Thank you for your business! 🎉</p>
         </div>
       </div>
     </div>

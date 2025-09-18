@@ -33,6 +33,7 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
 import { formatInvoiceNumber } from '../utils/formatters';
+import { templates } from './InvoiceTemplates';
 
 const ViewInvoice = () => {
   const { id } = useParams();
@@ -391,6 +392,91 @@ const ViewInvoice = () => {
                 )}
               </Box>
             )}
+          </Paper>
+
+          {/* Template Information */}
+          <Paper sx={{ p: 3, mb: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Invoice Template
+            </Typography>
+            {(() => {
+              const templateId = invoice.templateId || 'default';
+              const template = templates.find(t => t.id === templateId);
+              const templateName = template ? template.name : 'Default';
+              
+              return (
+                <Box>
+                  <Box 
+                    sx={{ 
+                      position: 'relative',
+                      width: '100%',
+                      paddingTop: '141.42%', // A4 aspect ratio (1:1.4142)
+                      borderRadius: 2,
+                      overflow: 'hidden',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      mb: 2,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        boxShadow: 3,
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                    onClick={handleDownloadPDF}
+                    title="Click to download PDF"
+                  >
+                    <img 
+                      src={`/template-previews/${templateId}-preview.png`}
+                      alt={templateName}
+                      style={{ 
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                      onError={(e) => {
+                        // Fallback to colored placeholder if image doesn't exist
+                        const parent = e.target.parentElement;
+                        parent.style.background = template?.preview?.primaryColor || '#f5f5f5';
+                        parent.innerHTML = `
+                          <div style="
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            text-align: center;
+                            color: white;
+                            padding: 20px;
+                          ">
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px;">${templateName}</h3>
+                            <p style="margin: 0; opacity: 0.8; font-size: 14px;">Template Preview</p>
+                          </div>
+                        `;
+                      }}
+                    />
+                  </Box>
+                  <Box textAlign="center">
+                    <Typography variant="subtitle1" fontWeight="500">
+                      {templateName}
+                    </Typography>
+                    {template?.isPremium && (
+                      <Chip 
+                        label="Premium - Free for Early Adopters" 
+                        size="small" 
+                        color="primary"
+                        sx={{ mt: 1 }}
+                      />
+                    )}
+                    <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+                      Click preview to download PDF
+                    </Typography>
+                  </Box>
+                </Box>
+              );
+            })()}
           </Paper>
 
           {/* Invoice Summary */}
