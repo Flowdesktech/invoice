@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 import Header from '../components/Header';
+import { templates } from './InvoiceTemplates';
 import {
   Box,
   Container,
@@ -959,6 +960,273 @@ const LandingPage = () => {
             >
               Start Free & Get Early Access Benefits
             </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      {/* Templates Showcase Section */}
+      <Box sx={{ 
+        py: { xs: 10, md: 16 }, 
+        bgcolor: '#f8fafc',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background decoration */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -100,
+            right: -100,
+            width: 300,
+            height: 300,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: -150,
+            left: -150,
+            width: 400,
+            height: 400,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <Container maxWidth="lg">
+          <Box sx={{ textAlign: 'center', mb: 8 }}>
+            <Chip 
+              label="15 Professional Templates"
+              color="primary"
+              sx={{ mb: 3, fontWeight: 600 }}
+            />
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '2rem', md: '3rem' },
+                fontWeight: 700,
+                color: '#1e293b',
+                mb: 3,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              Beautiful Invoice Templates
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                mb: 2,
+                color: '#64748b',
+                fontWeight: 400,
+                fontSize: { xs: '1.1rem', md: '1.4rem' },
+                maxWidth: 700,
+                mx: 'auto',
+              }}
+            >
+              Choose from our collection of professionally designed templates. 
+              Each one crafted to make your business look its best.
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#10b981',
+                fontWeight: 600,
+                fontSize: '1.1rem',
+              }}
+            >
+              ✨ All premium templates FREE for early adopters!
+            </Typography>
+          </Box>
+
+          {/* Template Grid */}
+          <Grid container spacing={3}>
+            {templates.slice(0, 12).map((template) => (
+              <Grid key={template.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Fade in={true} timeout={800}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      overflow: 'visible',
+                      position: 'relative',
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                        '& .template-preview': {
+                          transform: 'scale(1.05)',
+                        },
+                        '& .cta-button': {
+                          opacity: 1,
+                          transform: 'translateY(0)',
+                        }
+                      },
+                    }}
+                  >
+                    {/* Premium Badge */}
+                    {template.isPremium && (
+                      <Chip
+                        label="FREE for Early Adopters"
+                        size="small"
+                        sx={{
+                          position: 'absolute',
+                          top: 10,
+                          right: 10,
+                          zIndex: 2,
+                          bgcolor: '#10b981',
+                          color: 'white',
+                          fontWeight: 600,
+                        }}
+                      />
+                    )}
+
+                    {/* Template Preview */}
+                    <Box
+                      className="template-preview"
+                      sx={{
+                        position: 'relative',
+                        paddingTop: '141.42%', // A4 aspect ratio
+                        overflow: 'hidden',
+                        bgcolor: '#f1f5f9',
+                        transition: 'transform 0.3s ease',
+                      }}
+                    >
+                      {/* Check if preview image exists */}
+                      <Box
+                        component="img"
+                        src={`/template-previews/${template.id}-preview.png`}
+                        alt={template.name}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                      {/* Fallback colored preview */}
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          display: 'none', // Hidden by default, shown on image error
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          background: `linear-gradient(135deg, ${template.preview.primaryColor}20 0%, ${template.preview.secondaryColor}20 100%)`,
+                          borderBottom: `4px solid ${template.preview.primaryColor}`,
+                        }}
+                      >
+                        <Typography
+                          variant="h3"
+                          sx={{
+                            color: template.preview.primaryColor,
+                            fontWeight: 700,
+                            textAlign: 'center',
+                          }}
+                        >
+                          {template.name.split(' ').map(word => word[0]).join('')}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <CardContent sx={{ p: 3 }}>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          fontWeight: 600,
+                          color: '#1e293b',
+                          mb: 1,
+                        }}
+                      >
+                        {template.name}
+                      </Typography>
+                      <Typography 
+                        variant="body2" 
+                        sx={{ 
+                          color: '#64748b',
+                          mb: 2,
+                        }}
+                      >
+                        {template.description}
+                      </Typography>
+
+                      {/* CTA Button */}
+                      <Button
+                        className="cta-button"
+                        variant="contained"
+                        fullWidth
+                        onClick={() => navigate('/register')}
+                        sx={{
+                          opacity: 0,
+                          transform: 'translateY(10px)',
+                          transition: 'all 0.3s ease',
+                          background: `linear-gradient(135deg, ${template.preview.primaryColor} 0%, ${template.preview.secondaryColor} 100%)`,
+                          color: 'white',
+                          fontWeight: 600,
+                          py: 1.5,
+                          '&:hover': {
+                            background: `linear-gradient(135deg, ${template.preview.secondaryColor} 0%, ${template.preview.primaryColor} 100%)`,
+                          }
+                        }}
+                      >
+                        Try This Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Fade>
+              </Grid>
+            ))}
+          </Grid>
+
+          {/* View All Templates CTA */}
+          <Box sx={{ textAlign: 'center', mt: 8 }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => navigate('/register')}
+              sx={{
+                borderColor: '#3b82f6',
+                color: '#3b82f6',
+                py: 2,
+                px: 6,
+                fontSize: '1.125rem',
+                fontWeight: 600,
+                borderRadius: '12px',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s',
+                '&:hover': {
+                  borderColor: '#3b82f6',
+                  bgcolor: '#3b82f6',
+                  color: 'white',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 10px 30px rgba(59, 130, 246, 0.3)',
+                },
+              }}
+            >
+              Sign Up to Access All Templates
+            </Button>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                mt: 2,
+                color: '#64748b',
+              }}
+            >
+              No credit card required • Free forever
+            </Typography>
           </Box>
         </Container>
       </Box>
