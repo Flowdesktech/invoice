@@ -42,7 +42,7 @@ const SendInvoiceDialog = ({
   // Initialize recipients with customer email when dialog opens
   useEffect(() => {
     if (open && customer?.email) {
-      setRecipients([{ email: customer.email, isPrimary: true, name: customer.name }]);
+      setRecipients([{ email: customer.email, name: customer.name }]);
     }
   }, [open, customer]);
 
@@ -69,13 +69,16 @@ const SendInvoiceDialog = ({
       return;
     }
     
-    setRecipients([...recipients, { email: trimmedEmail, isPrimary: false }]);
+    setRecipients([...recipients, { email: trimmedEmail }]);
     setNewRecipient('');
     setEmailError('');
   };
 
   const handleRemoveRecipient = (emailToRemove) => {
-    setRecipients(recipients.filter(r => r.email !== emailToRemove));
+    // Ensure at least one recipient remains
+    if (recipients.length > 1) {
+      setRecipients(recipients.filter(r => r.email !== emailToRemove));
+    }
   };
 
   const handleSend = async () => {
@@ -141,41 +144,33 @@ const SendInvoiceDialog = ({
                       sx={{
                         p: 1,
                         borderRadius: 1,
-                        bgcolor: recipient.isPrimary ? 'primary.50' : 'grey.50',
+                        bgcolor: 'grey.50',
                         border: '1px solid',
-                        borderColor: recipient.isPrimary ? 'primary.200' : 'grey.200'
+                        borderColor: 'grey.200'
                       }}
                     >
                       <Box display="flex" alignItems="center" gap={1}>
-                        <EmailIcon fontSize="small" color={recipient.isPrimary ? "primary" : "action"} />
+                        <EmailIcon fontSize="small" color="action" />
                         <Typography variant="body2">
                           {recipient.email}
                         </Typography>
-                        {recipient.isPrimary && (
-                          <Chip
-                            label="Primary"
-                            size="small"
-                            color="primary"
-                            variant="outlined"
-                          />
-                        )}
                         {recipient.name && (
                           <Typography variant="body2" color="text.secondary">
                             ({recipient.name})
                           </Typography>
                         )}
                       </Box>
-                      {!recipient.isPrimary && (
-                        <Tooltip title="Remove recipient">
+                      <Tooltip title={recipients.length === 1 ? "At least one recipient is required" : "Remove recipient"}>
+                        <span>
                           <IconButton
                             size="small"
                             onClick={() => handleRemoveRecipient(recipient.email)}
-                            disabled={sending}
+                            disabled={sending || recipients.length === 1}
                           >
                             <DeleteIcon fontSize="small" />
                           </IconButton>
-                        </Tooltip>
-                      )}
+                        </span>
+                      </Tooltip>
                     </Box>
                   ))
                 )}

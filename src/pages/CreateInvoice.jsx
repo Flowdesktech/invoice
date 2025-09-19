@@ -3,6 +3,7 @@ import CustomerDialog from '../components/CustomerDialog';
 import RecurringInvoiceDialog from '../components/RecurringInvoiceDialog';
 import currencyOptions from '../data/currencyOptions.json';
 import { templates } from './InvoiceTemplates';
+import { openPdfInNewTab } from '../utils/pdfUtils';
 import Chip from '@mui/material/Chip';
 import {
   Dialog,
@@ -78,9 +79,7 @@ const CreateInvoice = () => {
   const [customerDialogOpen, setCustomerDialogOpen] = useState(false);
   const [customerEditMode, setCustomerEditMode] = useState(false);
   const [customerToEdit, setCustomerToEdit] = useState(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
-  const [previewPdf, setPreviewPdf] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const { currentUser, userData, currentProfile } = useAuth();
   const navigate = useNavigate();
@@ -114,6 +113,51 @@ const CreateInvoice = () => {
     fetchCustomers();
     if (!isEditMode && !isDuplicateMode) {
       generateInvoiceNumber();
+    }
+    
+    // Restore saved form data when returning from template selection
+    const savedFormData = localStorage.getItem('invoiceFormData');
+    if (savedFormData && !isEditMode && !isDuplicateMode) {
+      try {
+        const formData = JSON.parse(savedFormData);
+        
+        // Restore form values using setValue
+        if (formData.selectedCustomer) {
+          setValue('customer', formData.selectedCustomer);
+        }
+        if (formData.invoiceNumber) {
+          setValue('invoiceNumber', formData.invoiceNumber);
+        }
+        if (formData.issueDate) {
+          setValue('date', new Date(formData.issueDate));
+        }
+        if (formData.dueDate) {
+          setValue('dueDate', new Date(formData.dueDate));
+        }
+        if (formData.notes) {
+          setValue('notes', formData.notes);
+        }
+        if (formData.paymentTerms) {
+          setValue('paymentTerms', formData.paymentTerms);
+        }
+        if (formData.tax !== undefined) {
+          setValue('taxRate', formData.tax);
+        }
+        
+        // Restore line items
+        if (formData.items && formData.items.length > 0) {
+          setLineItems(formData.items);
+        }
+        
+        // Clear the saved data after restoration
+        localStorage.removeItem('invoiceFormData');
+        
+        // Show a message to indicate data was restored
+        toast.success('Your invoice data has been restored');
+      } catch (error) {
+        console.error('Error restoring form data:', error);
+        localStorage.removeItem('invoiceFormData');
+      }
     }
   }, [currentUser, isEditMode, isDuplicateMode]);
 
@@ -296,8 +340,11 @@ const CreateInvoice = () => {
       
       // Call backend preview API
       const response = await invoiceAPI.preview(invoiceData);
-      setPreviewPdf(response.data.pdf);
-      setPreviewOpen(true);
+      
+      // Use common utility to open PDF
+      openPdfInNewTab(response.data?.pdf, {
+        filename: `invoice_${invoiceNumber}_preview.pdf`
+      });
     } catch (error) {
       console.error('Error generating preview:', error);
       Swal.fire({
@@ -592,6 +639,20 @@ const CreateInvoice = () => {
                   variant="outlined"
                   startIcon={<PaletteIcon />}
                   onClick={() => {
+                    // Save current form data to localStorage before navigating
+                    const currentValues = watch(); // Get all current form values
+                    const formData = {
+                      selectedCustomer: currentValues.customer,
+                      invoiceNumber: currentValues.invoiceNumber,
+                      issueDate: currentValues.date ? currentValues.date.toISOString() : null,
+                      dueDate: currentValues.dueDate ? currentValues.dueDate.toISOString() : null,
+                      items: lineItems,
+                      notes: currentValues.notes,
+                      paymentTerms: currentValues.paymentTerms,
+                      tax: currentValues.taxRate
+                    };
+                    localStorage.setItem('invoiceFormData', JSON.stringify(formData));
+                    
                     // Construct the return path with current query params preserved
                     let returnPath = isEditMode ? `/invoices/${id}/edit` : '/invoices/create';
                     
@@ -1394,74 +1455,7 @@ const CreateInvoice = () => {
         editMode={customerEditMode}
       />
       
-      {/* Invoice Preview Modal */}
-      <Dialog
-        open={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: {
-            height: '90vh',
-            maxHeight: '90vh',
-          }
-        }}
-      >
-        <DialogTitle
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottom: '1px solid',
-            borderColor: 'divider',
-            pb: 2,
-          }}
-        >
-          <Typography variant="h6" fontWeight={600}>
-            Invoice Preview
-          </Typography>
-          <Box>
-            <IconButton
-              onClick={() => window.print()}
-              sx={{ mr: 1 }}
-            >
-              <PrintIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => setPreviewOpen(false)}
-              edge="end"
-            >
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent sx={{ p: 0, overflow: 'hidden' }}>
-          {/* PDF Preview */}
-          {previewPdf ? (
-            <iframe
-              src={`data:application/pdf;base64,${previewPdf}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                border: 'none',
-              }}
-              title="Invoice Preview"
-            />
-          ) : (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-                backgroundColor: '#f5f5f5',
-              }}
-            >
-              <CircularProgress />
-            </Box>
-          )}
-        </DialogContent>
-      </Dialog>
+
       
       {/* Recurring Invoice Dialog */}
       {createdInvoice && (

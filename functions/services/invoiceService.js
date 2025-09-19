@@ -115,7 +115,6 @@ class InvoiceService {
       taxRate,
       taxAmount,
       total,
-      recurringInvoiceId: invoiceData.recurringInvoiceId,
       notes: invoiceData.notes || '',
       paymentTerms: invoiceData.paymentTerms || userData.invoiceSettings?.paymentTerms || 'Due on receipt',
       currency: invoiceData.currency || userData.invoiceSettings?.currency || 'USD',
@@ -123,6 +122,11 @@ class InvoiceService {
       createdAt: Date.now(),
       updatedAt: Date.now()
     };
+    
+    // Only add recurringInvoiceId if it exists
+    if (invoiceData.recurringInvoiceId) {
+      newInvoice.recurringInvoiceId = invoiceData.recurringInvoiceId;
+    }
     
     // Only add profileId if not personal account
     if (profileId !== null) {

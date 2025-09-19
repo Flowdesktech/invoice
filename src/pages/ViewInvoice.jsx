@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { downloadPdf } from '../utils/pdfUtils';
 import {
   Container,
   Paper,
@@ -94,40 +95,23 @@ const ViewInvoice = () => {
 
 
   const handleDownloadPDF = async () => {
+    let loadingToast;
     try {
-      const loadingToast = toast.loading('Generating PDF...');
+      loadingToast = toast.loading('Generating PDF...');
       
       // Generate PDF on-demand
       const response = await invoiceAPI.generatePdf(invoice.id);
       
       toast.dismiss(loadingToast);
       
-      if (response.data?.pdf) {
-        // Convert base64 to blob and create download link
-        const base64Data = response.data.pdf;
-        const byteCharacters = atob(base64Data.replace(/^data:application\/pdf;base64,/, ''));
-        const byteNumbers = new Array(byteCharacters.length);
-        
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        
-        // Open in new tab
-        window.open(url, '_blank');
-        
-        // Clean up
-        setTimeout(() => window.URL.revokeObjectURL(url), 100);
-        
-        toast.success('PDF generated successfully!');
-      } else {
-        toast.error('Failed to generate PDF');
-      }
+      // Use common utility to open PDF
+      const formattedNumber = formatInvoiceNumber(
+        invoice.invoiceNumber,
+        userData?.invoiceSettings?.prefix || 'INV'
+      );
+      downloadPdf(response.data?.pdf, `invoice_${formattedNumber}.pdf`);
     } catch (error) {
-      toast.dismiss();
+      if (loadingToast) toast.dismiss(loadingToast);
       console.error('Error generating PDF:', error);
       Swal.fire({
         title: 'Error!',
