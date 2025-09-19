@@ -7,6 +7,7 @@ const {
   subWeeks, subMonths, subYears, getWeek, getQuarter 
 } = require('date-fns');
 const { formatDateForTemplate } = require('../utils/formatters');
+const { logger } = require('firebase-functions/v2');
 
 class RecurringInvoiceService {
   constructor() {
@@ -352,13 +353,16 @@ class RecurringInvoiceService {
     
     // Ensure template is a string and not HTML content
     if (typeof template !== 'string') {
-      console.error('Invalid template type:', typeof template);
+      logger.warn('Invalid template type', { templateType: typeof template });
       return String(template);
     }
     
     // Check if template contains HTML (error response)
     if (template.includes('<!DOCTYPE') || template.includes('<html')) {
-      console.error('HTML content detected in template:', template.substring(0, 100));
+      logger.warn('HTML content detected in template', { 
+        templatePreview: template.substring(0, 100),
+        frequency: frequency 
+      });
       return ''; // Return empty string instead of processing HTML
     }
     

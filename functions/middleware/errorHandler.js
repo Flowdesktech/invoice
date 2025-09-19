@@ -1,19 +1,29 @@
+const { logger } = require('firebase-functions/v2');
+
 /**
  * Global error handling middleware
  */
 const errorHandler = (err, req, res, next) => {
-  // Log detailed error information
-  console.error('==================== ERROR ====================');
-  console.error('Timestamp:', new Date().valueOf());
-  console.error('Method:', req.method);
-  console.error('Path:', req.path);
-  console.error('Body:', JSON.stringify(req.body, null, 2));
-  console.error('User ID:', req.user?.uid || 'Not authenticated');
-  console.error('Error Name:', err.name);
-  console.error('Error Message:', err.message);
-  console.error('Error Code:', err.code);
-  console.error('Stack Trace:', err.stack);
-  console.error('==============================================');
+  // Log detailed error information for production monitoring
+  const errorDetails = {
+    timestamp: new Date().toISOString(),
+    method: req.method,
+    path: req.path,
+    userId: req.user?.uid || 'Not authenticated',
+    profileId: req.profileId || null,
+    errorName: err.name,
+    errorMessage: err.message,
+    errorCode: err.code,
+    stack: err.stack,
+    body: req.body
+  };
+  
+  // Log error with appropriate severity
+  if (err.statusCode >= 500 || !err.statusCode) {
+    logger.error('Internal Server Error', errorDetails);
+  } else {
+    logger.warn('Request Error', errorDetails);
+  }
 
   // Handle specific error types
   if (err.name === 'ValidationError') {
@@ -54,12 +64,12 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Default error response
-  const statusCode = err.statusCode || 500;
+  const statusCode = err.statusCode || err.status || 500;
   const message = err.message || 'Internal Server Error';
 
   res.status(statusCode).json({
-    error: statusCode === 500 ? 'Internal Server Error' : 'Error',
-    message: statusCode === 500 ? 'Something went wrong' : message,
+    error: statusCode >= 500 ? 'Internal Server Error' : 'Error',
+    message: message, // Always send the actual error message
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 };

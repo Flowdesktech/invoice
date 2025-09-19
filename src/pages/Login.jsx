@@ -65,7 +65,7 @@ const Login = () => {
       
       <Header />
       
-      <Container component="main" maxWidth="xs" sx={{ pt: 10 }}style={{ minHeight: '800px' }}>
+      <Container component="main" maxWidth="xs" sx={{ pt: 10 }} style={{ minHeight: '800px' }}>
         <Box
           sx={{
             marginTop: 8,

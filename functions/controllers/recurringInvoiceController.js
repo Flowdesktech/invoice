@@ -131,98 +131,29 @@ class RecurringInvoiceController {
    * Manually generate next invoice from recurring template
    */
   generateNextInvoice = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const userId = req.user.uid;
-    
-    // Get recurring invoice
-    const recurringInvoice = await recurringInvoiceService.getRecurringInvoiceById(id, userId, req.profileId);
-    
-    // Get customer data
-    const customer = await customerService.getCustomerById(recurringInvoice.customerId, userId, req.profileId);
-    
-    // Get user data for invoice settings
-    const userData = await userService.getUserById(userId);
-    
-    // Get the last generated invoice to determine dates and invoice number
-    let invoiceDate;
-    let invoiceNumber;
-    let lastInvoiceData = null;
-    
-    if (recurringInvoice.generatedInvoiceIds && recurringInvoice.generatedInvoiceIds.length > 0) {
-      // Get the last generated invoice
-      const lastInvoiceId = recurringInvoice.generatedInvoiceIds[recurringInvoice.generatedInvoiceIds.length - 1];
-      try {
-        lastInvoiceData = await invoiceService.getInvoiceById(lastInvoiceId, userId, req.profileId);
-        
-        // Calculate next invoice date based on last invoice date and frequency
-        const lastInvoiceDate = new Date(lastInvoiceData.date);
-        invoiceDate = recurringInvoiceService.calculateNextGenerationDate(lastInvoiceDate, recurringInvoice.frequency);
-        
-        // Last invoice number should already be stored as number only
-        // If it's a string, parse it; if it's already a number, just increment
-        const lastInvoiceNumber = lastInvoiceData.invoiceNumber;
-        if (typeof lastInvoiceNumber === 'number') {
-          invoiceNumber = lastInvoiceNumber + 1;
-        } else {
-          // Try to extract number if it's a formatted string (legacy data)
-          const match = String(lastInvoiceNumber).match(/([0-9]+)$/);
-          invoiceNumber = match ? parseInt(match[1], 10) + 1 : recurringInvoice.nextInvoiceNumber;
-        }
-      } catch (error) {
-        console.error('Error fetching last invoice:', error);
-        // Fallback to recurring invoice data
-        invoiceDate = new Date(recurringInvoice.nextGenerationDate);
-        invoiceNumber = recurringInvoice.nextInvoiceNumber;
+    try {
+      const { id } = req.params;
+      const userId = req.user.uid;
+      
+      // Get recurring invoice
+      const recurringInvoice = await recurringInvoiceService.getRecurringInvoiceById(id, userId, req.profileId);
+      if (!recurringInvoice) {
+        const error = new Error('Recurring invoice not found');
+        error.statusCode = 404;
+        throw error;
       }
-    } else {
-      // First invoice generation - use nextGenerationDate, not startDate
-      // This ensures the first generated invoice is for the next period, not the original date
-      invoiceDate = new Date(recurringInvoice.nextGenerationDate);
-      invoiceNumber = recurringInvoice.nextInvoiceNumber;
+      
+      // Generate invoice using shared logic
+      const invoice = await this._generateInvoiceFromRecurring(recurringInvoice, id);
+      
+      res.json({
+        message: 'Invoice generated successfully',
+        invoice: invoice
+      });
+    } catch (error) {
+      // Let the errorHandler middleware handle the error with proper status code
+      throw error;
     }
-    
-    // Get timezone from user/profile settings
-    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
-    const timezone = profileData?.invoiceSettings?.timezone || userData?.invoiceSettings?.timezone || 'America/New_York';
-    
-    // Process line items with dynamic descriptions
-    const processedLineItems = recurringInvoiceService.processLineItemsWithTemplates(
-      recurringInvoice.lineItems,
-      invoiceDate,
-      recurringInvoice.frequency,
-      timezone
-    );
-    
-    // Prepare invoice data
-    const invoiceData = {
-      customerId: recurringInvoice.customerId,
-      lineItems: processedLineItems,
-      taxRate: recurringInvoice.taxRate,
-      notes: recurringInvoice.notes,
-      paymentTerms: recurringInvoice.paymentTerms,
-      date: invoiceDate.getTime(),
-      dueDate: invoiceDate.getTime() + (recurringInvoice.dueDateDuration * 24 * 60 * 60 * 1000),
-      status: 'pending',
-      recurringInvoiceId: id, // Link to recurring invoice
-      invoiceNumber: invoiceNumber // Provide the invoice number (number only)
-    };
-    
-    // Create the invoice
-    const invoice = await invoiceService.createInvoice(
-      invoiceData,
-      userId,
-      userData,
-      customer,
-      req.profileId
-    );
-    
-    // Update recurring invoice with generated invoice info
-    await recurringInvoiceService.markInvoiceGenerated(id, invoice.id);
-    
-    res.json({
-      message: 'Invoice generated successfully',
-      invoice: invoice
-    });
   });
 
   /**
@@ -243,7 +174,11 @@ class RecurringInvoiceController {
         generatedInvoices.push(invoice);
       } catch (error) {
         // Skip if invoice not found (might have been deleted)
-        console.error(`Generated invoice ${invoiceId} not found:`, error.message);
+        logger.warn('Generated invoice not found', {
+          invoiceId: invoiceId,
+          error: error.message,
+          recurringInvoiceId: id
+        });
       }
     }
     
@@ -330,8 +265,13 @@ class RecurringInvoiceController {
     // Get user data
     const userData = await userService.getUserById(recurringInvoice.userId);
     if (!userData) {
-      logger.error(`User not found: ${recurringInvoice.userId}`);
-      throw new Error(`User not found: ${recurringInvoice.userId}`);
+      const error = new Error(`User account not found for recurring invoice`);
+      error.statusCode = 404;
+      logger.error('User not found for recurring invoice', {
+        userId: recurringInvoice.userId,
+        recurringInvoiceId: recurringInvoiceId
+      });
+      throw error;
     }
     
     // Get customer data
@@ -342,8 +282,13 @@ class RecurringInvoiceController {
     );
     
     if (!customer) {
-      logger.error(`Customer not found: ${recurringInvoice.customerId}`);
-      throw new Error(`Customer not found: ${recurringInvoice.customerId}`);
+      const error = new Error(`Customer not found. The customer may have been deleted.`);
+      error.statusCode = 404;
+      logger.error('Customer not found for recurring invoice', {
+        customerId: recurringInvoice.customerId,
+        recurringInvoiceId: recurringInvoiceId
+      });
+      throw error;
     }
     
     // Determine invoice date and number
@@ -376,7 +321,10 @@ class RecurringInvoiceController {
           invoiceNumber = match ? parseInt(match[1], 10) + 1 : recurringInvoice.nextInvoiceNumber;
         }
       } catch (error) {
-        logger.warn('Error fetching last invoice, using defaults:', error.message);
+        logger.warn('Error fetching last invoice, using defaults', {
+          error: error.message,
+          lastInvoiceId: lastInvoiceId
+        });
         invoiceDate = new Date(recurringInvoice.nextGenerationDate);
         invoiceNumber = recurringInvoice.nextInvoiceNumber;
       }
@@ -401,18 +349,26 @@ class RecurringInvoiceController {
       timezone
     );
     
+    // Validate line items
+    if (!processedLineItems || processedLineItems.length === 0) {
+      const error = new Error('No line items found in recurring invoice');
+      error.statusCode = 400;
+      throw error;
+    }
+    
     // Create invoice data
     const invoiceData = {
       customerId: recurringInvoice.customerId,
       lineItems: processedLineItems,
-      taxRate: recurringInvoice.taxRate,
-      notes: recurringInvoice.notes,
-      paymentTerms: recurringInvoice.paymentTerms,
+      taxRate: recurringInvoice.taxRate || 0,
+      notes: recurringInvoice.notes || '',
+      paymentTerms: recurringInvoice.paymentTerms || 'Due on receipt',
       date: invoiceDate.getTime(),
-      dueDate: invoiceDate.getTime() + (recurringInvoice.dueDateDuration * 24 * 60 * 60 * 1000),
+      dueDate: invoiceDate.getTime() + ((recurringInvoice.dueDateDuration || 7) * 24 * 60 * 60 * 1000),
       status: 'pending',
       recurringInvoiceId: recurringInvoiceId,
-      invoiceNumber: invoiceNumber
+      invoiceNumber: invoiceNumber,
+      templateId: recurringInvoice.templateId || 'default'
     };
     
     // Create the invoice

@@ -49,7 +49,7 @@ const ProfileDialog = ({ open, onClose }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log('ProfileDialog - Form data being submitted:', data);
+      // console.log('ProfileDialog - Form data being submitted:', data);
       await addProfile(data);
       handleClose();
     } catch (error) {

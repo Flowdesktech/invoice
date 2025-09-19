@@ -236,7 +236,7 @@ export const AuthProvider = ({ children }) => {
   // Add new profile
   const addProfile = async (profileData) => {
     try {
-      console.log('AuthContext - addProfile received data:', profileData);
+      // console.log('AuthContext - addProfile received data:', profileData);
       const newProfile = {
         id: `profile_${Date.now()}`,
         displayName: profileData.displayName || 'New Profile',
@@ -266,7 +266,7 @@ export const AuthProvider = ({ children }) => {
         activeProfileId: newProfile.id 
       };
       
-      console.log('AuthContext - Data being sent to API:', JSON.stringify(updateData, null, 2));
+      // console.log('AuthContext - Data being sent to API:', JSON.stringify(updateData, null, 2));
       const response = await profileAPI.update(updateData);
       
       setUserData(response.data);

@@ -1,6 +1,7 @@
 const formData = require('form-data');
 const Mailgun = require('mailgun.js');
 const { formatCurrency, formatDate } = require('../utils/formatters');
+const { logger } = require('firebase-functions/v2');
 
 class EmailService {
   constructor() {
@@ -28,10 +29,9 @@ class EmailService {
         url: process.env.MAILGUN_EU ? 'https://api.eu.mailgun.net' : 'https://api.mailgun.net'
       });
       this.domain = domain;
-      console.log('Mailgun initialized successfully with domain:', domain);
+      // Mailgun initialized successfully
     } else {
-      console.error('Mailgun API key not found in environment variables');
-      console.log('Available env vars:', Object.keys(process.env).filter(key => key.includes('MAIL')));
+      // Mailgun API key not found - email functionality will be disabled
       this.mg = null;
     }
     
@@ -83,7 +83,11 @@ class EmailService {
 
     try {
       const response = await this.mg.messages.create(this.domain, messageData);
-      console.log(`Invoice email sent successfully to ${emailRecipients.length} recipient(s):`, response.id);
+      logger.info('Invoice email sent successfully', {
+        recipients: emailRecipients.length,
+        messageId: response.id,
+        domain: this.domain
+      });
       return {
         success: true,
         messageId: response.id,
@@ -91,10 +95,12 @@ class EmailService {
         recipientCount: emailRecipients.length
       };
     } catch (error) {
-      console.error('Error sending invoice email:', error);
-      if (error.details) {
-        console.error('Mailgun error details:', error.details);
-      }
+      logger.error('Error sending invoice email', {
+        error: error.message,
+        details: error.details,
+        stack: error.stack,
+        recipients: emailRecipients.length
+      });
       throw new Error(error.message || 'Failed to send invoice email');
     }
   }
@@ -135,17 +141,21 @@ class EmailService {
 
     try {
       const response = await this.mg.messages.create(this.domain, messageData);
-      console.log(`Contact email sent successfully:`, response.id);
+      logger.info('Contact email sent successfully', {
+        messageId: response.id,
+        domain: this.domain
+      });
       return {
         success: true,
         messageId: response.id,
         status: response.status
       };
     } catch (error) {
-      console.error('Error sending contact email:', error);
-      if (error.details) {
-        console.error('Mailgun error details:', error.details);
-      }
+      logger.error('Error sending contact email', {
+        error: error.message,
+        details: error.details,
+        stack: error.stack
+      });
       throw new Error(error.message || 'Failed to send contact email');
     }
   }

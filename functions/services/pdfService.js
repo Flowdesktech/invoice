@@ -3,6 +3,7 @@ const handlebars = require('handlebars');
 const fs = require('fs').promises;
 const path = require('path');
 const { formatCurrency, formatDate, formatDateShort, formatInvoiceNumber } = require('../utils/formatters');
+const { logger } = require('firebase-functions/v2');
 
 class PdfService {
   constructor() {
@@ -139,8 +140,11 @@ class PdfService {
       return `data:application/pdf;base64,${pdfBase64}`;
     } catch (error) {
       const errorType = isPreview ? 'preview generation' : 'generation';
-      console.error(`PDF ${errorType} error:`, error);
-      console.error('Error stack:', error.stack);
+      logger.error(`PDF ${errorType} error`, {
+        error: error.message,
+        stack: error.stack,
+        isPreview: isPreview
+      });
       throw new Error(`Failed to generate PDF${isPreview ? ' preview' : ''}: ${error.message}`);
     }
   }
@@ -166,9 +170,13 @@ class PdfService {
     try {
       const fileName = `invoices/${userId}/${invoiceId}/invoice-${invoiceNumber}.pdf`;
       await this.bucket.file(fileName).delete();
-      console.log('PDF deleted successfully:', fileName);
+      logger.info('PDF deleted successfully', { fileName: fileName });
     } catch (error) {
-      console.error('Error deleting PDF:', error);
+      logger.warn('Error deleting PDF', {
+        fileName: fileName,
+        error: error.message,
+        code: error.code
+      });
       // Don't throw error if file doesn't exist
       if (error.code !== 404) {
         throw error;

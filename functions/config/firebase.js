@@ -1,14 +1,14 @@
 const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
+const { logger } = require('firebase-functions/v2');
 
 // Initialize Firebase Admin SDK
 try {
-  console.log('Initializing Firebase Admin SDK...');
-  console.log('Environment variables:', {
+  logger.info('Initializing Firebase Admin SDK', {
     FUNCTIONS_EMULATOR: process.env.FUNCTIONS_EMULATOR,
-    FIREBASE_CONFIG: process.env.FIREBASE_CONFIG,
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
+    hasFirebaseConfig: !!process.env.FIREBASE_CONFIG
   });
   
   // Extract storage bucket from FIREBASE_CONFIG if available
@@ -17,41 +17,45 @@ try {
     try {
       const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
       storageBucket = firebaseConfig.storageBucket;
-      console.log('Storage bucket from FIREBASE_CONFIG:', storageBucket);
+      logger.info('Storage bucket from FIREBASE_CONFIG', { storageBucket });
     } catch (e) {
-      console.error('Failed to parse FIREBASE_CONFIG:', e);
+      logger.error('Failed to parse FIREBASE_CONFIG', { error: e.message });
     }
   }
   
   // First, try to load service account from file (prioritize local development)
   const serviceAccountPath = path.join(__dirname, '..', 'serviceAccountKey.json');
-  console.log('Looking for service account at:', serviceAccountPath);
+  logger.info('Looking for service account', { path: serviceAccountPath });
   
   if (fs.existsSync(serviceAccountPath)) {
-    console.log('Service account file found, loading credentials...');
+    logger.info('Service account file found, loading credentials');
     const serviceAccount = require(serviceAccountPath);
-    console.log('Service account project ID:', serviceAccount.project_id);
+    logger.info('Service account project ID', { projectId: serviceAccount.project_id });
     
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       storageBucket: storageBucket || `${serviceAccount.project_id}.appspot.com`
     });
-    console.log('Firebase initialized with service account credentials');
-    console.log('Using storage bucket:', storageBucket || `${serviceAccount.project_id}.appspot.com`);
+    logger.info('Firebase initialized with service account credentials', {
+      storageBucket: storageBucket || `${serviceAccount.project_id}.appspot.com`
+    });
   } else if (process.env.FUNCTIONS_EMULATOR || process.env.FIREBASE_CONFIG) {
     // Running in Firebase environment without local service account
-    console.log('No local service account found, but detected Firebase environment');
-    console.log('Using default credentials (this may not work for signed URLs in emulator)');
+    logger.info('No local service account found, but detected Firebase environment');
+    logger.warn('Using default credentials (this may not work for signed URLs in emulator)');
     admin.initializeApp();
   } else {
     // No credentials available
-    console.warn('No service account found at:', serviceAccountPath);
-    console.warn('Not in Firebase environment either.');
-    console.warn('Some features like signed URLs will not work.');
+    logger.warn('No service account found', { path: serviceAccountPath });
+    logger.warn('Not in Firebase environment either');
+    logger.warn('Some features like signed URLs will not work');
     admin.initializeApp();
   }
 } catch (error) {
-  console.error('Error initializing Firebase Admin:', error);
+  logger.error('Error initializing Firebase Admin', {
+    error: error.message,
+    stack: error.stack
+  });
   // Fallback initialization
   admin.initializeApp();
 }

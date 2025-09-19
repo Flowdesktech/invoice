@@ -1,4 +1,5 @@
 const { db, admin } = require('../config/firebase');
+const { logger } = require('firebase-functions/v2');
 
 class CustomerService {
   constructor() {
@@ -35,8 +36,9 @@ class CustomerService {
 
       return customers;
     } catch (error) {
-      console.error('Error in getAllCustomers:', {
+      logger.error('Error in getAllCustomers', {
         userId,
+        profileId,
         error: error.message,
         stack: error.stack
       });
@@ -82,9 +84,10 @@ class CustomerService {
 
       return customer;
     } catch (error) {
-      console.error('Error in getCustomerById:', {
+      logger.error('Error in getCustomerById', {
         customerId,
         userId,
+        profileId,
         error: error.message,
         statusCode: error.statusCode,
         stack: error.stack

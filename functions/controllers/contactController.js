@@ -1,5 +1,6 @@
 const { asyncHandler } = require('../middleware/errorHandler');
 const emailService = require('../services/emailService');
+const { logger } = require('firebase-functions/v2');
 
 class ContactController {
   /**
@@ -48,7 +49,11 @@ class ContactController {
         emailResult
       });
     } catch (error) {
-      console.error('Error sending contact email:', error);
+      logger.error('Error sending contact email', {
+        error: error.message,
+        stack: error.stack,
+        emailData: { name, email, subject }
+      });
       res.status(500).json({
         error: 'Failed to send message',
         message: 'There was an error sending your message. Please try again later.'

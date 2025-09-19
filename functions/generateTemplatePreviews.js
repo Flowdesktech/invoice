@@ -1,55 +1,18 @@
-const fs = require('fs');
+const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
-const handlebars = require('handlebars');
+const pdfService = require('./services/pdfService');
 
 // Paths
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
 const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'template-previews');
-const COMMON_HTML_PATH = path.join(TEMPLATES_DIR, 'common.html');
 
 // Ensure output directory exists
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+if (!fsSync.existsSync(OUTPUT_DIR)) {
+  fsSync.mkdirSync(OUTPUT_DIR, { recursive: true });
   console.log(`Created output directory: ${OUTPUT_DIR}`);
 }
-
-// Register Handlebars helpers
-handlebars.registerHelper('formatCurrency', (amount, options) => {
-  const currency = options.hash.currency || 'USD';
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency
-  }).format(amount || 0);
-});
-
-handlebars.registerHelper('formatDate', (date, options) => {
-  const dateObj = new Date(date);
-  const timezone = options.hash.timezone || 'America/New_York';
-  return dateObj.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: timezone
-  });
-});
-
-handlebars.registerHelper('formatDateShort', (date) => {
-  const dateObj = new Date(date);
-  return dateObj.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-});
-
-handlebars.registerHelper('eq', (a, b) => a === b);
-
-handlebars.registerHelper('formatInvoiceNumber', (number, prefix) => {
-  prefix = prefix || 'INV';
-  const paddedNumber = String(number).padStart(5, '0');
-  return `${prefix}-${paddedNumber}`;
-});
 
 // Sample data for preview
 const sampleData = {
@@ -133,15 +96,14 @@ const sampleData = {
 // Auto-discover template files
 function discoverTemplates() {
   const templates = [];
-  const files = fs.readdirSync(TEMPLATES_DIR);
+  const files = fsSync.readdirSync(TEMPLATES_DIR);
   
   for (const file of files) {
     if (file.endsWith('.html') && file !== 'common.html') {
       const templateId = file.replace('.html', '');
       templates.push({
         id: templateId,
-        filename: file,
-        path: path.join(TEMPLATES_DIR, file)
+        filename: file
       });
     }
   }
@@ -150,35 +112,8 @@ function discoverTemplates() {
   return templates;
 }
 
-// Load and process template
-async function prepareTemplateHtml(templatePath, templateId) {
-  // Read template
-  let templateHtml = fs.readFileSync(templatePath, 'utf-8');
-  
-  // Read and inject common styles if available
-  if (fs.existsSync(COMMON_HTML_PATH)) {
-    const commonHtml = fs.readFileSync(COMMON_HTML_PATH, 'utf-8');
-    
-    // Extract common styles
-    const styleMatch = commonHtml.match(/<style[^>]*id="common-styles"[^>]*>([\s\S]*?)<\/style>/);
-    if (styleMatch) {
-      const commonStyles = styleMatch[0];
-      // Inject before </head>
-      templateHtml = templateHtml.replace('</head>', `${commonStyles}\n</head>`);
-    }
-    
-    // Extract running header
-    const headerMatch = commonHtml.match(/<!-- RUNNING_HEADER_START -->([\s\S]*?)<!-- RUNNING_HEADER_END -->/);
-    if (headerMatch) {
-      const runningHeader = headerMatch[1];
-      // Compile running header
-      const headerTemplate = handlebars.compile(runningHeader);
-      const compiledHeader = headerTemplate(sampleData);
-      // Inject after <body>
-      templateHtml = templateHtml.replace('<body>', `<body>\n${compiledHeader}`);
-    }
-  }
-  
+// Generate PDF using pdfService
+async function generatePdfForTemplate(templateId) {
   // Update sample data with current template ID
   const templateData = {
     ...sampleData,
@@ -188,15 +123,18 @@ async function prepareTemplateHtml(templatePath, templateId) {
     }
   };
   
-  // Compile and render template
-  const template = handlebars.compile(templateHtml);
-  const html = template(templateData);
+  // Generate PDF using pdfService
+  const pdfBase64 = await pdfService.generateInvoicePDF(templateData);
   
-  return html;
+  // Convert base64 to buffer
+  const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
+  const pdfBuffer = Buffer.from(base64Data, 'base64');
+  
+  return pdfBuffer;
 }
 
-// Generate preview image using Puppeteer at full resolution
-async function generatePreviewImage(html, outputPath) {
+// Convert PDF to PNG using Puppeteer
+async function convertPdfToPng(pdfBuffer, outputPath) {
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -215,54 +153,75 @@ async function generatePreviewImage(html, outputPath) {
       deviceScaleFactor: 2 // High quality
     });
     
-    // Set content
+    // Convert PDF buffer to base64 data URL
+    const pdfBase64 = pdfBuffer.toString('base64');
+    const pdfDataUrl = `data:application/pdf;base64,${pdfBase64}`;
+    
+    // Create HTML with embedded PDF viewer
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { margin: 0; padding: 0; }
+          iframe { border: none; }
+        </style>
+      </head>
+      <body>
+        <canvas id="pdfCanvas"></canvas>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <script>
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+          
+          // Convert base64 to Uint8Array
+          const pdfData = atob('${pdfBase64}');
+          const pdfArray = new Uint8Array(pdfData.length);
+          for (let i = 0; i < pdfData.length; i++) {
+            pdfArray[i] = pdfData.charCodeAt(i);
+          }
+          
+          // Load PDF
+          pdfjsLib.getDocument({ data: pdfArray }).promise.then(function(pdf) {
+            pdf.getPage(1).then(function(page) {
+              const scale = 2; // High quality
+              const viewport = page.getViewport({ scale: scale });
+              
+              const canvas = document.getElementById('pdfCanvas');
+              const context = canvas.getContext('2d');
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+              
+              const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+              };
+              page.render(renderContext).promise.then(function() {
+                console.log('PDF rendered');
+              });
+            });
+          });
+        </script>
+      </body>
+      </html>
+    `;
+    
+    // Set content and wait for PDF to render
     await page.setContent(html, {
       waitUntil: 'networkidle0',
       timeout: 30000
     });
     
-    // Add CSS to ensure proper rendering
-    await page.addStyleTag({
-      content: `
-        /* Reset everything */
-        *, *::before, *::after {
-          margin: 0 !important;
-          padding: 0 !important;
-          box-sizing: border-box !important;
-        }
-        
-        /* Set html and body */
-        html, body {
-          margin: 0 !important;
-          padding: 0 !important;
-          width: ${a4Width}px !important;
-          background: white !important;
-        }
-        
-        /* Set invoice container to full width */
-        .invoice-container {
-          margin: 0 !important;
-          padding: 40px !important;
-          width: ${a4Width}px !important;
-          background: white !important;
-          box-sizing: border-box !important;
-        }
-        
-        /* Hide elements we don't want in previews */
-        .running-header {
-          display: none !important;
-        }
-      `
-    });
+    // Wait for PDF to render
+    await page.waitForFunction(() => {
+      const canvas = document.getElementById('pdfCanvas');
+      return canvas && canvas.width > 0 && canvas.height > 0;
+    }, { timeout: 30000 });
     
-    // Wait a bit for styles to apply
-    await page.evaluate(() => new Promise(r => setTimeout(r, 200)));
-    
-    // Take full page screenshot at original resolution
-    await page.screenshot({
+    // Take screenshot of the canvas
+    const canvas = await page.$('#pdfCanvas');
+    await canvas.screenshot({
       path: outputPath,
-      type: 'png',
-      fullPage: true
+      type: 'png'
     });
     
     console.log(`  ✓ Screenshot saved: ${outputPath} (full resolution)`);
@@ -295,23 +254,24 @@ async function generateAllPreviews() {
     console.log(`\nProcessing: ${template.id}`);
     
     try {
-      // Prepare HTML
-      console.log('  - Preparing HTML...');
-      const html = await prepareTemplateHtml(template.path, template.id);
+      // Generate PDF using pdfService
+      console.log('  - Generating PDF using pdfService...');
+      const pdfBuffer = await generatePdfForTemplate(template.id);
       
-      // Generate preview image at full resolution
-      console.log('  - Generating preview image (full resolution)...');
+      // Convert PDF to PNG preview image at full resolution
+      console.log('  - Converting PDF to preview image (full resolution)...');
       const previewPath = path.join(OUTPUT_DIR, `${template.id}-preview.png`);
-      await generatePreviewImage(html, previewPath);
+      await convertPdfToPng(pdfBuffer, previewPath);
       
-      // Generate full image (same as preview for full resolution)
-      console.log('  - Generating full image (full resolution)...');
+      // Copy preview as full image (same resolution)
+      console.log('  - Creating full image copy...');
       const fullPath = path.join(OUTPUT_DIR, `${template.id}-full.png`);
-      await generatePreviewImage(html, fullPath);
+      await fs.copyFile(previewPath, fullPath);
       
       successCount++;
     } catch (error) {
       console.error(`  ✗ Error: ${error.message}`);
+      console.error(`     Stack: ${error.stack}`);
       failCount++;
     }
   }

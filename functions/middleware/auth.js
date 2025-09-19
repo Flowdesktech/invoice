@@ -1,4 +1,5 @@
 const { auth } = require('../config/firebase');
+const { logger } = require('firebase-functions/v2');
 
 /**
  * Authentication middleware to verify Firebase ID tokens
@@ -33,14 +34,24 @@ const authenticate = async (req, res, next) => {
       
       next();
     } catch (tokenError) {
-      console.error('Token verification failed:', tokenError);
+      // Log token verification errors (usually client errors)
+      logger.warn('Token verification failed', {
+        error: tokenError.message,
+        code: tokenError.code
+      });
       return res.status(401).json({ 
         error: 'Unauthorized',
         message: 'Invalid authentication token' 
       });
     }
   } catch (error) {
-    console.error('Auth middleware error:', error);
+    // Log auth middleware errors (server errors)
+    logger.error('Authentication middleware error', {
+      error: error.message,
+      stack: error.stack,
+      path: req.path,
+      method: req.method
+    });
     return res.status(500).json({ 
       error: 'Internal Server Error',
       message: 'Authentication failed' 

@@ -30,39 +30,44 @@ class InvoiceController {
    * Preview invoice - generate PDF without saving
    */
   previewInvoice = asyncHandler(async (req, res) => {
-    const invoiceData = req.body;
-    const userId = req.user.uid;
+    try {
+      const invoiceData = req.body;
+      const userId = req.user.uid;
 
-    // Get customer data
-    const customer = await customerService.getCustomerById(invoiceData.customerId, userId, req.profileId);
-    
-    // Get user data for invoice settings
-    let userData = await userService.getUserById(userId);
-    
-    if (!userData) {
-      // Initialize user settings if user doesn't exist
-      userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
-    }
-    
-    // Get profile data if using profile
-    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
-    
-    // Ensure invoice settings exist
-    if (!userData.invoiceSettings) {
-      return res.status(400).json({
-        error: 'Invoice settings not found',
-        message: 'Please complete your profile settings before creating invoices'
-      });
-    }
+      // Validate required fields
+      if (!invoiceData.customerId) {
+        const error = new Error('Customer ID is required');
+        error.statusCode = 400;
+        throw error;
+      }
 
-    // Debug logging for currency
-    console.log('Preview Invoice Data:', {
-      requestedCurrency: invoiceData.currency,
-      profileCurrency: profileData?.invoiceSettings?.currency,
-      userCurrency: userData?.invoiceSettings?.currency,
-      defaultCurrency: 'USD',
-      templateId: invoiceData.templateId || 'default'
-    });
+      // Get customer data
+      const customer = await customerService.getCustomerById(invoiceData.customerId, userId, req.profileId);
+      if (!customer) {
+        const error = new Error('Customer not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Get user data for invoice settings
+      let userData = await userService.getUserById(userId);
+      
+      if (!userData) {
+        // Initialize user settings if user doesn't exist
+        userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
+      }
+      
+      // Get profile data if using profile
+      const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+      
+      // Ensure invoice settings exist
+      if (!userData.invoiceSettings) {
+        const error = new Error('Please complete your profile settings before creating invoices');
+        error.statusCode = 400;
+        throw error;
+      }
+
+    // Currency is determined by priority: request > profile > user > default
 
     // Prepare invoice data for PDF generation in the format expected by PDF service
     const previewData = {
@@ -87,8 +92,7 @@ class InvoiceController {
       profileData: profileData
     };
 
-    // Debug log the final currency being used
-    console.log('Final preview currency:', previewData.invoice.currency);
+    // Final preview currency is set above based on priority order
 
     // Calculate tax and total
     previewData.invoice.taxAmount = (previewData.invoice.subtotal * previewData.invoice.taxRate) / 100;
@@ -100,61 +104,86 @@ class InvoiceController {
     // The generatePdfPreview returns a data URL, extract the base64 part
     const base64Data = pdfBase64.replace(/^data:application\/pdf;base64,/, '');
     
-    res.json({ 
-      pdf: base64Data,
-      mimeType: 'application/pdf'
-    });
+      res.json({ 
+        pdf: base64Data,
+        mimeType: 'application/pdf'
+      });
+    } catch (error) {
+      // Error will be handled by asyncHandler and errorHandler middleware
+      throw error;
+    }
   });
 
   /**
    * Create a new invoice with PDF generation
    */
   createInvoice = asyncHandler(async (req, res) => {
-    const invoiceData = req.body;
-    const userId = req.user.uid;
+    try {
+      const invoiceData = req.body;
+      const userId = req.user.uid;
 
-    // Get customer data
-    const customer = await customerService.getCustomerById(invoiceData.customerId, userId, req.profileId);
-    
-    // Get user data for invoice settings
-    let userData = await userService.getUserById(userId);
-    
-    if (!userData) {
-      // Initialize user settings if user doesn't exist
-      userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
+      // Validate required fields
+      if (!invoiceData.customerId) {
+        const error = new Error('Customer ID is required');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      if (!invoiceData.lineItems || invoiceData.lineItems.length === 0) {
+        const error = new Error('At least one line item is required');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // Get customer data
+      const customer = await customerService.getCustomerById(invoiceData.customerId, userId, req.profileId);
+      if (!customer) {
+        const error = new Error('Customer not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Get user data for invoice settings
+      let userData = await userService.getUserById(userId);
+      
+      if (!userData) {
+        // Initialize user settings if user doesn't exist
+        userData = await userService.initializeUserSettings(userId, req.user.email, req.user.displayName);
+      }
+      
+      // Get profile data if using profile
+      const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
+      
+      // Ensure invoice settings exist
+      if (!userData.invoiceSettings) {
+        const error = new Error('Please complete your profile settings before creating invoices');
+        error.statusCode = 400;
+        throw error;
+      }
+      
+      if (!userData.invoiceSettings.prefix || !userData.invoiceSettings.nextNumber) {
+        const error = new Error('Invoice prefix and number sequence must be configured in your profile');
+        error.statusCode = 400;
+        throw error;
+      }
+
+      // Create invoice
+      const invoice = await invoiceService.createInvoice(
+        invoiceData,
+        userId,
+        userData,
+        customer,
+        req.profileId
+      );
+
+      // Update user's next invoice number
+      await userService.incrementInvoiceNumber(userId, req.profileId);
+
+      res.status(201).json(invoice);
+    } catch (error) {
+      // Error will be handled by asyncHandler and errorHandler middleware
+      throw error;
     }
-    
-    // Get profile data if using profile
-    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
-    
-    // Ensure invoice settings exist
-    if (!userData.invoiceSettings) {
-      return res.status(400).json({
-        error: 'Invoice settings not found',
-        message: 'Please complete your profile settings before creating invoices'
-      });
-    }
-    
-    if (!userData.invoiceSettings.prefix || !userData.invoiceSettings.nextNumber) {
-      return res.status(400).json({
-        error: 'Invalid invoice settings',
-        message: 'Invoice prefix and number sequence must be configured in your profile'
-      });
-    }
-
-    // Create invoice
-    const invoice = await invoiceService.createInvoice(
-      invoiceData,
-      userId,
-      userData,
-      customer,
-      req.profileId
-    );
-
-    // Update user's next invoice number
-    await userService.incrementInvoiceNumber(userId, req.profileId);
-
-    res.status(201).json(invoice);
   });
 
   /**
@@ -210,63 +239,93 @@ class InvoiceController {
    * Generate PDF for an invoice on-demand
    */
   generateInvoicePdf = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const userId = req.user.uid;
+    try {
+      const { id } = req.params;
+      const userId = req.user.uid;
 
-    // Get invoice
-    const invoice = await invoiceService.getInvoiceById(id, userId, req.profileId);
+      // Get invoice
+      const invoice = await invoiceService.getInvoiceById(id, userId, req.profileId);
+      if (!invoice) {
+        const error = new Error('Invoice not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Get customer data
+      const customer = await customerService.getCustomerById(invoice.customerId, userId, req.profileId);
+      if (!customer) {
+        const error = new Error('Customer not found for this invoice');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Get user data
+      const userData = await userService.getUserById(userId);
+      if (!userData) {
+        const error = new Error('User data not found');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Get profile data if using profile
+      const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
     
-    // Get customer data
-    const customer = await customerService.getCustomerById(invoice.customerId, userId, req.profileId);
-    
-    // Get user data
-    const userData = await userService.getUserById(userId);
-    
-    // Get profile data if using profile
-    const profileData = req.profileId ? userData?.profiles?.find(p => p.id === req.profileId) : null;
-    
-    // Generate PDF
-    const pdfData = {
-      invoice,
-      userData,
-      customer,
-      profileData
-    };
-    
-    const pdfBase64 = await pdfService.generateInvoicePDF(pdfData);
-    
-    // Return base64 PDF data
-    res.json({
-      pdf: pdfBase64,
-      invoiceNumber: invoice.invoiceNumber
-    });
+      // Generate PDF
+      const pdfData = {
+        invoice,
+        userData,
+        customer,
+        profileData
+      };
+      
+      const pdfBase64 = await pdfService.generateInvoicePDF(pdfData);
+      
+      // Return base64 PDF data
+      res.json({
+        pdf: pdfBase64,
+        invoiceNumber: invoice.invoiceNumber
+      });
+    } catch (error) {
+      // Error will be handled by asyncHandler and errorHandler middleware
+      throw error;
+    }
   });
 
   /**
    * Send invoice via email
    */
   sendInvoice = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const { customMessage, recipients } = req.body;
-    const userId = req.user.uid;
+    try {
+      const { id } = req.params;
+      const { customMessage, recipients } = req.body;
+      const userId = req.user.uid;
 
-    // Get invoice with customer data
-    const invoice = await invoiceService.getInvoiceById(id, userId, req.profileId);
-    
-    // Get customer data
-    const customer = await customerService.getCustomerById(invoice.customerId, userId, req.profileId);
-    
-    // Handle recipients - use provided recipients or fall back to customer email
-    let emailRecipients = recipients;
-    
-    // If no recipients provided, use customer email
-    if (!emailRecipients || emailRecipients.length === 0) {
-      if (!customer.email) {
-        return res.status(400).json({
-          error: 'No recipients specified',
-          message: 'Please provide at least one email recipient'
-        });
+      // Get invoice with customer data
+      const invoice = await invoiceService.getInvoiceById(id, userId, req.profileId);
+      if (!invoice) {
+        const error = new Error('Invoice not found');
+        error.statusCode = 404;
+        throw error;
       }
+      
+      // Get customer data
+      const customer = await customerService.getCustomerById(invoice.customerId, userId, req.profileId);
+      if (!customer) {
+        const error = new Error('Customer not found for this invoice');
+        error.statusCode = 404;
+        throw error;
+      }
+      
+      // Handle recipients - use provided recipients or fall back to customer email
+      let emailRecipients = recipients;
+      
+      // If no recipients provided, use customer email
+      if (!emailRecipients || emailRecipients.length === 0) {
+            if (!customer.email) {
+            const error = new Error('Customer email not found. Please provide at least one email recipient');
+            error.statusCode = 400;
+            throw error;
+          }
       emailRecipients = [customer.email];
     }
     
@@ -274,12 +333,11 @@ class InvoiceController {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const invalidEmails = emailRecipients.filter(email => !emailRegex.test(email));
     
-    if (invalidEmails.length > 0) {
-      return res.status(400).json({
-        error: 'Invalid email addresses',
-        message: `The following email addresses are invalid: ${invalidEmails.join(', ')}`
-      });
-    }
+      if (invalidEmails.length > 0) {
+        const error = new Error(`The following email addresses are invalid: ${invalidEmails.join(', ')}`);
+        error.statusCode = 400;
+        throw error;
+      }
     
     // Get user data
     const userData = await userService.getUserById(userId);
@@ -329,11 +387,15 @@ class InvoiceController {
       sentCount: (invoice.sentCount || 0) + 1
     }, userId, req.profileId);
     
-    res.json({
-      success: true,
-      message: 'Invoice sent successfully',
-      emailResult
-    });
+      res.json({
+        success: true,
+        message: 'Invoice sent successfully',
+        emailResult
+      });
+    } catch (error) {
+      // Error will be handled by asyncHandler and errorHandler middleware
+      throw error;
+    }
   });
 }
 
