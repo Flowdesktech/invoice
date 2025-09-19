@@ -35,14 +35,17 @@ export async function setup() {
     
     // Start preview server
     server = await preview({
+      root: process.cwd(),
       preview: {
         port: 5173,
         strictPort: true,
         host: 'localhost'
+      },
+      build: {
+        outDir: 'dist'
       }
     });
     
-    await server.listen();
     console.log('✅ Preview server started at http://localhost:5173');
     
   } else {
