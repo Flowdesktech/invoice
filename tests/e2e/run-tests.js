@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const TEST_URL = process.env.TEST_URL || 'http://localhost:5173';
+const TEST_URL = process.env.TEST_URL || 'http://localhost:3000';
 const HEADLESS = process.env.HEADLESS !== 'false';
 const SLOWMO = process.env.SLOWMO ? parseInt(process.env.SLOWMO) : 0;
 

@@ -46,7 +46,7 @@ jobs:
         HEADLESS: true
         CI: true
         # Set the correct URL for the preview server in CI
-        TEST_URL: http://localhost:5173
+        TEST_URL: http://localhost:3000
         # Firebase configuration for the test build
         VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
         VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}

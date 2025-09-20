@@ -72,7 +72,7 @@ tests/e2e/
 
 ### Environment Variables
 
-- `TEST_URL` - Base URL for tests (default: `http://localhost:5173`)
+- `TEST_URL` - Base URL for tests (default: `http://localhost:3000`)
 - `HEADLESS` - Run in headless mode (`true`/`false`)
 - `SLOWMO` - Slow down Puppeteer operations by specified milliseconds
 - `DEVTOOLS` - Open Chrome DevTools automatically (`true`/`false`)
@@ -84,7 +84,7 @@ tests/e2e/
 
 ### Puppeteer Configuration (`jest-puppeteer.config.js`)
 - Browser window size: 1920x1080
-- Automatic server start on port 5173
+- Automatic server start on port 3000
 - Headless mode by default
 
 ## 📝 Writing New Tests
