@@ -6,7 +6,9 @@ import {
   onAuthStateChanged,
   updateProfile,
   updatePassword,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { profileAPI } from '../utils/api';
@@ -109,6 +111,58 @@ export const AuthProvider = ({ children }) => {
       return user;
     } catch (error) {
       toast.error(error.message);
+      throw error;
+    }
+  };
+
+  // Google Sign-In function
+  const signInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const { user } = await signInWithPopup(auth, provider);
+      
+      // Check if this is a new user (first time Google sign-in)
+      const response = await profileAPI.get();
+      if (!response.data || !response.data.profiles) {
+        // Create default profile for new Google users
+        const userDoc = {
+          uid: user.uid,
+          email: user.email,
+          activeProfileId: 'default',
+          profiles: [{
+            id: 'default',
+            name: 'Main Business',
+            displayName: user.displayName || '',
+            company: '',
+            phone: '',
+            address: {},
+            invoiceSettings: {
+              prefix: 'INV',
+              nextNumber: 1,
+              taxRate: 0,
+              currency: 'USD',
+              paymentTerms: 'Due on receipt',
+              dueDateDuration: 7,
+              autoIncrementNumber: true,
+              timezone: 'America/New_York'
+            },
+            isDefault: true,
+            createdAt: new Date().valueOf()
+          }]
+        };
+        
+        await profileAPI.update(userDoc);
+      }
+      
+      toast.success('Signed in with Google successfully!');
+      return user;
+    } catch (error) {
+      if (error.code === 'auth/popup-closed-by-user') {
+        // User closed the popup without signing in
+        toast.error('Sign-in cancelled');
+      } else {
+        toast.error(error.message);
+      }
       throw error;
     }
   };
@@ -361,6 +415,7 @@ export const AuthProvider = ({ children }) => {
     currentProfile: getCurrentProfile(),
     signup,
     login,
+    signInWithGoogle,
     logout,
     updateUserProfile,
     changePassword,

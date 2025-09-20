@@ -22,16 +22,19 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Phone as PhoneIcon,
+  Google as GoogleIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from '../components/Logo';
+import GoogleLogo from '../components/GoogleLogo';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const { signup, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -64,6 +67,18 @@ const Register = () => {
       console.error('Registration error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
+      await signInWithGoogle();
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -252,6 +267,39 @@ const Register = () => {
             </Button>
             
             <Divider sx={{ my: 2 }}>OR</Divider>
+            
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleGoogleSignIn}
+              disabled={googleLoading}
+              startIcon={googleLoading ? null : <GoogleLogo size={18} />}
+              sx={{ 
+                mb: 2,
+                textTransform: 'none',
+                backgroundColor: '#fff',
+                color: '#3c4043',
+                borderColor: '#dadce0',
+                borderRadius: '4px',
+                fontSize: '14px',
+                fontWeight: 500,
+                py: 1.5,
+                boxShadow: '0 1px 2px 0 rgba(60,64,67,.30), 0 1px 3px 1px rgba(60,64,67,.15)',
+                '&:hover': {
+                  backgroundColor: '#f8f9fa',
+                  borderColor: '#dadce0',
+                  boxShadow: '0 1px 2px 0 rgba(60,64,67,.30), 0 2px 6px 2px rgba(60,64,67,.15)',
+                },
+                '&:disabled': {
+                  backgroundColor: '#fff',
+                  color: '#3c4043',
+                  opacity: 0.6,
+                },
+              }}
+            >
+              {googleLoading ? <CircularProgress size={20} sx={{ color: '#4285f4' }} /> : 'Sign up with Google'}
+            </Button>
             
             <Box sx={{ textAlign: 'center' }}>
               <Typography variant="body2" color="text.secondary">
