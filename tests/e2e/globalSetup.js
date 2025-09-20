@@ -20,20 +20,36 @@ export async function setup() {
         env: {
           ...process.env,
           // Add any required build env vars here
-          NODE_ENV: 'production'
+          NODE_ENV: 'production',
+          // Ensure all Firebase env vars are passed to build
+          VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
+          VITE_FIREBASE_AUTH_DOMAIN: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+          VITE_FIREBASE_PROJECT_ID: process.env.VITE_FIREBASE_PROJECT_ID,
+          VITE_FIREBASE_STORAGE_BUCKET: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+          VITE_FIREBASE_MESSAGING_SENDER_ID: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+          VITE_FIREBASE_APP_ID: process.env.VITE_FIREBASE_APP_ID
         }
       });
       
       buildProcess.on('close', (code) => {
         if (code === 0) {
-          resolve();
+          console.log('✅ Build completed successfully');
+          // Verify build output exists
+          const fs = require('fs');
+          const path = require('path');
+          const indexPath = path.join(process.cwd(), 'build', 'index.html');
+          if (!fs.existsSync(indexPath)) {
+            reject(new Error('Build output missing - index.html not found'));
+          } else {
+            resolve();
+          }
         } else {
           reject(new Error(`Build failed with code ${code}`));
         }
       });
     });
     
-    // Start preview server
+    // Start preview server with SPA fallback
     server = await preview({
       root: process.cwd(),
       preview: {
@@ -42,8 +58,9 @@ export async function setup() {
         host: 'localhost'
       },
       build: {
-        outDir: 'dist'
-      }
+        outDir: 'build' // Match the vite.config.js setting
+      },
+      appType: 'spa' // Ensure SPA mode for client-side routing
     });
     
     console.log('✅ Preview server started at http://localhost:5173');

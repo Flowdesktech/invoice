@@ -27,6 +27,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    - name: Create test directories
+      run: mkdir -p tests/e2e/screenshots
+    
     # Install Chrome dependencies for Puppeteer
     # These are required system libraries that Chrome needs to run on Ubuntu
     - name: Install Chrome dependencies

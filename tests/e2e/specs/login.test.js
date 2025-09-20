@@ -29,18 +29,50 @@ describe('Login Flow', () => {
   });
 
   test('should display login form correctly', async () => {
-    // Check form elements exist
-    const emailInput = await page.$('input[type="email"]');
-    expect(emailInput).toBeTruthy();
-    
-    const passwordInput = await page.$('input[type="password"]');
-    expect(passwordInput).toBeTruthy();
-    
-    const submitButton = await page.$('button[type="submit"]');
-    expect(submitButton).toBeTruthy();
-    
-    // Take screenshot for visual verification
-    await takeScreenshot(page, 'login-form');
+    // Add debugging to see what's on the page
+    try {
+      // Wait for page to fully load
+      await page.waitForLoadState('networkidle');
+      
+      // Log the page content for debugging
+      const bodyText = await page.$eval('body', el => el.innerText);
+      console.log('Page body text:', bodyText.substring(0, 200));
+      
+      // Check if there's an error message
+      const errorElement = await page.$('[class*="error"], [class*="Error"]');
+      if (errorElement) {
+        const errorText = await errorElement.textContent();
+        console.log('Error found on page:', errorText);
+      }
+      
+      // Try to wait for email input with longer timeout
+      await page.waitForSelector('input[type="email"]', { timeout: 10000 });
+      
+      // Check form elements exist
+      const emailInput = await page.$('input[type="email"]');
+      expect(emailInput).toBeTruthy();
+      
+      const passwordInput = await page.$('input[type="password"]');
+      expect(passwordInput).toBeTruthy();
+      
+      const submitButton = await page.$('button[type="submit"]');
+      expect(submitButton).toBeTruthy();
+      
+      // Take screenshot for visual verification
+      await takeScreenshot(page, 'login-form');
+    } catch (error) {
+      // Take screenshot on error
+      await takeScreenshot(page, 'login-form-error');
+      
+      // Log page title and URL for debugging
+      const title = await page.title();
+      const url = page.url();
+      console.log('Page title:', title);
+      console.log('Page URL:', url);
+      
+      // Re-throw to fail the test
+      throw error;
+    }
   });
 
   // REMOVED: Browser validation messages are inconsistent across browsers

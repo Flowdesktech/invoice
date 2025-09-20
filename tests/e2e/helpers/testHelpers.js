@@ -110,6 +110,15 @@ const waitForElementToDisappear = async (page, selector, timeout = 5000) => {
  * @param {string} name - Screenshot name
  */
 const takeScreenshot = async (page, name) => {
+  // Ensure screenshots directory exists
+  const fs = require('fs');
+  const path = require('path');
+  const screenshotsDir = path.join(process.cwd(), 'tests/e2e/screenshots');
+  
+  if (!fs.existsSync(screenshotsDir)) {
+    fs.mkdirSync(screenshotsDir, { recursive: true });
+  }
+  
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   await page.screenshot({
     path: `tests/e2e/screenshots/${name}-${timestamp}.png`,
