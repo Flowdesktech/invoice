@@ -53,7 +53,7 @@ export async function setup() {
     server = await preview({
       root: process.cwd(),
       preview: {
-        port: 5173,
+        port: 3000,
         strictPort: true,
         host: 'localhost'
       },
@@ -63,7 +63,7 @@ export async function setup() {
       appType: 'spa' // Ensure SPA mode for client-side routing
     });
     
-    console.log('✅ Preview server started at http://localhost:5173');
+    console.log('✅ Preview server started at http://localhost:3000');
     
   } else {
     // Local development mode

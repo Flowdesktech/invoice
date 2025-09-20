@@ -31,8 +31,8 @@ describe('Login Flow', () => {
   test('should display login form correctly', async () => {
     // Add debugging to see what's on the page
     try {
-      // Wait for page to fully load
-      await page.waitForLoadState('networkidle');
+      // The page is already loaded from beforeEach navigateTo
+      // No need for additional waitForLoadState
       
       // Log the page content for debugging
       const bodyText = await page.$eval('body', el => el.innerText);

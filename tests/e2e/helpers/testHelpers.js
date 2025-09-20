@@ -2,7 +2,7 @@
  * E2E Test Helpers for Invoice Management App
  */
 
-const BASE_URL = process.env.TEST_URL || 'http://localhost:3001';
+const BASE_URL = process.env.TEST_URL || 'http://localhost:3000';
 
 /**
  * Navigate to a specific path
