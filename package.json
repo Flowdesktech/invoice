@@ -10,7 +10,41 @@
     "deploy": "npm run build && firebase deploy",
     "deploy:hosting": "npm run build && firebase deploy --only hosting",
     "deploy:functions": "cd functions && npm install && cd .. && firebase deploy --only functions",
-    "deploy:preview": "npm run build && firebase hosting:channel:deploy preview-$(date +%s) --expires 7d"
+    "deploy:preview": "npm run build && firebase hosting:channel:deploy preview-$(date +%s) --expires 7d",
+    "test": "vitest",
+    "test:e2e": "vitest run",
+    "test:e2e:watch": "vitest watch",
+    "test:e2e:ui": "vitest --ui",
+    "test:e2e:headless": "cross-env HEADLESS=true vitest run",
+    "test:e2e:debug": "cross-env HEADLESS=false SLOWMO=100 DEVTOOLS=true vitest run",
+    "test:e2e:landing": "vitest run tests/e2e/specs/landing.test.js",
+    "test:e2e:login": "vitest run tests/e2e/specs/login.test.js",
+    "test:e2e:signup": "vitest run tests/e2e/specs/signup.test.js",
+    "test:e2e:ci": "cross-env HEADLESS=true vitest run --reporter=default --reporter=json --outputFile=test-results.json"
+  },
+  "jest": {
+    "preset": "jest-puppeteer",
+    "testMatch": [
+      "**/tests/e2e/**/*.test.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/e2e/setup.js"
+    ],
+    "testTimeout": 30000,
+    "testEnvironment": "./tests/e2e/puppeteerEnvironment.js",
+    "transform": {},
+    "extensionsToTreatAsEsm": [
+      ".js"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "testEnvironmentOptions": {
+      "customExportConditions": [
+        "node",
+        "node-addons"
+      ]
+    }
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -30,10 +64,16 @@
     "sweetalert2": "^11.23.0"
   },
   "devDependencies": {
+    "@types/puppeteer": "^5.4.7",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/ui": "^3.2.4",
+    "cross-env": "^10.0.0",
+    "happy-dom": "^18.0.1",
+    "puppeteer": "^24.22.0",
     "vite": "^6.0.5",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.2.4"
   }
 }

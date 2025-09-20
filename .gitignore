@@ -45,3 +45,7 @@ Thumbs.db
 # Firebase config (contains sensitive data)
 src/config/firebase.js.local
 serviceAccountKey.json
+
+# Test secrets
+tests/e2e/test-secrets.json
+tests/e2e/screenshots
