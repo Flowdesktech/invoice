@@ -94,4 +94,20 @@ export const recurringInvoiceAPI = {
   getGeneratedInvoices: (id) => api.get(`/recurring-invoices/${id}/invoices`),
 };
 
+// FlowBoost API endpoints
+export const flowBoostAPI = {
+  // Get available tasks
+  getTasks: () => api.get('/flowboost/tasks'),
+  // Get user earnings
+  getEarnings: () => api.get('/flowboost/earnings'),
+  // Get FlowScore
+  getScore: () => api.get('/flowboost/score'),
+  // Start a task
+  startTask: (taskId) => api.post('/flowboost/tasks/start', { taskId }),
+  // Complete a task
+  completeTask: (taskId, completionData) => api.post('/flowboost/tasks/complete', { taskId, completionData }),
+  // Join waitlist
+  joinWaitlist: (data) => api.post('/flowboost/waitlist', data),
+};
+
 export default api;

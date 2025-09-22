@@ -31,6 +31,7 @@ import {
   Schedule as ScheduleIcon,
   MailOutline as MailOutlineIcon,
   Description as DescriptionIcon,
+  TrendingUp as TrendingUpIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import Logo from './Logo';
@@ -73,6 +74,7 @@ const Layout = () => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'FlowBoost', icon: <TrendingUpIcon />, path: '/flowboost' },
     { text: 'Customers', icon: <PeopleIcon />, path: '/customers' },
     { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices' },
     { text: 'Templates', icon: <DescriptionIcon />, path: '/invoice-templates' },

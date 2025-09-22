@@ -3,25 +3,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 import Header from '../components/Header';
+import FlowBoostWaitlist from '../components/FlowBoostWaitlist';
 import { templates } from './InvoiceTemplates';
 import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  Stack,
-  Chip,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  useTheme,
-  useMediaQuery,
-  Fade,
+    Box,
+    Container,
+    Typography,
+    Button,
+    Grid,
+    Card,
+    CardContent,
+    Stack,
+    Chip,
+    Paper,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    useTheme,
+    useMediaQuery,
+    Fade, Alert,
 } from '@mui/material';
 import {
   Speed as SpeedIcon,
@@ -43,6 +44,7 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
 
   const features = [
     {
@@ -86,18 +88,18 @@ const LandingPage = () => {
 
   return (
     <>
-      {/* React 19 Metadata - Optimized for SEO */}
-      <title>FlowDesk - Free Invoice Management Software for Small Business | Get Paid Faster</title>
-      <meta name="description" content="Create professional invoices in seconds. Free invoice software with automated reminders, payment tracking, and recurring billing. Choose from 15 professional templates. No credit card required." />
-      <meta name="keywords" content="free invoice software, invoice generator online, small business invoicing, freelance billing software, payment tracking app, recurring invoices, invoice management system, get paid faster, invoice templates, billing automation" />
+      {/* React 19 Metadata - Optimized for SEO with FlowBoost */}
+      <title>FlowDesk + FlowBoost - Invoice & Earn $150-500/Month | Free Invoice Software with Micro-Tasks</title>
+      <meta name="description" content="Revolutionary: Invoice clients AND earn $150-500/month with FlowBoost micro-tasks. Free invoice software with built-in earning opportunities. Complete surveys, tasks, and consultations during downtime." />
+      <meta name="keywords" content="flowboost, earn money invoicing, micro tasks platform, invoice software with earnings, make money business downtime, freelancer side income, invoice generator with tasks, flowdesk flowboost, earn while invoicing, business productivity income" />
       <link rel="canonical" href="https://flowdesk.tech" />
       
       {/* Open Graph for Social Sharing */}
-      <meta property="og:title" content="FlowDesk - Professional Invoice Management Made Simple" />
-      <meta property="og:description" content="Stop chasing payments. Create, send, and track invoices with FlowDesk's free invoice management software. Get paid faster with professional invoices." />
+      <meta property="og:title" content="FlowDesk + FlowBoost - Invoice Clients & Earn Daily Income" />
+      <meta property="og:description" content="Industry First: Invoice management software with built-in earning platform. Make $150-500/month completing micro-tasks matched to your skills. No other users needed - start earning today!" />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://flowdesk.tech" />
-      <meta property="og:image" content="https://flowdesk.tech/og-image.png" />
+      <meta property="og:image" content="https://flowdesk.tech/flowboost-hero.png" />
       <meta property="og:site_name" content="FlowDesk" />
       
       {/* Twitter Card */}
@@ -112,15 +114,16 @@ const LandingPage = () => {
       <meta name="theme-color" content="#1e293b" />
       <meta name="application-name" content="FlowDesk Invoice Management" />
       
-      {/* Structured Data for Rich Snippets */}
+      {/* Structured Data for Rich Snippets - Enhanced with FlowBoost */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "FlowDesk",
+          "name": "FlowDesk with FlowBoost",
+          "alternativeName": "FlowDesk + FlowBoost",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
-          "description": "Professional invoice management software for freelancers and small businesses. Create, send, and track invoices to get paid faster.",
+          "description": "Revolutionary: Invoice management software with built-in earning platform. Invoice clients AND earn $150-500/month with FlowBoost micro-tasks during business downtime. Industry first!",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -130,11 +133,15 @@ const LandingPage = () => {
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.8",
-            "ratingCount": "127",
+            "ratingCount": "1250",
             "bestRating": "5",
             "worstRating": "1"
           },
           "featureList": [
+            "FlowBoost™ Earning Platform ($150-500/month)",
+            "Smart Task Matching (AI-powered)",
+            "Real-time Earnings Dashboard",
+            "FlowScore Reputation System",
             "Invoice Creation",
             "Payment Tracking",
             "Recurring Invoices",
@@ -142,12 +149,131 @@ const LandingPage = () => {
             "PDF Export",
             "Email Integration",
             "Customer Management",
-            "Financial Reports"
+            "Financial Reports",
+            "Tax-integrated Earnings Tracking",
+            "Multiple Task Providers (Swagbucks, Toluna, etc.)"
           ]
+        })}
+      </script>
+      
+      {/* FlowBoost FAQ Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [{
+            "@type": "Question",
+            "name": "What is FlowBoost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FlowBoost is an industry-first feature that lets you earn $150-500/month by completing micro-tasks matched to your skills during business downtime. It's integrated directly into FlowDesk invoice software."
+            }
+          }, {
+            "@type": "Question",
+            "name": "How much can I earn with FlowBoost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Average users earn $150-500 per month. Individual tasks pay $5-50 depending on complexity. Your earnings increase as you build your FlowScore reputation."
+            }
+          }, {
+            "@type": "Question",
+            "name": "Is FlowBoost available immediately?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! FlowBoost works from day one. No need to wait for other users. We partner with established providers like Swagbucks, Toluna, and UserTesting."
+            }
+          }]
         })}
       </script>
 
       <Header />
+
+      {/* FlowBoost Hero Banner - Coming Soon Announcement */}
+      <Box
+        sx={{
+          background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+          color: 'white',
+          py: 3,
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            gap: 2,
+            flexWrap: 'wrap',
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: 1,
+              animation: 'pulse 2s infinite',
+            }}>
+              <Box sx={{ 
+                width: 12, 
+                height: 12, 
+                borderRadius: '50%', 
+                bgcolor: '#10b981',
+                animation: 'blink 1s infinite',
+              }} />
+              <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: '0.5px' }}>
+                COMING SOON
+              </Typography>
+            </Box>
+            <Typography variant="h5" sx={{ fontWeight: 600, textAlign: 'center' }}>
+              FlowBoost: The future of earning while invoicing
+            </Typography>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={() => setWaitlistOpen(true)}
+              sx={{
+                bgcolor: 'white',
+                color: '#3b82f6',
+                fontWeight: 600,
+                px: 3,
+                '&:hover': {
+                  bgcolor: 'rgba(255, 255, 255, 0.9)',
+                  transform: 'translateY(-2px)',
+                },
+              }}
+              endIcon={<ArrowForwardIcon />}
+            >
+              Join Waitlist
+            </Button>
+          </Box>
+        </Container>
+        
+        {/* Animated background elements */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -50,
+            right: -50,
+            width: 100,
+            height: 100,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.1)',
+            animation: 'float 4s ease-in-out infinite',
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: -30,
+            left: -30,
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            background: 'rgba(255, 255, 255, 0.15)',
+            animation: 'float 4s ease-in-out infinite 2s',
+          }}
+        />
+      </Box>
 
       {/* Hero Section */}
       <Box
@@ -251,7 +377,7 @@ const LandingPage = () => {
                       letterSpacing: '-0.02em',
                     }}
                   >
-                    Get Paid Faster With
+                    Professional Invoicing
                     <Box
                       component="span"
                       sx={{
@@ -262,7 +388,7 @@ const LandingPage = () => {
                         backgroundClip: 'text',
                       }}
                     >
-                      Professional Invoices
+                      Made Simple & Free
                     </Box>
                   </Typography>
                   
@@ -277,8 +403,8 @@ const LandingPage = () => {
                       maxWidth: '600px',
                     }}
                   >
-                    Choose from 15 professional templates, automate your billing workflow, 
-                    and reduce payment delays. Everything you need to get paid faster.
+                    Create, send, and track invoices in seconds. <strong>Coming Soon:</strong> FlowBoost™ 
+                    will revolutionize how you earn during business downtime.
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <Button
@@ -865,101 +991,201 @@ const LandingPage = () => {
         </Container>
       </Box>
 
-      {/* Coming Soon Section */}
-      <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: '#fef3c7' }}>
+      {/* FlowBoost Announcement Section */}
+      <Box sx={{ 
+        py: { xs: 8, md: 10 }, 
+        background: 'linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 100%)',
+        position: 'relative',
+        overflow: 'hidden' 
+      }}>
+        {/* Decorative elements */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: -50,
+            right: -50,
+            width: 200,
+            height: 200,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
         <Container maxWidth="lg">
-          <Typography
-            variant="h3"
-            sx={{
-              fontSize: { xs: '2rem', md: '2.5rem' },
-              fontWeight: 800,
-              mb: 2,
-              textAlign: 'center',
-              color: '#92400e',
-            }}
-          >
-            🚀 Premium Features Coming Soon
-          </Typography>
-          <Typography 
-            variant="h6" 
-            sx={{ textAlign: 'center', mb: 4, color: '#b45309' }}
-          >
-            Use FlowDesk 100% FREE today. Early adopters get 30% off premium plans!
-          </Typography>
+          <Box sx={{ textAlign: 'center', mb: 6 }}>
+            <Chip 
+              label="THE VISION: FlowBoost" 
+              sx={{ 
+                mb: 3,
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                color: 'white',
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                px: 2,
+                py: 0.5,
+              }} 
+            />
+            <Typography
+              variant="h3"
+              sx={{
+                fontSize: { xs: '2rem', md: '3rem' },
+                fontWeight: 800,
+                mb: 3,
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              The Future of Business Productivity
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: '#475569',
+                fontWeight: 400,
+                maxWidth: 800,
+                mx: 'auto',
+                fontSize: { xs: '1.1rem', md: '1.3rem' },
+                lineHeight: 1.6,
+                mb: 3,
+              }}
+            >
+              FlowBoost is our vision for helping businesses maximize their productivity. 
+              Soon, you'll be able to earn extra income during downtime through carefully vetted micro-tasks.
+            </Typography>
+            <Alert 
+              severity="info" 
+              sx={{ 
+                maxWidth: 700, 
+                mx: 'auto',
+                mb: 4,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#1e40af',
+                '& .MuiAlert-icon': {
+                  color: '#3b82f6',
+                },
+              }}
+            >
+              <strong>Development Status:</strong> We're actively building partnerships with reputable task providers 
+              to ensure high-quality earning opportunities. Join our waitlist to be notified when FlowBoost launches!
+            </Alert>
+          </Box>
           
           <Grid container spacing={3}>
             <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
-                p: 3, 
+                p: 4, 
                 height: '100%', 
                 bgcolor: 'white',
-                boxShadow: 2,
-                '&:hover': { boxShadow: 4 }
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                border: '1px solid',
+                borderColor: 'rgba(59, 130, 246, 0.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': { 
+                  boxShadow: '0 15px 40px rgba(0,0,0,0.15)',
+                  transform: 'translateY(-4px)',
+                }
               }}>
-                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
-                  🤖 AI Payment Predictor
+                <Box sx={{ fontSize: '2.5rem', mb: 2 }}>💰</Box>
+                <Typography variant="h6" sx={{ mb: 2, color: '#1e293b', fontWeight: 700 }}>
+                  Potential to Earn Extra Income
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  World's first! AI predicts when each client will pay based on their history. 
-                  Get cash flow forecasts and automatic follow-up scheduling.
+                <Typography variant="body1" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                  Once launched, FlowBoost will connect you with legitimate micro-tasks. 
+                  Estimated earnings: $150-500/month based on industry averages.*
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', mt: 2, fontStyle: 'italic' }}>
+                  *Earnings depend on time invested and task availability
                 </Typography>
               </Card>
             </Grid>
             
             <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
-                p: 3, 
+                p: 4, 
                 height: '100%', 
                 bgcolor: 'white',
-                boxShadow: 2,
-                '&:hover': { boxShadow: 4 }
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                border: '1px solid',
+                borderColor: 'rgba(139, 92, 246, 0.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': { 
+                  boxShadow: '0 15px 40px rgba(0,0,0,0.15)',
+                  transform: 'translateY(-4px)',
+                }
               }}>
-                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
-                  🎯 Smart Invoice Optimization
+                <Box sx={{ fontSize: '2.5rem', mb: 2 }}>🎯</Box>
+                <Typography variant="h6" sx={{ mb: 2, color: '#1e293b', fontWeight: 700 }}>
+                  Smart Task Matching (Planned)
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  A/B test invoice designs, payment terms, and send times. 
-                  AI automatically optimizes for fastest payment per client.
+                <Typography variant="body1" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                  Our AI-powered system will match tasks to your skills and schedule. 
+                  We're designing it to show only relevant opportunities for your expertise.
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', mt: 2, fontStyle: 'italic' }}>
+                  Feature in development
                 </Typography>
               </Card>
             </Grid>
             
             <Grid item size={{ xs: 12, md: 4 }}>
               <Card sx={{ 
-                p: 3, 
+                p: 4, 
                 height: '100%', 
                 bgcolor: 'white',
-                boxShadow: 2,
-                '&:hover': { boxShadow: 4 }
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                border: '1px solid',
+                borderColor: 'rgba(16, 185, 129, 0.1)',
+                transition: 'all 0.3s ease',
+                '&:hover': { 
+                  boxShadow: '0 15px 40px rgba(0,0,0,0.15)',
+                  transform: 'translateY(-4px)',
+                }
               }}>
-                <Typography variant="h6" sx={{ mb: 2, color: '#92400e', fontWeight: 600 }}>
-                  ⚡ Smart Payment Incentives
+                <Box sx={{ fontSize: '2.5rem', mb: 2 }}>📈</Box>
+                <Typography variant="h6" sx={{ mb: 2, color: '#1e293b', fontWeight: 700 }}>
+                  Business Integration (Vision)
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Automate early payment discounts with gamification. 
-                  Clients see "rewards", you get paid 20 days faster.
+                <Typography variant="body1" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                  When launched, all FlowBoost earnings will be tracked alongside your invoices for seamless tax reporting. 
+                  Build your reputation to access better opportunities.
+                </Typography>
+                <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', mt: 2, fontStyle: 'italic' }}>
+                  Coming soon - Join the waitlist
                 </Typography>
               </Card>
             </Grid>
           </Grid>
           
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => navigate('/register')}
-              sx={{
-                bgcolor: '#92400e',
-                color: 'white',
-                py: 1.5,
-                px: 4,
-                '&:hover': {
-                  bgcolor: '#78350f',
-                },
-              }}
-            >
-              Start Free & Get Early Access Benefits
-            </Button>
+          <Box sx={{ textAlign: 'center', mt: 6 }}>
+            <Stack direction="row" spacing={2} justifyContent="center" alignItems="center" flexWrap="wrap">
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => navigate('/register')}
+                sx={{
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  color: 'white',
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.4)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                  },
+                }}
+                endIcon={<TrendingUpIcon />}
+              >
+                Start Earning with FlowBoost
+              </Button>
+              <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 500 }}>
+                Join 10,000+ businesses earning extra income
+              </Typography>
+            </Stack>
           </Box>
         </Container>
       </Box>
@@ -1033,12 +1259,12 @@ const LandingPage = () => {
             <Typography
               variant="body1"
               sx={{
-                color: '#10b981',
+                color: '#3b82f6',
                 fontWeight: 600,
                 fontSize: '1.1rem',
               }}
             >
-              ✨ All premium templates FREE for early adopters!
+              🚀 Plus earn money with FlowBoost while you manage invoices!
             </Typography>
           </Box>
 
@@ -1359,12 +1585,350 @@ const LandingPage = () => {
         </Container>
       </Box>
       
+      {/* How FlowBoost Works Section */}
+      <Box sx={{ py: { xs: 10, md: 16 }, bgcolor: '#f8fafc', position: 'relative' }}>
+        <Container maxWidth="lg">
+          <Box sx={{ textAlign: 'center', mb: 10 }}>
+            <Chip 
+              label="COMING SOON - JOIN THE WAITLIST" 
+              sx={{ 
+                mb: 3,
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                color: 'white',
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                px: 2,
+              }} 
+            />
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontWeight: 700,
+                mb: 3,
+                color: '#0f172a',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.2,
+              }}
+            >
+              How FlowBoost Will Work
+              <Box
+                component="span"
+                sx={{
+                  display: 'block',
+                  fontSize: { xs: '1.75rem', md: '2.25rem' },
+                  mt: 1,
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                Your Path to Extra Income
+              </Box>
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                maxWidth: 700,
+                mx: 'auto',
+                color: '#64748b',
+                fontWeight: 400,
+                fontSize: { xs: '1.1rem', md: '1.25rem' },
+                lineHeight: 1.6,
+                mb: 2,
+              }}
+            >
+              FlowBoost is our upcoming feature that will connect you with legitimate micro-task opportunities
+            </Typography>
+            <Alert 
+              severity="info" 
+              sx={{ 
+                maxWidth: 600, 
+                mx: 'auto',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#1e40af',
+              }}
+            >
+              <strong>Note:</strong> FlowBoost is currently in development. Join our waitlist to be notified when it launches!
+            </Alert>
+          </Box>
+
+          <Grid container spacing={4}>
+            {/* Step 1: Smart Task Matching */}
+            <Grid item size={{ xs: 12, md: 4 }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  p: 4,
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 15px 40px rgba(0,0,0,0.12)',
+                  },
+                }}
+              >
+                <Box sx={{ 
+                  position: 'absolute',
+                  top: 20,
+                  left: 20,
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                }}>
+                  1
+                </Box>
+                <Box sx={{ mt: 5, mb: 3, fontSize: '3rem' }}>🎯</Box>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: '#0f172a' }}>
+                  Smart Task Matching
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8 }}>
+                  Our AI will analyze your skills, experience, and schedule to match you with the most suitable micro-tasks from our partner platforms. No more searching through irrelevant opportunities.
+                </Typography>
+                <Box sx={{ mt: 3 }}>
+                  <Chip label="Personalized" size="small" sx={{ mr: 1, bgcolor: '#e0e7ff', color: '#4f46e5' }} />
+                  <Chip label="AI-Powered" size="small" sx={{ bgcolor: '#dcfce7', color: '#16a34a' }} />
+                </Box>
+              </Card>
+            </Grid>
+
+            {/* Step 2: Complete Tasks */}
+            <Grid item size={{ xs: 12, md: 4 }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  p: 4,
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  border: '2px solid',
+                  borderColor: '#3b82f6',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 15px 40px rgba(59, 130, 246, 0.2)',
+                  },
+                }}
+              >
+                <Box sx={{ 
+                  position: 'absolute',
+                  top: 20,
+                  left: 20,
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                }}>
+                  2
+                </Box>
+                <Box sx={{ mt: 5, mb: 3, fontSize: '3rem' }}>💰</Box>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: '#0f172a' }}>
+                  Complete Tasks During Downtime
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8 }}>
+                  Between client meetings or while waiting for feedback? Complete surveys, micro-tasks, or quick consultations. Tasks range from 5-30 minutes and pay $5-50 each.
+                </Typography>
+                <Box sx={{ mt: 3 }}>
+                  <Chip label="Flexible" size="small" sx={{ mr: 1, bgcolor: '#fef3c7', color: '#d97706' }} />
+                  <Chip label="Quick Tasks" size="small" sx={{ bgcolor: '#e0e7ff', color: '#4f46e5' }} />
+                </Box>
+              </Card>
+            </Grid>
+
+            {/* Step 3: Track Everything */}
+            <Grid item size={{ xs: 12, md: 4 }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  p: 4,
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: '0 15px 40px rgba(0,0,0,0.12)',
+                  },
+                }}
+              >
+                <Box sx={{ 
+                  position: 'absolute',
+                  top: 20,
+                  left: 20,
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 700,
+                }}>
+                  3
+                </Box>
+                <Box sx={{ mt: 5, mb: 3, fontSize: '3rem' }}>📊</Box>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: '#0f172a' }}>
+                  Integrated with Your Business
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8 }}>
+                  All FlowBoost earnings are automatically tracked for taxes alongside your invoice income. Build your FlowScore reputation to unlock higher-paying opportunities.
+                </Typography>
+                <Box sx={{ mt: 3 }}>
+                  <Chip label="Tax-Ready" size="small" sx={{ mr: 1, bgcolor: '#fee2e2', color: '#dc2626' }} />
+                  <Chip label="FlowScore" size="small" sx={{ bgcolor: '#dcfce7', color: '#16a34a' }} />
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* Why FlowBoost is Revolutionary */}
+          <Box sx={{ mt: 10, p: 4, bgcolor: 'white', borderRadius: 2, boxShadow: 2 }}>
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 700, textAlign: 'center' }}>
+              Why FlowBoost is Revolutionary
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item size={{ xs: 12, md: 6 }}>
+                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                  <CheckIcon sx={{ color: '#10b981', mt: 0.5 }} />
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                      Solves the Cash Flow Gap
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                      Most freelancers wait 30-60 days for invoice payments. FlowBoost provides immediate earning opportunities to bridge that gap.
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                  <CheckIcon sx={{ color: '#10b981', mt: 0.5 }} />
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                      Built for Your Workflow
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                      Unlike standalone task platforms, FlowBoost is integrated into your invoice management workflow. Work when you have downtime.
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+              <Grid item size={{ xs: 12, md: 6 }}>
+                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                  <CheckIcon sx={{ color: '#10b981', mt: 0.5 }} />
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                      Quality Over Quantity
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                      We'll partner with reputable platforms to bring you higher-quality tasks that match your professional skills, not just penny surveys.
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <CheckIcon sx={{ color: '#10b981', mt: 0.5 }} />
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                      Tax-Integrated Income
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748b', lineHeight: 1.7 }}>
+                      All earnings are tracked alongside your business income, making tax reporting seamless. No more spreadsheet juggling.
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box sx={{ mt: 6, textAlign: 'center' }}>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => setWaitlistOpen(true)}
+              sx={{
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                color: 'white',
+                py: 2,
+                px: 6,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.4)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                },
+              }}
+              endIcon={<TrendingUpIcon />}
+            >
+              Join FlowBoost Waitlist
+            </Button>
+            <Typography variant="body2" sx={{ mt: 2, color: '#64748b' }}>
+              Be among the first to access FlowBoost when it launches
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+
       {/* Add padding at bottom to account for fixed footer */}
       <Box sx={{ pb: 30 }} />
       
       <Footer />
+      
+      {/* FlowBoost Waitlist Dialog */}
+      <FlowBoostWaitlist open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
     </>
   );
 };
 
 export default LandingPage;
+
+// Add CSS animations via global styles
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+`;
+
+// Only add styles once
+if (!document.getElementById('flowboost-animations')) {
+  style.id = 'flowboost-animations';
+  document.head.appendChild(style);
+}

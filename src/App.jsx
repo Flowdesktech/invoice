@@ -26,6 +26,7 @@ import Documentation from './pages/Documentation';
 import About from './pages/About';
 import Blog from './pages/Blog';
 import InvoiceTemplates from './pages/InvoiceTemplates';
+import FlowBoost from './pages/FlowBoost';
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -284,6 +285,10 @@ const router = createBrowserRouter([
           {
             path: 'recurring-invoices/:id/invoices',
             element: <RecurringInvoices />,
+          },
+          {
+            path: 'flowboost',
+            element: <FlowBoost />,
           },
             ],
           },

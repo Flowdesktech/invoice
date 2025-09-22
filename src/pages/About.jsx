@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Container,
     Paper,
@@ -10,7 +10,7 @@ import {
     CardContent,
     Avatar,
     Chip,
-    Divider, Stack,
+    Divider, Stack, Alert,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -25,9 +25,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import FlowBoostWaitlist from '../components/FlowBoostWaitlist';
 
 const About = () => {
   const navigate = useNavigate();
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
 
   const services = [
     {
@@ -81,15 +83,15 @@ const About = () => {
 
   return (
     <>
-      {/* React 19 SEO Meta Tags */}
-      <title>About FlowDesk - Full Stack Developer & Invoice Software Creator</title>
-      <meta name="description" content="FlowDesk was built by a full stack developer specializing in React, Node.js, mobile apps, and blockchain. Available for custom software development and app maintenance." />
-      <meta name="keywords" content="full stack developer, react developer, node.js developer, invoice software developer, custom software development, app maintenance, freelance developer, web development services" />
+      {/* React 19 SEO Meta Tags - Updated with FlowBoost */}
+      <title>About FlowDesk + FlowBoost - Invoice Software with Built-in Earning Platform | Earn $150-500/Month</title>
+      <meta name="description" content="FlowDesk with FlowBoost: Revolutionary invoice software that lets you earn $150-500/month during downtime. Built by a full stack developer who created the industry's first invoice + earning platform." />
+      <meta name="keywords" content="flowboost creator, flowdesk developer, invoice software with earnings, micro task platform developer, full stack developer, react developer, node.js developer, flowboost innovation, earn while invoicing" />
       <link rel="canonical" href="https://flowdesk.tech/about" />
       
       {/* Open Graph */}
-      <meta property="og:title" content="About FlowDesk - Professional Invoice Software & Development Services" />
-      <meta property="og:description" content="Built by a full stack developer who understands business needs. Available for custom development projects." />
+      <meta property="og:title" content="About FlowDesk + FlowBoost - The Creator Behind the Innovation" />
+      <meta property="og:description" content="Learn about the developer who created FlowBoost - the industry-first feature that lets you earn money while managing invoices. Available for custom development projects." />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://flowdesk.tech/about" />
       
@@ -469,15 +471,15 @@ const About = () => {
         </Container>
       </Box>
 
-      {/* Roadmap Section */}
-      <Box sx={{ py: { xs: 10, md: 16 }, bgcolor: 'white' }}>
+      {/* FlowBoost Section */}
+      <Box sx={{ py: { xs: 10, md: 16 }, background: 'linear-gradient(135deg, #f0f9ff 0%, #f0e7ff 50%, #fff 100%)', position: 'relative' }}>
         <Container maxWidth="lg">
           <Box sx={{ textAlign: 'center', mb: 10 }}>
             <Typography
               variant="body2"
               sx={{
                 display: 'inline-block',
-                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                 color: 'white',
                 px: 3,
                 py: 1,
@@ -488,7 +490,7 @@ const About = () => {
                 mb: 3,
               }}
             >
-              COMING SOON
+              COMING SOON: FLOWBOOST
             </Typography>
             
             <Typography
@@ -502,18 +504,18 @@ const About = () => {
                 lineHeight: 1.2,
               }}
             >
-              Premium Features
+              My Vision: FlowBoost
               <Box
                 component="span"
                 sx={{
                   display: 'block',
-                  background: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                 }}
               >
-                That Don't Exist Anywhere
+                Productivity Meets Opportunity
               </Box>
             </Typography>
             
@@ -526,32 +528,58 @@ const About = () => {
                 fontWeight: 400,
                 fontSize: { xs: '1.1rem', md: '1.25rem' },
                 lineHeight: 1.6,
-                mb: 4,
+                mb: 3,
               }}
             >
-              FlowDesk is <strong>100% FREE</strong> right now! Premium features are in development.
-              Early adopters will get exclusive discounts when we launch.
+              I'm developing FlowBoost to solve a common problem: the income gap between invoices. 
+              Soon, you'll be able to earn extra income through carefully vetted micro-tasks during business downtime.
             </Typography>
             
+            <Alert 
+              severity="info" 
+              sx={{ 
+                maxWidth: 600, 
+                mx: 'auto',
+                mb: 4,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                color: '#1e40af',
+                '& .MuiAlert-icon': {
+                  color: '#3b82f6',
+                },
+              }}
+            >
+              <strong>Development Update:</strong> FlowBoost is currently in development. I'm working on partnerships 
+              with reputable task providers. Target earning potential: $150-500/month based on similar platforms.
+            </Alert>
+            
             <Box sx={{ display: 'inline-block' }}>
-              <Box
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => setWaitlistOpen(true)}
                 sx={{
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                   color: 'white',
                   px: 4,
                   py: 2,
                   borderRadius: '12px',
                   fontSize: '1rem',
                   fontWeight: 600,
-                  boxShadow: '0 8px 24px -4px rgba(16, 185, 129, 0.3)',
+                  boxShadow: '0 8px 24px -4px rgba(59, 130, 246, 0.3)',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 1,
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 12px 32px -4px rgba(59, 130, 246, 0.4)',
+                  },
                 }}
+                endIcon={<ArrowForwardIcon />}
               >
-                <Box component="span" sx={{ fontSize: '1.5rem' }}>🎯</Box>
-                Early adopters get special pricing forever!
-              </Box>
+                <Box component="span" sx={{ fontSize: '1.5rem' }}>🔔</Box>
+                Join FlowBoost Waitlist
+              </Button>
             </Box>
           </Box>
           
@@ -839,9 +867,14 @@ const About = () => {
                   FlowDesk was born from the idea that invoicing should be simple, professional, and accessible. 
                   It includes only the features businesses actually use, with a clean interface that doesn't require training.
                 </Typography>
+                <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8, mb: 3 }}>
+                  But I didn't stop there. I realized that most freelancers and small businesses face another challenge: 
+                  <strong> the income gap between invoices</strong>. That's why I'm developing <strong>FlowBoost</strong>.
+                </Typography>
                 <Typography variant="body1" sx={{ color: '#475569', lineHeight: 1.8 }}>
-                  This project showcases my approach: understanding the problem first, then building 
-                  a solution that's both powerful and easy to use.
+                  FlowBoost will revolutionize how businesses think about downtime. Instead of just waiting for invoice payments, 
+                  users will be able to earn $150-500/month completing micro-tasks matched to their skills. 
+                  It's the first invoice management system with a built-in earning platform.
                 </Typography>
               </Box>
             </Grid>
@@ -894,6 +927,9 @@ const About = () => {
     </Container>
     
     <Footer />
+    
+    {/* FlowBoost Waitlist Dialog */}
+    <FlowBoostWaitlist open={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
     </>
   );
 };

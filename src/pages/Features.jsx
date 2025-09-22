@@ -40,6 +40,7 @@ import {
   Loop as LoopIcon,
   Search as SearchIcon,
   ArrowForward as ArrowForwardIcon,
+  TrendingUp as TrendingUpIcon,
 } from '@mui/icons-material';
 
 const Features = () => {
@@ -133,9 +134,17 @@ const Features = () => {
       title: 'Customizable Templates',
       description: 'Professional invoice templates that match your brand',
     },
+    {
+      icon: <TrendingUpIcon />,
+      title: 'FlowBoost (Coming Soon)',
+      description: 'Turn business downtime into income with smart task matching. Earn $150-500/month!',
+      isComingSoon: true,
+    },
   ];
 
   const comparisonData = [
+    { feature: '🚀 FlowBoost Earnings', flowdesk: 'Coming Soon!', others: '❌ Not Available', highlight: true },
+    { feature: 'Earn While Invoicing', flowdesk: '$150-500/month', others: '❌ No Earning Feature', highlight: true },
     { feature: 'Professional Templates', flowdesk: '15 Templates', others: '3-5 Templates' },
     { feature: 'Setup Time', flowdesk: '< 2 minutes', others: '15+ minutes' },
     { feature: 'Multi-Currency Support', flowdesk: '✓ Built-in', others: 'Limited' },
@@ -488,6 +497,7 @@ const Features = () => {
                       borderRadius: '16px',
                       border: '1px solid transparent',
                       transition: 'all 0.3s ease',
+                      position: 'relative',
                       '&:hover': {
                         transform: 'translateY(-4px)',
                         boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)',
@@ -495,6 +505,22 @@ const Features = () => {
                       },
                     }}
                   >
+                    {/* Coming Soon Badge */}
+                    {feature.isComingSoon && (
+                      <Chip
+                        label="Coming Soon"
+                        size="small"
+                        sx={{
+                          position: 'absolute',
+                          top: 16,
+                          right: 16,
+                          background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                          color: 'white',
+                          fontWeight: 600,
+                          fontSize: '0.75rem',
+                        }}
+                      />
+                    )}
                     <Box
                       sx={{
                         width: 56,
@@ -576,16 +602,38 @@ const Features = () => {
                 </thead>
                 <tbody>
                   {comparisonData.map((row, index) => (
-                    <tr key={index} style={{ borderTop: '1px solid #e2e8f0' }}>
-                      <td style={{ padding: '16px', color: '#475569' }}>{row.feature}</td>
-                      <td style={{ padding: '16px', textAlign: 'center' }}>
+                    <tr 
+                      key={index} 
+                      style={{ 
+                        borderTop: '1px solid #e2e8f0',
+                        backgroundColor: row.highlight ? 'rgba(59, 130, 246, 0.05)' : 'transparent',
+                      }}
+                    >
+                      <td style={{ 
+                        padding: '16px', 
+                        color: row.highlight ? '#1e40af' : '#475569',
+                        fontWeight: row.highlight ? 600 : 400,
+                      }}>
+                        {row.feature}
+                      </td>
+                      <td style={{ 
+                        padding: '16px', 
+                        textAlign: 'center',
+                        color: row.highlight ? '#1e40af' : 'inherit',
+                        fontWeight: row.highlight ? 600 : 400,
+                      }}>
                         {row.flowdesk === true ? (
                           <CheckIcon sx={{ color: '#10b981' }} />
                         ) : (
                           row.flowdesk
                         )}
                       </td>
-                      <td style={{ padding: '16px', textAlign: 'center', color: '#94a3b8' }}>
+                      <td style={{ 
+                        padding: '16px', 
+                        textAlign: 'center', 
+                        color: row.highlight ? '#dc2626' : '#94a3b8',
+                        fontWeight: row.highlight ? 600 : 400,
+                      }}>
                         {row.others === true ? (
                           <CheckIcon sx={{ color: '#94a3b8' }} />
                         ) : row.others === false ? (
