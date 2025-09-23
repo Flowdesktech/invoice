@@ -9,3 +9,16 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// Hide the initial HTML loader once React app is mounted
+// This ensures smooth transition from HTML loader to React app
+setTimeout(() => {
+  const initialLoader = document.getElementById('initial-loader');
+  if (initialLoader) {
+    initialLoader.classList.add('fade-out');
+    // Remove from DOM after fade animation
+    setTimeout(() => {
+      initialLoader.remove();
+    }, 300);
+  }
+}, 0);

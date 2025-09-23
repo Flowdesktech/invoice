@@ -15,9 +15,15 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-TileColor" content="#1e293b" />
     
-    <!-- Material UI Fonts -->
+    <!-- Performance Optimization: Resource Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firebaseapp.com">
+    <link rel="preconnect" href="https://firebaseio.com">
+    <link rel="dns-prefetch" href="https://firebase.googleapis.com">
+    <link rel="dns-prefetch" href="https://firebaseinstallations.googleapis.com">
+    
+    <!-- Material UI Fonts -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
@@ -27,9 +33,94 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
     
+    <!-- Critical CSS for instant loading feedback -->
+    <style>
+      /* Prevent white flash with immediate background */
+      body {
+        margin: 0;
+        font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f5f5f5;
+      }
+      
+      /* Initial loading screen */
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f5;
+        z-index: 9999;
+        transition: opacity 0.3s ease-out;
+      }
+      
+      #initial-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      .loader-logo {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1976d2;
+        letter-spacing: -0.5px;
+        margin-bottom: 24px;
+        font-family: 'Roboto', sans-serif;
+      }
+      
+      /* Simple CSS spinner */
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #e0e0e0;
+        border-top-color: #1976d2;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      .loader-text {
+        margin-top: 16px;
+        color: #666;
+        font-size: 0.875rem;
+      }
+    </style>
   </head>
   <body>
+    <!-- Initial loader shown immediately while React loads -->
+    <div id="initial-loader">
+      <div class="loader-logo">FlowDesk</div>
+      <div class="spinner"></div>
+      <div class="loader-text">Loading...</div>
+    </div>
+    
     <div id="root"></div>
+    
+    <script>
+      // Remove initial loader once React app is mounted
+      window.addEventListener('load', function() {
+        // Give React a moment to mount
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.classList.add('fade-out');
+            setTimeout(function() {
+              loader.style.display = 'none';
+            }, 300);
+          }
+        }, 100);
+      });
+    </script>
+    
     <script type="module" src="/src/index.jsx"></script>
   </body>
 </html>

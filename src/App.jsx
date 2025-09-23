@@ -7,25 +7,25 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-// Import pages
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import Customers from './pages/Customers';
-import Invoices from './pages/Invoices';
-import CreateInvoice from './pages/CreateInvoice';
-import ViewInvoice from './pages/ViewInvoice';
-import RecurringInvoices from './pages/RecurringInvoices';
-import LandingPage from './pages/LandingPage';
-import Features from './pages/Features';
-import Contact from './pages/Contact';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import Documentation from './pages/Documentation';
-import About from './pages/About';
-import Blog from './pages/Blog';
-import InvoiceTemplates from './pages/InvoiceTemplates';
+// Import pages using lazy loading for better performance
+const Login = React.lazy(() => import('./pages/Login'));
+const Register = React.lazy(() => import('./pages/Register'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Customers = React.lazy(() => import('./pages/Customers'));
+const Invoices = React.lazy(() => import('./pages/Invoices'));
+const CreateInvoice = React.lazy(() => import('./pages/CreateInvoice'));
+const ViewInvoice = React.lazy(() => import('./pages/ViewInvoice'));
+const RecurringInvoices = React.lazy(() => import('./pages/RecurringInvoices'));
+const LandingPage = React.lazy(() => import('./pages/LandingPage'));
+const Features = React.lazy(() => import('./pages/Features'));
+const Contact = React.lazy(() => import('./pages/Contact'));
+const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = React.lazy(() => import('./pages/TermsOfService'));
+const Documentation = React.lazy(() => import('./pages/Documentation'));
+const About = React.lazy(() => import('./pages/About'));
+const Blog = React.lazy(() => import('./pages/Blog'));
+const InvoiceTemplates = React.lazy(() => import('./pages/InvoiceTemplates'));
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -33,6 +33,7 @@ import Layout from './components/Layout';
 import SocialImageGenerator from './components/SocialImageGenerator';
 import ScrollToTop from './components/ScrollToTop';
 import RootLayout from './components/RootLayout';
+import LoadingScreen from './components/LoadingScreen';
 
 // Create MUI theme with professional admin dashboard colors
 const theme = createTheme({
@@ -300,7 +301,9 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AuthProvider>
           <Toaster position="top-right" />
-          <RouterProvider router={router} />
+          <React.Suspense fallback={<LoadingScreen />}>
+            <RouterProvider router={router} />
+          </React.Suspense>
         </AuthProvider>
       </LocalizationProvider>
     </ThemeProvider>

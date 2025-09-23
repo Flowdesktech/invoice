@@ -35,6 +35,46 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
-    sourcemap: true
+    sourcemap: true,
+    // Optimize bundle splitting
+    rollupOptions: {
+      output: {
+        // Create separate chunks for vendor libraries
+        manualChunks: {
+          // React ecosystem in one chunk
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          // Material UI in separate chunk (it's large)
+          'mui-vendor': ['@mui/material', '@mui/icons-material', '@mui/x-date-pickers'],
+          // Firebase SDK in separate chunk
+          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+          // Other utilities
+          'utils-vendor': ['date-fns', 'axios', 'react-hot-toast'],
+        },
+        // Use content hash for better caching
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'js/[name]-[hash].js',
+        entryFileNames: 'js/[name]-[hash].js',
+      },
+    },
+    // Increase chunk size warning limit slightly
+    chunkSizeWarningLimit: 600,
+    // Minify for production
+    minify: 'esbuild',
+    // Better tree shaking
+    treeshake: {
+      moduleSideEffects: false,
+    },
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@mui/material',
+      'firebase/app',
+      'firebase/auth',
+      'firebase/firestore',
+    ],
   }
 })
