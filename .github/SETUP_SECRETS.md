@@ -36,20 +36,15 @@ These secrets are required for building the application with proper Firebase con
 
 These secrets are required for deploying to Firebase:
 
-1. **FIREBASE_SERVICE_ACCOUNT**
+1. **FIREBASE_SERVICE_ACCOUNT** (Required)
    - A JSON key for Firebase service account
    - To create:
      1. Go to Firebase Console > Project Settings > Service Accounts
      2. Click "Generate new private key"
      3. Download the JSON file
      4. Copy the entire JSON content as the secret value
-
-2. **FIREBASE_TOKEN**
-   - Firebase CI token for deployment
-   - To create:
-     1. Install Firebase CLI: `npm install -g firebase-tools`
-     2. Run: `firebase login:ci`
-     3. Copy the token provided
+   - **Important**: This is the ONLY authentication method needed for deployment
+   - The deploy.yml uses this for all Firebase deployments (Hosting, Functions, Rules)
 
 ### Firebase Functions Environment Variables
 
