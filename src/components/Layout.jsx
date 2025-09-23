@@ -74,7 +74,6 @@ const Layout = () => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-    { text: 'FlowBoost', icon: <TrendingUpIcon />, path: '/flowboost' },
     { text: 'Customers', icon: <PeopleIcon />, path: '/customers' },
     { text: 'Invoices', icon: <ReceiptIcon />, path: '/invoices' },
     { text: 'Templates', icon: <DescriptionIcon />, path: '/invoice-templates' },
