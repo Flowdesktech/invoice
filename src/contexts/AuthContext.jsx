@@ -8,7 +8,8 @@ import {
   updatePassword,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  fetchSignInMethodsForEmail
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { profileAPI } from '../utils/api';
@@ -110,7 +111,37 @@ export const AuthProvider = ({ children }) => {
       toast.success('Logged in successfully!');
       return user;
     } catch (error) {
-      toast.error(error.message);
+      console.log('Auth error:', error.code, error.message);
+      
+      // Firebase v9+ specific error handling
+      // When a user tries to sign in with password but the account uses a different provider
+      if (error.code === 'auth/invalid-credential' || 
+          error.code === 'auth/invalid-login-credentials' ||
+          error.code === 'auth/wrong-password') {
+        
+        // Since fetchSignInMethodsForEmail is deprecated, we'll provide helpful guidance
+        // based on the error pattern
+        toast.error(
+          'Invalid email or password. If you previously signed in with Google, ' +
+          'please use "Sign in with Google" instead.',
+          { duration: 5000 }
+        );
+        
+        // Still throw the special error to trigger UI effects
+        throw new Error('EMAIL_LINKED_TO_GOOGLE');
+      }
+      
+      // Show user-friendly error messages for other cases
+      const errorMessages = {
+        'auth/user-not-found': 'No account found with this email address.',
+        'auth/invalid-email': 'Invalid email address format.',
+        'auth/user-disabled': 'This account has been disabled.',
+        'auth/too-many-requests': 'Too many failed attempts. Please try again later.',
+        'auth/network-request-failed': 'Network error. Please check your connection.',
+      };
+      
+      const friendlyMessage = errorMessages[error.code] || 'Authentication failed. Please try again.';
+      toast.error(friendlyMessage);
       throw error;
     }
   };

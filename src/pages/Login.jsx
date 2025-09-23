@@ -53,6 +53,17 @@ const Login = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
+      // If the email is linked to Google, highlight the Google sign-in button
+      if (error.message === 'EMAIL_LINKED_TO_GOOGLE') {
+        // Add a visual indicator to the Google button
+        const googleButton = document.getElementById('google-signin-button');
+        if (googleButton) {
+          googleButton.classList.add('pulse-animation');
+          setTimeout(() => {
+            googleButton.classList.remove('pulse-animation');
+          }, 3000);
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -194,6 +205,7 @@ const Login = () => {
             <Divider sx={{ my: 2 }}>OR</Divider>
             
             <Button
+              id="google-signin-button"
               fullWidth
               variant="outlined"
               size="large"
@@ -215,6 +227,11 @@ const Login = () => {
                   backgroundColor: '#f8f9fa',
                   borderColor: '#dadce0',
                   boxShadow: '0 1px 2px 0 rgba(60,64,67,.30), 0 2px 6px 2px rgba(60,64,67,.15)',
+                },
+                '&.pulse-animation': {
+                  animation: 'pulse 1s ease-in-out 3',
+                  borderColor: '#4285f4',
+                  boxShadow: '0 0 0 4px rgba(66, 133, 244, 0.3)',
                 },
                 '&:disabled': {
                   backgroundColor: '#fff',
@@ -240,6 +257,21 @@ const Login = () => {
     </Container>
     
     <Footer />
+    
+    {/* Add CSS for pulse animation */}
+    <style jsx>{`
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(66, 133, 244, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(66, 133, 244, 0);
+        }
+      }
+    `}</style>
     </>
   );
 };
