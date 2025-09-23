@@ -51,12 +51,47 @@ These secrets are required for deploying to Firebase:
    - `Firebase Admin` (roles/firebase.admin)
    - `Service Account User` (roles/iam.serviceAccountUser)
    - `Cloud Functions Developer` (roles/cloudfunctions.developer)
+   - `Firebase Extensions Admin` (roles/firebaseextensions.admin)
    
-   To grant permissions:
+   **Option A: Add Permissions to Existing Service Account**
    1. Go to [Google Cloud Console](https://console.cloud.google.com)
    2. Navigate to "IAM & Admin" > "IAM"
    3. Find your service account and click "Edit"
-   4. Add the required roles listed above
+   4. Add ALL the required roles listed above
+   
+   **Option B: Use Firebase Admin SDK Default Account (Easier)**
+   1. Go to Firebase Console > Project Settings > Service Accounts
+   2. Click "Generate new private key" for "Firebase Admin SDK"
+   3. This account usually has all permissions by default
+   
+   **Option C: Create New Service Account via gcloud CLI**
+   ```bash
+   # Create service account
+   gcloud iam service-accounts create github-actions-deploy \
+     --display-name="GitHub Actions Deploy" \
+     --project=YOUR-PROJECT-ID
+   
+   # Grant all required roles
+   gcloud projects add-iam-policy-binding YOUR-PROJECT-ID \
+     --member="serviceAccount:github-actions-deploy@YOUR-PROJECT-ID.iam.gserviceaccount.com" \
+     --role="roles/firebase.admin"
+   
+   gcloud projects add-iam-policy-binding YOUR-PROJECT-ID \
+     --member="serviceAccount:github-actions-deploy@YOUR-PROJECT-ID.iam.gserviceaccount.com" \
+     --role="roles/iam.serviceAccountUser"
+   
+   gcloud projects add-iam-policy-binding YOUR-PROJECT-ID \
+     --member="serviceAccount:github-actions-deploy@YOUR-PROJECT-ID.iam.gserviceaccount.com" \
+     --role="roles/cloudfunctions.developer"
+   
+   gcloud projects add-iam-policy-binding YOUR-PROJECT-ID \
+     --member="serviceAccount:github-actions-deploy@YOUR-PROJECT-ID.iam.gserviceaccount.com" \
+     --role="roles/firebaseextensions.admin"
+   
+   # Generate key
+   gcloud iam service-accounts keys create key.json \
+     --iam-account=github-actions-deploy@YOUR-PROJECT-ID.iam.gserviceaccount.com
+   ```
 
 ### Firebase Functions Environment Variables
 
