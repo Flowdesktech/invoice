@@ -173,7 +173,7 @@ const About = () => {
                 letterSpacing: '-0.02em',
               }}
             >
-              Built by Developers
+              Built for Everyone
               <Box
                 component="span"
                 sx={{
@@ -184,7 +184,7 @@ const About = () => {
                   backgroundClip: 'text',
                 }}
               >
-                For Business Owners
+                From Developers to Enterprises
               </Box>
             </Typography>
             
@@ -200,32 +200,10 @@ const About = () => {
                 mx: 'auto',
               }}
             >
-              FlowDesk was created to solve real invoicing challenges. As a full-stack developer 
-              with years of experience, I built the tool I wished existed - simple, powerful, and free.
+              FlowDesk was created to solve real invoicing challenges for businesses of any scale. Whether you're 
+              an individual developer, a growing SME, or an enterprise - our platform scales with your needs. 
+              Simple enough for solo freelancers, powerful enough for large organizations.
             </Typography>
-            
-            <Button
-              startIcon={<ArrowBackIcon />}
-              onClick={() => navigate('/')}
-              variant="outlined"
-              size="large"
-              sx={{
-                borderColor: '#e5e7eb',
-                color: '#475569',
-                py: 1.5,
-                px: 4,
-                fontSize: '1rem',
-                fontWeight: 500,
-                borderRadius: '8px',
-                '&:hover': {
-                  borderColor: '#3b82f6',
-                  bgcolor: 'rgba(59, 130, 246, 0.04)',
-                  color: '#3b82f6',
-                },
-              }}
-            >
-              Back to Home
-            </Button>
           </Box>
         </Container>
       </Box>
@@ -600,16 +578,16 @@ const About = () => {
                   },
                 }}
               >
-                <Box sx={{ fontSize: '2.5rem', mb: 2 }}>🤖</Box>
+                <Box sx={{ fontSize: '2.5rem', mb: 2 }}>💰</Box>
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: '#92400e' }}>
-                  AI Payment Predictor
+                  FlowBoost Earnings
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#78350f', lineHeight: 1.8 }}>
-                  World's first AI that predicts when each client will pay with 90% accuracy. Get cash flow forecasting, 
-                  automatic follow-up scheduling, and payment behavior analytics.
+                  Turn downtime into income. Earn $150-500/month completing micro-tasks between invoices. 
+                  Smart matching ensures you only see tasks that fit your skills and schedule.
                 </Typography>
                 <Box sx={{ mt: 3 }}>
-                  <Chip label="INDUSTRY FIRST" sx={{ bgcolor: '#f59e0b', color: 'white', fontWeight: 600 }} />
+                  <Chip label="EARN DAILY" sx={{ bgcolor: '#f59e0b', color: 'white', fontWeight: 600 }} />
                 </Box>
               </Box>
             </Grid>
@@ -632,14 +610,14 @@ const About = () => {
               >
                 <Box sx={{ fontSize: '2.5rem', mb: 2 }}>🎯</Box>
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: '#6b21a8' }}>
-                  Smart Invoice Optimization
+                  Smart Task Matching
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#581c87', lineHeight: 1.8 }}>
-                  A/B test invoice designs, payment terms, and send times. AI automatically optimizes each 
-                  invoice for fastest payment based on client-specific data.
+                  FlowBoost intelligently matches tasks to your skills and availability. Complete surveys, 
+                  micro-tasks, and more. Each task is vetted for legitimacy and fair compensation.
                 </Typography>
                 <Box sx={{ mt: 3 }}>
-                  <Chip label="REVOLUTIONARY" sx={{ bgcolor: '#9333ea', color: 'white', fontWeight: 600 }} />
+                  <Chip label="AI POWERED" sx={{ bgcolor: '#9333ea', color: 'white', fontWeight: 600 }} />
                 </Box>
               </Box>
             </Grid>
@@ -662,14 +640,14 @@ const About = () => {
               >
                 <Box sx={{ fontSize: '2.5rem', mb: 2 }}>⚡</Box>
                 <Typography variant="h5" sx={{ mb: 2, fontWeight: 600, color: '#14532d' }}>
-                  Smart Payment Incentives
+                  Daily Engagement Platform
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#166534', lineHeight: 1.8 }}>
-                  Gamified early payment discounts with "rewards" and badges. Dynamic optimization 
-                  suggests the best discount per client to get paid faster.
+                  FlowBoost transforms FlowDesk from a weekly invoice tool into a daily-use platform. 
+                  Build your FlowScore, unlock better tasks, and maximize earnings with consistent activity.
                 </Typography>
                 <Box sx={{ mt: 3 }}>
-                  <Chip label="GAME CHANGER" sx={{ bgcolor: '#16a34a', color: 'white', fontWeight: 600 }} />
+                  <Chip label="DAILY INCOME" sx={{ bgcolor: '#16a34a', color: 'white', fontWeight: 600 }} />
                 </Box>
               </Box>
             </Grid>
@@ -771,7 +749,7 @@ const About = () => {
                   },
                   transition: 'all 0.3s',
                 }}
-                onClick={() => window.open('mailto:developer@flowdesk.tech')}
+                onClick={() => window.open('mailto:contact@flowdesk.tech')}
               >
                 Email Directly
               </Button>

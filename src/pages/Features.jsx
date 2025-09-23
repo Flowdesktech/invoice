@@ -727,28 +727,6 @@ const Features = () => {
               >
                 Get Started Free
               </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                component={RouterLink}
-                to="/"
-                sx={{
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
-                  color: 'white',
-                  py: 2.5,
-                  px: 5,
-                  fontSize: '1.125rem',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  '&:hover': {
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
-                    bgcolor: 'rgba(255, 255, 255, 0.05)',
-                  },
-                  transition: 'all 0.3s',
-                }}
-              >
-                Back to Home
-              </Button>
             </Stack>
           </Box>
         </Container>

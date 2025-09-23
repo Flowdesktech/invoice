@@ -136,22 +136,6 @@ const Contact = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Button
-            component={RouterLink}
-            to="/"
-            startIcon={<ArrowBackIcon />}
-            sx={{
-              mb: 3,
-              color: '#64748b',
-              '&:hover': {
-                color: '#475569',
-                bgcolor: 'rgba(0,0,0,0.05)',
-              },
-            }}
-          >
-            Back to Home
-          </Button>
-          
           <Fade in timeout={800}>
             <Box textAlign="center">
               <Typography

@@ -11,7 +11,8 @@ import {
   Slide,
   Stack,
 } from '@mui/material';
-// Remove icon import as we'll use the actual logo
+import { useAuth } from '../contexts/AuthContext';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -26,6 +27,7 @@ function HideOnScroll({ children }) {
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentUser } = useAuth();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -137,46 +139,75 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <Stack direction="row" spacing={2}>
-            <Button
-              variant="outlined"
-              onClick={() => navigate('/login')}
-              sx={{
-                borderColor: '#e5e7eb',
-                color: '#64748b',
-                fontWeight: 500,
-                textTransform: 'none',
-                px: 3,
-                borderRadius: '8px',
-                '&:hover': {
-                  borderColor: '#3b82f6',
-                  bgcolor: 'rgba(59, 130, 246, 0.04)',
-                  color: '#3b82f6',
-                },
-              }}
-            >
-              Sign In
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => navigate('/register')}
-              sx={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                color: 'white',
-                fontWeight: 600,
-                textTransform: 'none',
-                px: 3,
-                borderRadius: '8px',
-                boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
-                '&:hover': {
-                  background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                  boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
-                  transform: 'translateY(-1px)',
-                },
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            >
-              Get Started Free
-            </Button>
+            {currentUser ? (
+              // Show Dashboard button for signed-in users
+              <Button
+                variant="contained"
+                startIcon={<DashboardIcon />}
+                onClick={() => navigate('/dashboard')}
+                sx={{
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                  color: 'white',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  px: 3,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                    transform: 'translateY(-1px)',
+                  },
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+              >
+                Dashboard
+              </Button>
+            ) : (
+              // Show Sign In and Get Started buttons for non-authenticated users
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/login')}
+                  sx={{
+                    borderColor: '#e5e7eb',
+                    color: '#64748b',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    px: 3,
+                    borderRadius: '8px',
+                    '&:hover': {
+                      borderColor: '#3b82f6',
+                      bgcolor: 'rgba(59, 130, 246, 0.04)',
+                      color: '#3b82f6',
+                    },
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => navigate('/register')}
+                  sx={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                    color: 'white',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    px: 3,
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                      boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                      transform: 'translateY(-1px)',
+                    },
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                >
+                  Get Started Free
+                </Button>
+              </>
+            )}
           </Stack>
         </Toolbar>
       </Container>
