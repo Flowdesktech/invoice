@@ -25,7 +25,7 @@ describe('Landing Page', () => {
   test('should display the landing page correctly', async () => {
     // Check if main elements are visible
     const h1Text = await page.$eval('h1', el => el.textContent);
-    expect(h1Text).toContain('Professional Invoice'); // More flexible assertion
+    expect(h1Text).toContain('Professional InvoicingMade Simple & Free'); // More flexible assertion
     
     const descriptionExists = await page.$eval('body', el => 
       el.textContent.includes('billing') || el.textContent.includes('invoice')

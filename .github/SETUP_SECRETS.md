@@ -45,6 +45,18 @@ These secrets are required for deploying to Firebase:
      4. Copy the entire JSON content as the secret value
    - **Important**: This is the ONLY authentication method needed for deployment
    - The deploy.yml uses this for all Firebase deployments (Hosting, Functions, Rules)
+   
+   **Required IAM Permissions:**
+   The service account must have these roles in Google Cloud Console:
+   - `Firebase Admin` (roles/firebase.admin)
+   - `Service Account User` (roles/iam.serviceAccountUser)
+   - `Cloud Functions Developer` (roles/cloudfunctions.developer)
+   
+   To grant permissions:
+   1. Go to [Google Cloud Console](https://console.cloud.google.com)
+   2. Navigate to "IAM & Admin" > "IAM"
+   3. Find your service account and click "Edit"
+   4. Add the required roles listed above
 
 ### Firebase Functions Environment Variables
 
