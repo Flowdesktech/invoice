@@ -9,7 +9,7 @@ class InvoiceService {
   /**
    * Get all invoices for a user and profile
    */
-  async getAllInvoices(userId, profileId = 'default') {
+  async getAllInvoices(userId, profileId) {
     let query = this.collection.where('userId', '==', userId);
     
     if (profileId === null) {
@@ -41,7 +41,7 @@ class InvoiceService {
   /**
    * Get a single invoice by ID
    */
-  async getInvoiceById(invoiceId, userId, profileId = 'default') {
+  async getInvoiceById(invoiceId, userId, profileId) {
     const doc = await this.collection.doc(invoiceId).get();
     
     if (!doc.exists) {
@@ -71,7 +71,7 @@ class InvoiceService {
   /**
    * Create a new invoice
    */
-  async createInvoice(invoiceData, userId, userData, customerData, profileId = 'default') {
+  async createInvoice(invoiceData, userId, userData, customerData, profileId) {
     // Validate invoice settings
     if (!userData?.invoiceSettings?.prefix || !userData?.invoiceSettings?.nextNumber) {
       throw new Error('Invalid user invoice settings. Please configure invoice settings in your profile.');
@@ -161,7 +161,7 @@ class InvoiceService {
   /**
    * Update an invoice
    */
-  async updateInvoice(invoiceId, updateData, userId, profileId = 'default') {
+  async updateInvoice(invoiceId, updateData, userId, profileId) {
     // First verify ownership and profile
     await this.getInvoiceById(invoiceId, userId, profileId);
 
@@ -203,7 +203,7 @@ class InvoiceService {
   /**
    * Delete an invoice
    */
-  async deleteInvoice(invoiceId, userId, profileId = 'default') {
+  async deleteInvoice(invoiceId, userId, profileId) {
     // First verify ownership and profile
     const invoice = await this.getInvoiceById(invoiceId, userId, profileId);
 
@@ -216,7 +216,7 @@ class InvoiceService {
   /**
    * Get invoice statistics for a user and profile
    */
-  async getInvoiceStats(userId, profileId = 'default') {
+  async getInvoiceStats(userId, profileId) {
     const invoices = await this.getAllInvoices(userId, profileId);
     
     const stats = {

@@ -9,7 +9,7 @@ class CustomerService {
   /**
    * Get all customers for a user and profile
    */
-  async getAllCustomers(userId, profileId = 'default') {
+  async getAllCustomers(userId, profileId) {
     try {
       let query = this.collection.where('userId', '==', userId);
       
@@ -49,7 +49,7 @@ class CustomerService {
   /**
    * Get a single customer by ID
    */
-  async getCustomerById(customerId, userId, profileId = 'default') {
+  async getCustomerById(customerId, userId, profileId) {
     try {
       const doc = await this.collection.doc(customerId).get();
       
@@ -99,7 +99,7 @@ class CustomerService {
   /**
    * Create a new customer
    */
-  async createCustomer(customerData, userId, profileId = 'default') {
+  async createCustomer(customerData, userId, profileId) {
     const newCustomer = {
       ...customerData,
       userId,
@@ -121,7 +121,7 @@ class CustomerService {
   /**
    * Update an existing customer
    */
-  async updateCustomer(customerId, updateData, userId, profileId = 'default') {
+  async updateCustomer(customerId, updateData, userId, profileId) {
     // First verify ownership and profile
     await this.getCustomerById(customerId, userId, profileId);
 
@@ -145,7 +145,7 @@ class CustomerService {
   /**
    * Delete a customer
    */
-  async deleteCustomer(customerId, userId, profileId = 'default') {
+  async deleteCustomer(customerId, userId, profileId) {
     // First verify ownership and profile
     await this.getCustomerById(customerId, userId, profileId);
 

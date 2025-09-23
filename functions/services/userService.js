@@ -65,7 +65,7 @@ class UserService {
   /**
    * Get user statistics for a specific profile
    */
-  async getUserStats(userId, profileId = 'default') {
+  async getUserStats(userId, profileId) {
     let customersQuery = db.collection('customers').where('userId', '==', userId);
     let invoicesQuery = db.collection('invoices').where('userId', '==', userId);
     

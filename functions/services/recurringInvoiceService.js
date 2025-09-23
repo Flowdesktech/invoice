@@ -17,7 +17,7 @@ class RecurringInvoiceService {
   /**
    * Get all recurring invoices for a user and profile
    */
-  async getAllRecurringInvoices(userId, profileId = 'default') {
+  async getAllRecurringInvoices(userId, profileId) {
     let query = this.collection.where('userId', '==', userId);
     
     if (profileId === null) {
@@ -47,7 +47,7 @@ class RecurringInvoiceService {
   /**
    * Get a single recurring invoice by ID
    */
-  async getRecurringInvoiceById(recurringInvoiceId, userId, profileId = 'default') {
+  async getRecurringInvoiceById(recurringInvoiceId, userId, profileId) {
     const doc = await this.collection.doc(recurringInvoiceId).get();
     
     if (!doc.exists) {
@@ -77,7 +77,7 @@ class RecurringInvoiceService {
   /**
    * Create a new recurring invoice
    */
-  async createRecurringInvoice(recurringData, userId, profileId = 'default') {
+  async createRecurringInvoice(recurringData, userId, profileId) {
     // Validate frequency
     const validFrequencies = ['weekly', 'biweekly', 'monthly', 'quarterly', 'yearly'];
     if (!validFrequencies.includes(recurringData.frequency)) {
@@ -139,7 +139,7 @@ class RecurringInvoiceService {
   /**
    * Update a recurring invoice
    */
-  async updateRecurringInvoice(recurringInvoiceId, updateData, userId, profileId = 'default') {
+  async updateRecurringInvoice(recurringInvoiceId, updateData, userId, profileId) {
     // First verify ownership and profile
     await this.getRecurringInvoiceById(recurringInvoiceId, userId, profileId);
 
@@ -178,7 +178,7 @@ class RecurringInvoiceService {
   /**
    * Pause a recurring invoice
    */
-  async pauseRecurringInvoice(recurringInvoiceId, pauseUntil, userId, profileId = 'default') {
+  async pauseRecurringInvoice(recurringInvoiceId, pauseUntil, userId, profileId) {
     await this.updateRecurringInvoice(recurringInvoiceId, {
       isActive: false,
       pausedUntil: pauseUntil ? new Date(pauseUntil).getTime() : null
@@ -188,7 +188,7 @@ class RecurringInvoiceService {
   /**
    * Resume a recurring invoice
    */
-  async resumeRecurringInvoice(recurringInvoiceId, userId, profileId = 'default') {
+  async resumeRecurringInvoice(recurringInvoiceId, userId, profileId) {
     const recurringInvoice = await this.getRecurringInvoiceById(recurringInvoiceId, userId, profileId);
     
     // Calculate new next generation date from today
@@ -204,7 +204,7 @@ class RecurringInvoiceService {
   /**
    * Stop (delete) a recurring invoice
    */
-  async stopRecurringInvoice(recurringInvoiceId, userId, profileId = 'default') {
+  async stopRecurringInvoice(recurringInvoiceId, userId, profileId) {
     // First verify ownership and profile
     await this.getRecurringInvoiceById(recurringInvoiceId, userId, profileId);
 
@@ -338,7 +338,7 @@ class RecurringInvoiceService {
       nextGenerationDate: nextGenerationDate.getTime(),
       nextInvoiceNumber: lastInvoiceNumber + 1,
       generatedInvoiceIds: FieldValue.arrayUnion(generatedInvoiceId),
-      totalGenerated: admin.firestore.FieldValue.increment(1),
+      totalGenerated: FieldValue.increment(1),
       updatedAt: Date.now()
     });
   }
