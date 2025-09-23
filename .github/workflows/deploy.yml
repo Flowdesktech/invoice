@@ -67,11 +67,7 @@ jobs:
     - name: Deploy Firestore Rules
       run: |
         firebase deploy --only firestore:rules --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-    
-    - name: Deploy Storage Rules
-      run: |
-        firebase deploy --only storage:rules --project ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
-    
+
     - name: Clean up service account
       if: always()
       run: |
