@@ -53,6 +53,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import Header from "../components/Header.jsx";
 
 const Documentation = () => {
   const navigate = useNavigate();
@@ -97,14 +98,8 @@ const Documentation = () => {
         })}
       </script>
       
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/dashboard')}
-          sx={{ mb: 3 }}
-        >
-          Back to Dashboard
-        </Button>
+      <Header />
+      <Container maxWidth="lg" sx={{ mt: 12, mb: 12 }}>
 
         <Paper sx={{ p: { xs: 3, sm: 5 }, mb: 4, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }} color="white">
