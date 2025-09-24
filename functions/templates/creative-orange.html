@@ -32,19 +32,22 @@
     /* Creative diagonal header */
     .header {
       position: relative;
-      height: 300px;
+      height: 180px;
       background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
-      transform: skewY(-3deg);
-      margin-bottom: 25px;
+      transform: skewY(-2deg);
+      margin-bottom: 15px;
       transform-origin: top left;
     }
     
     .header-content {
-      transform: skewY(3deg);
-      padding: 50px;
+      transform: skewY(2deg);
+      padding: 25px 40px;
       color: white;
       position: relative;
       z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
     
     /* Floating circles decoration */
@@ -77,9 +80,9 @@
     }
     
     .company-info h1 {
-      font-size: 22pt;
+      font-size: 16pt;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
     
@@ -91,16 +94,14 @@
     
     /* Creative invoice badge */
     .invoice-badge {
-      position: absolute;
-      top: 40px;
-      right: 50px;
       background: white;
       color: #ea580c;
-      padding: 15px 40px;
-      border-radius: 50%;
+      padding: 15px 25px;
+      border-radius: 15px;
       text-align: center;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-      transform: rotate(-10deg);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transform: rotate(-5deg);
+      margin-top: -10px;
     }
     
     .invoice-badge h2 {
@@ -116,8 +117,8 @@
     
     /* Main content with cards */
     .content {
-      padding: 0 50px 50px;
-      margin-top: -40px;
+      padding: 0 30px 20px;
+      margin-top: -20px;
       position: relative;
       z-index: 3;
     }
@@ -125,9 +126,9 @@
     /* Customer card */
     .customer-card {
       background: white;
-      padding: 35px;
-      border-radius: 20px;
-      box-shadow: 0 5px 20px rgba(234, 88, 12, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px rgba(234, 88, 12, 0.1);
       margin-bottom: 15px;
       position: relative;
       overflow: hidden;
@@ -144,13 +145,13 @@
     }
     
     .card-title {
-      font-size: 12pt;
+      font-size: 10pt;
       color: #ea580c;
       font-weight: 700;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     
     .card-icon {
@@ -167,18 +168,18 @@
     /* Date pills */
     .date-pills {
       display: flex;
-      gap: 20px;
+      gap: 15px;
       margin-bottom: 15px;
       flex-wrap: wrap;
     }
     
     .date-pill {
       background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
-      padding: 15px 25px;
-      border-radius: 25px;
+      padding: 10px 20px;
+      border-radius: 20px;
       text-align: center;
       flex: 1;
-      min-width: 150px;
+      min-width: 120px;
     }
     
     .date-pill-label {
@@ -198,19 +199,19 @@
     /* Creative items table */
     .items-section {
       background: white;
-      border-radius: 20px;
-      padding: 35px;
-      box-shadow: 0 5px 20px rgba(234, 88, 12, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(234, 88, 12, 0.1);
       margin-bottom: 15px;
     }
     
     .items-header {
       display: grid;
       grid-template-columns: 2fr 0.5fr 0.75fr 0.75fr;
-      gap: 20px;
-      padding: 15px 0;
+      gap: 15px;
+      padding: 10px 0;
       border-bottom: 2px solid #fed7aa;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
     
     .items-header div {
@@ -224,8 +225,8 @@
     .item-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 0.75fr 0.75fr;
-      gap: 20px;
-      padding: 20px 0;
+      gap: 15px;
+      padding: 12px 0;
       border-bottom: 1px solid #fff7ed;
       position: relative;
     }
@@ -276,10 +277,10 @@
     .totals-card {
       background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
       color: white;
-      padding: 35px;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(234, 88, 12, 0.3);
-      min-width: 350px;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(234, 88, 12, 0.2);
+      min-width: 300px;
       position: relative;
       overflow: hidden;
     }
@@ -314,8 +315,8 @@
     /* Creative footer */
     .footer {
       background: #fff7ed;
-      padding: 50px;
-      border-radius: 30px 30px 0 0;
+      padding: 25px;
+      border-radius: 20px 20px 0 0;
       position: relative;
     }
     
