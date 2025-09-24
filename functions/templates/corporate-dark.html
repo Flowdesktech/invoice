@@ -22,37 +22,36 @@
       margin: 0;
       background: #ffffff;
       display: grid;
-      grid-template-columns: 280px 1fr;
-      min-height: 100vh;
+      grid-template-columns: 250px 1fr;
     }
     
     /* Dark sidebar */
     .sidebar {
       background: #111827;
       color: #d1d5db;
-      padding: 50px 40px;
+      padding: 30px 25px;
       position: relative;
     }
     
     .company-logo {
-      font-size: 18pt;
+      font-size: 16pt;
       font-weight: 700;
       color: #f3f4f6;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       letter-spacing: -1px;
     }
     
     .sidebar-section {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     
     .sidebar-section h3 {
-      font-size: 9pt;
+      font-size: 8pt;
       font-weight: 400;
       color: #6b7280;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 15px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
     
     .sidebar-section p {
@@ -63,9 +62,9 @@
     
     .invoice-badge {
       position: absolute;
-      bottom: 50px;
-      left: 40px;
-      right: 40px;
+      bottom: 30px;
+      left: 25px;
+      right: 25px;
       background: #1f2937;
       padding: 15px;
       text-align: center;
@@ -88,27 +87,27 @@
     
     /* Main content area */
     .main-content {
-      padding: 50px 60px;
+      padding: 30px 40px;
       background: #ffffff;
     }
     
     .page-title {
-      font-size: 36pt;
+      font-size: 24pt;
       font-weight: 300;
       color: #111827;
-      margin-bottom: 20px;
-      letter-spacing: -2px;
+      margin-bottom: 15px;
+      letter-spacing: -1px;
     }
     
     /* Date bar */
     .date-bar {
       background: #f9fafb;
       border: 1px solid #e5e7eb;
-      padding: 25px;
+      padding: 15px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     
     .date-item {
@@ -134,18 +133,18 @@
     .billing-section {
       background: #1f2937;
       color: #f3f4f6;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-left: 5px solid #3730a3;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-left: 4px solid #3730a3;
     }
     
     .billing-header {
-      font-size: 9pt;
+      font-size: 8pt;
       font-weight: 400;
       color: #9ca3af;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
     }
     
     .billing-info {
@@ -219,17 +218,17 @@
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 15px;
-      padding: 15px 0;
-      font-size: 9pt;
+      padding: 10px 0;
+      font-size: 8pt;
       border-bottom: 1px solid #374151;
     }
     
     .total-row:last-child {
       border-bottom: none;
       border-top: 2px solid #f3f4f6;
-      margin-top: 15px;
-      padding-top: 20px;
-      font-size: 14pt;
+      margin-top: 10px;
+      padding-top: 10px;
+      font-size: 11pt;
       font-weight: 700;
     }
     
@@ -247,26 +246,27 @@
       color: #ffffff;
     }
     
-    /* Corporate footer */
+    /* Corporate footer - inside main content */
     .footer {
-      padding: 60px;
+      margin-top: 30px;
+      padding: 20px;
       background: #f9fafb;
-      border-top: 3px solid #111827;
+      border-top: 2px solid #111827;
     }
     
     .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 50px;
+      gap: 30px;
     }
     
     .notes-section h3 {
-      font-size: 9pt;
+      font-size: 8pt;
       font-weight: 400;
       color: #374151;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
     }
     
     .notes-section p {
@@ -403,21 +403,20 @@
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Corporate Footer -->
-    <div class="footer">
-      <div class="footer-content">
-        {{#if invoice.notes}}
-        <div class="notes-section">
-          <h3>Notes & Terms</h3>
-          <p>{{invoice.notes}}</p>
-        </div>
-        {{/if}}
-        
-        <div class="payment-box">
-          <h4>Payment Due</h4>
-          <p>{{formatDate invoice.dueDate timezone=userData.timezone}}</p>
+      <!-- Corporate Footer - Inside main content -->
+      <div class="footer">
+        <div class="footer-content">
+          {{#if invoice.notes}}
+          <div class="notes-section">
+            <h3>Notes & Terms</h3>
+            <p>{{invoice.notes}}</p>
+          </div>
+          {{/if}}
+          
+          <div class="payment-box">
+            <h4>Payment Due</h4>
+            <p>{{formatDate invoice.dueDate timezone=userData.timezone}}</p>
+          </div>
         </div>
       </div>
     </div>
