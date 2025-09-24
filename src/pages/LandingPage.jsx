@@ -199,7 +199,7 @@ const LandingPage = () => {
           boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)',
         }}
       >
-        <Container maxWidth="lg" style={{ marginTop: '50px'}}>
+        <Container maxWidth="lg" style={{ marginTop: '60px'}}>
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 

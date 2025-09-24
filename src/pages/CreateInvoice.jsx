@@ -343,7 +343,7 @@ const CreateInvoice = () => {
       
       // Use common utility to open PDF
       openPdfInNewTab(response.data?.pdf, {
-        filename: `invoice_${invoiceNumber}_preview.pdf`
+        filename: `invoice_${invoiceData.invoiceNumber}_preview.pdf`
       });
     } catch (error) {
       console.error('Error generating preview:', error);

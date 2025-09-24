@@ -119,15 +119,15 @@ class PdfService {
         html = html.replace('<body>', `<body>\n${compiledHeader}\n`);
       }
       
-      // PDF options
+      // PDF options - Optimized margins for single-page invoices
       const options = {
         format: 'A4',
         printBackground: true,
         margin: {
-          top: '20mm',
-          right: '20mm',
-          bottom: '20mm',
-          left: '20mm'
+          top: '12mm',
+          right: '12mm',
+          bottom: '12mm',
+          left: '12mm'
         }
       };
 
