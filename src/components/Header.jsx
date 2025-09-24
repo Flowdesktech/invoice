@@ -67,18 +67,19 @@ const Header = () => {
   ];
 
   return (
-    <AppBar
-      position="fixed"
-      sx={{
-        background: 'rgba(255, 255, 255, 0.95)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-        transition: 'transform 0.3s ease-in-out',
-        transform: visible ? 'translateY(0)' : 'translateY(-100%)',
-      }}
-      elevation={0}
-    >
+    <>
+      <AppBar
+        position="fixed"
+        sx={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+          transition: 'transform 0.3s ease-in-out',
+          transform: visible ? 'translateY(0)' : 'translateY(-100%)',
+        }}
+        elevation={0}
+      >
       <Container maxWidth="lg">
         <Toolbar sx={{ py: 1 }}>
           {/* Logo */}
@@ -382,6 +383,7 @@ const Header = () => {
         </Stack>
       </Box>
     </Drawer>
+    </>
   );
 };
 
