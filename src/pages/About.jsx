@@ -165,7 +165,7 @@ const About = () => {
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
+                fontSize: { xs: '1.875rem', sm: '2.5rem', md: '3.5rem', lg: '4rem' },
                 fontWeight: 700,
                 mb: 3,
                 lineHeight: 1.1,
@@ -191,7 +191,7 @@ const About = () => {
             <Typography
               variant="h5"
               sx={{
-                fontSize: { xs: '1.125rem', md: '1.25rem' },
+                fontSize: { xs: '0.938rem', sm: '1.125rem', md: '1.25rem' },
                 mb: 6,
                 color: '#475569',
                 fontWeight: 400,
@@ -240,7 +240,7 @@ const About = () => {
                 sx={{ 
                   fontWeight: 700,
                   mb: 3,
-                  fontSize: { xs: '2rem', md: '2.5rem' },
+                  fontSize: { xs: '1.5rem', sm: '1.875rem', md: '2.5rem' },
                   color: '#0f172a',
                   letterSpacing: '-0.03em',
                 }}
@@ -355,7 +355,7 @@ const About = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
                 fontWeight: 700,
                 mb: 3,
                 color: '#0f172a',
@@ -474,7 +474,7 @@ const About = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
                 fontWeight: 700,
                 mb: 3,
                 color: '#0f172a',
@@ -682,7 +682,7 @@ const About = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontSize: { xs: '1.875rem', sm: '2.25rem', md: '3.5rem' },
                 fontWeight: 700,
                 color: 'white',
                 mb: 3,
@@ -789,7 +789,7 @@ const About = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
                 fontWeight: 700,
                 mb: 6,
                 color: '#0f172a',

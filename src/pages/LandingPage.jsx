@@ -199,7 +199,7 @@ const LandingPage = () => {
           boxShadow: '0 4px 20px rgba(59, 130, 246, 0.3)',
         }}
       >
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" style={{ marginTop: '50px'}}>
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
@@ -220,11 +220,11 @@ const LandingPage = () => {
                 bgcolor: '#10b981',
                 animation: 'blink 1s infinite',
               }} />
-              <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: '0.5px' }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: '0.5px' }} color="white">
                 COMING SOON
               </Typography>
             </Box>
-            <Typography variant="h5" sx={{ fontWeight: 600, textAlign: 'center' }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, textAlign: 'center', fontSize: { xs: '1rem', sm: '1.25rem', md: '1.5rem' } }} color="white">
               FlowBoost: The future of earning while invoicing
             </Typography>
             <Button
@@ -252,25 +252,27 @@ const LandingPage = () => {
         <Box
           sx={{
             position: 'absolute',
-            top: -50,
-            right: -50,
-            width: 100,
-            height: 100,
+            top: { xs: -25, md: -50 },
+            right: { xs: -25, md: -50 },
+            width: { xs: 50, md: 100 },
+            height: { xs: 50, md: 100 },
             borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.1)',
             animation: 'float 4s ease-in-out infinite',
+            display: { xs: 'none', sm: 'block' },
           }}
         />
         <Box
           sx={{
             position: 'absolute',
-            bottom: -30,
-            left: -30,
-            width: 60,
-            height: 60,
+            bottom: { xs: -15, md: -30 },
+            left: { xs: -15, md: -30 },
+            width: { xs: 30, md: 60 },
+            height: { xs: 30, md: 60 },
             borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.15)',
             animation: 'float 4s ease-in-out infinite 2s',
+            display: { xs: 'none', sm: 'block' },
           }}
         />
       </Box>
@@ -292,13 +294,14 @@ const LandingPage = () => {
             position: 'absolute',
             top: 0,
             right: 0,
-            width: '60%',
+            width: { xs: '80%', md: '60%' },
             height: '100%',
-            opacity: 0.03,
+            opacity: { xs: 0.02, md: 0.03 },
             background: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%231e293b' stroke-width='1' opacity='0.3'%3E%3Cpath d='M0 0h100v100H0z'/%3E%3Cpath d='M0 50h100M50 0v100'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '100px 100px',
+            backgroundSize: { xs: '50px 50px', md: '100px 100px' },
             transform: 'skewY(-6deg)',
             transformOrigin: '100% 0',
+            display: { xs: 'none', sm: 'block' },
           }}
         />
         
@@ -330,14 +333,15 @@ const LandingPage = () => {
         <Box
           sx={{
             position: 'absolute',
-            top: '-20%',
-            left: '-10%',
-            width: '40%',
-            height: '140%',
+            top: { xs: '-10%', md: '-20%' },
+            left: { xs: '-5%', md: '-10%' },
+            width: { xs: '30%', md: '40%' },
+            height: { xs: '120%', md: '140%' },
             background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%)',
-            filter: 'blur(100px)',
+            filter: { xs: 'blur(50px)', md: 'blur(100px)' },
             transform: 'rotate(-15deg)',
             pointerEvents: 'none',
+            display: { xs: 'none', sm: 'block' },
           }}
         />
         
@@ -369,7 +373,7 @@ const LandingPage = () => {
                   <Typography
                     variant="h1"
                     sx={{
-                      fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
+                      fontSize: { xs: '1.875rem', sm: '2.5rem', md: '3.5rem', lg: '4rem' },
                       fontWeight: 700,
                       mb: 3,
                       lineHeight: 1.1,
@@ -395,7 +399,7 @@ const LandingPage = () => {
                   <Typography
                     variant="h5"
                     sx={{
-                      fontSize: { xs: '1.125rem', md: '1.25rem' },
+                      fontSize: { xs: '0.938rem', sm: '1.125rem', md: '1.25rem' },
                       mb: 4,
                       color: '#475569',
                       fontWeight: 400,
@@ -809,7 +813,7 @@ const LandingPage = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
                 fontWeight: 700,
                 mb: 3,
                 color: '#0f172a',
@@ -1233,7 +1237,7 @@ const LandingPage = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2rem', md: '3rem' },
+                fontSize: { xs: '1.5rem', sm: '1.875rem', md: '3rem' },
                 fontWeight: 700,
                 color: '#1e293b',
                 mb: 3,
@@ -1484,7 +1488,7 @@ const LandingPage = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                fontSize: { xs: '1.875rem', sm: '2.25rem', md: '3.5rem' },
                 fontWeight: 700,
                 color: 'white',
                 mb: 3,
@@ -1603,7 +1607,7 @@ const LandingPage = () => {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: '2.25rem', md: '3rem' },
+                fontSize: { xs: '1.75rem', sm: '2rem', md: '3rem' },
                 fontWeight: 700,
                 mb: 3,
                 color: '#0f172a',

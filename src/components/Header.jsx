@@ -10,9 +10,20 @@ import {
   useScrollTrigger,
   Slide,
   Stack,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Divider,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -30,6 +41,9 @@ const Header = () => {
   const { currentUser } = useAuth();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -137,8 +151,8 @@ const Header = () => {
             ))}
           </Stack>
 
-          {/* CTA Buttons */}
-          <Stack direction="row" spacing={2}>
+          {/* CTA Buttons - Hide on mobile */}
+          <Stack direction="row" spacing={2} sx={{ display: { xs: 'none', md: 'flex' } }}>
             {currentUser ? (
               // Show Dashboard button for signed-in users
               <Button
@@ -209,9 +223,165 @@ const Header = () => {
               </>
             )}
           </Stack>
+
+          {/* Mobile Menu Button */}
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setMobileMenuOpen(true)}
+            sx={{ 
+              display: { xs: 'flex', md: 'none' },
+              color: '#64748b',
+              ml: 1,
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
         </Toolbar>
       </Container>
     </AppBar>
+
+    {/* Mobile Drawer */}
+    <Drawer
+      anchor="right"
+      open={mobileMenuOpen}
+      onClose={() => setMobileMenuOpen(false)}
+      sx={{
+        display: { xs: 'block', md: 'none' },
+        '& .MuiDrawer-paper': {
+          width: 280,
+          boxSizing: 'border-box',
+          bgcolor: '#ffffff',
+        },
+      }}
+    >
+      <Box sx={{ p: 2 }}>
+        {/* Drawer Header */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, color: '#0f172a' }}>
+            Menu
+          </Typography>
+          <IconButton onClick={() => setMobileMenuOpen(false)} sx={{ color: '#64748b' }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        {/* Navigation Links */}
+        <List sx={{ mb: 3 }}>
+          {navItems.map((item) => (
+            <ListItem key={item.path} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton
+                onClick={() => {
+                  navigate(item.path);
+                  setMobileMenuOpen(false);
+                }}
+                selected={location.pathname === item.path}
+                sx={{
+                  borderRadius: '8px',
+                  '&.Mui-selected': {
+                    bgcolor: 'rgba(59, 130, 246, 0.08)',
+                    color: '#3b82f6',
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.12)',
+                    },
+                  },
+                  '&:hover': {
+                    bgcolor: 'rgba(59, 130, 246, 0.04)',
+                  },
+                }}
+              >
+                <ListItemText 
+                  primary={item.label} 
+                  primaryTypographyProps={{
+                    fontWeight: location.pathname === item.path ? 600 : 500,
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+
+        <Divider sx={{ mb: 3 }} />
+
+        {/* CTA Buttons */}
+        <Stack spacing={2}>
+          {currentUser ? (
+            <Button
+              variant="contained"
+              fullWidth
+              startIcon={<DashboardIcon />}
+              onClick={() => {
+                navigate('/dashboard');
+                setMobileMenuOpen(false);
+              }}
+              sx={{
+                background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                color: 'white',
+                fontWeight: 600,
+                textTransform: 'none',
+                py: 1.5,
+                borderRadius: '8px',
+                boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                },
+              }}
+            >
+              Dashboard
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => {
+                  navigate('/login');
+                  setMobileMenuOpen(false);
+                }}
+                sx={{
+                  borderColor: '#e5e7eb',
+                  color: '#64748b',
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  py: 1.5,
+                  borderRadius: '8px',
+                  '&:hover': {
+                    borderColor: '#3b82f6',
+                    bgcolor: 'rgba(59, 130, 246, 0.04)',
+                    color: '#3b82f6',
+                  },
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={() => {
+                  navigate('/register');
+                  setMobileMenuOpen(false);
+                }}
+                sx={{
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                  color: 'white',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  py: 1.5,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                  },
+                }}
+              >
+                Get Started Free
+              </Button>
+            </>
+          )}
+        </Stack>
+      </Box>
+    </Drawer>
   );
 };
 
