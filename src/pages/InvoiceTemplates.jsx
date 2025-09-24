@@ -585,8 +585,6 @@ const InvoiceTemplates = () => {
       {/* Full Preview Modal */}
       {renderFullPreview()}
 
-      {/* Footer */}
-      <Footer />
     </>
   );
 };
