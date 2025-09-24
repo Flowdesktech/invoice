@@ -254,12 +254,17 @@ const Customers = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h4" gutterBottom>
-            Customers
-          </Typography>
+    <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Customers - FlowDesk Invoice Management</title>
+      <meta name="description" content="Manage your customers efficiently. Add, edit, and track customer information, contact details, and billing addresses all in one place." />
+      
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h4" gutterBottom>
+              Customers
+            </Typography>
           <Box display="flex" alignItems="center" gap={2}>
             <Search>
               <SearchIconWrapper>
@@ -490,6 +495,7 @@ const Customers = () => {
         </form>
       </Dialog>
     </Container>
+    </>
   );
 };
 

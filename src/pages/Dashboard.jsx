@@ -118,15 +118,20 @@ const Dashboard = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Dashboard
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Welcome back! Here's an overview of your business.
-        </Typography>
-      </Box>
+    <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Dashboard - FlowDesk Invoice Management</title>
+      <meta name="description" content="View your invoice dashboard with real-time stats, recent invoices, and business insights. Manage customers, track revenue, and monitor pending payments." />
+      
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" gutterBottom>
+            Dashboard
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Welcome back! Here's an overview of your business.
+          </Typography>
+        </Box>
 
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -262,6 +267,7 @@ const Dashboard = () => {
         )}
       </Paper>
     </Container>
+    </>
   );
 };
 

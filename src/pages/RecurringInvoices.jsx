@@ -198,12 +198,17 @@ const RecurringInvoices = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4">
-            Recurring Invoices
-          </Typography>
+    <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Recurring Invoices - FlowDesk Invoice Management</title>
+      <meta name="description" content="Manage recurring invoices with automated scheduling. Set up weekly, monthly, or custom billing cycles. Track and control recurring revenue streams." />
+      
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <Typography variant="h4">
+              Recurring Invoices
+            </Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -369,6 +374,7 @@ const RecurringInvoices = () => {
         />
       )}
     </Container>
+    </>
   );
 };
 

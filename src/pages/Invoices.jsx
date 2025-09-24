@@ -501,12 +501,17 @@ const Invoices = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mb: 4 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
-          <Typography variant="h4">
-            Invoices
-          </Typography>
+    <>
+      {/* React 19 SEO Meta Tags */}
+      <title>Invoices - FlowDesk Invoice Management</title>
+      <meta name="description" content="View and manage all your invoices. Create, send, track payment status, and download PDF invoices. Filter by status and search across all invoices." />
+      
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
+            <Typography variant="h4">
+              Invoices
+            </Typography>
           <Box display="flex" alignItems="center" gap={2} flexWrap="wrap">
             <Search>
               <SearchIconWrapper>
@@ -823,6 +828,7 @@ const Invoices = () => {
         )}
       </Paper>
     </Container>
+    </>
   );
 };
 
