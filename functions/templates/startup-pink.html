@@ -32,10 +32,10 @@
     /* Dynamic startup header */
     .startup-header {
       background: linear-gradient(45deg, #db2777 0%, #ec4899 50%, #f9a8d4 100%);
-      padding: 50px;
+      padding: 25px 30px;
       position: relative;
       clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-      margin-bottom: 25px;
+      margin-bottom: 15px;
     }
     
     /* Animated shapes */
@@ -95,34 +95,27 @@
     }
     
     .company-name {
-      font-size: 26pt;
+      font-size: 18pt;
       font-weight: 700;
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
     }
     
     .tagline {
       font-size: 9pt;
       opacity: 0.9;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     
-    .invoice-bubble {
+    .invoice-badge {
       position: absolute;
-      top: 50px;
-      right: 50px;
+      top: 30px;
+      right: 30px;
       background: white;
       color: #db2777;
-      padding: 15px;
-      border-radius: 50%;
+      padding: 15px 30px;
+      border-radius: 12px;
       text-align: center;
-      width: 150px;
-      height: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 30px rgba(219, 39, 119, 0.3);
-      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 5px 20px rgba(219, 39, 119, 0.2);
     }
     
     @keyframes float {
@@ -130,30 +123,32 @@
       50% { transform: translateY(-10px); }
     }
     
-    .invoice-bubble h2 {
-      font-size: 9pt;
-      margin-bottom: 5px;
+    .invoice-badge h2 {
+      font-size: 8pt;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     
-    .invoice-bubble .number {
+    .invoice-badge .number {
       font-size: 14pt;
       font-weight: 700;
     }
     
     /* Dynamic content */
     .content {
-      padding: 0 50px 50px;
-      margin-top: -30px;
+      padding: 0 25px 25px;
+      margin-top: -20px;
     }
     
     /* Customer card with gradient border */
     .customer-card {
       background: white;
-      border-radius: 20px;
-      padding: 15px;
+      border-radius: 15px;
+      padding: 20px;
       margin-bottom: 15px;
       position: relative;
-      box-shadow: 0 5px 20px rgba(219, 39, 119, 0.1);
+      box-shadow: 0 3px 15px rgba(219, 39, 119, 0.1);
     }
     
     .customer-card::before {
@@ -249,10 +244,10 @@
     .table-header {
       background: linear-gradient(45deg, #db2777, #ec4899);
       color: white;
-      padding: 20px;
+      padding: 10px 15px;
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 20px;
+      gap: 15px;
       font-size: 9pt;
       font-weight: 600;
       text-transform: uppercase;
@@ -260,17 +255,17 @@
     }
     
     .table-row {
-      padding: 20px;
+      padding: 10px 15px;
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 20px;
+      gap: 15px;
       border-bottom: 1px solid #fce7f3;
       transition: all 0.3s ease;
     }
     
     .table-row:hover {
       background: #fdf2f8;
-      padding-left: 30px;
+      padding-left: 20px;
     }
     
     .table-row:last-child {
@@ -331,8 +326,8 @@
     /* Social footer */
     .social-footer {
       background: #fdf2f8;
-      padding: 50px;
-      border-radius: 30px 30px 0 0;
+      padding: 25px;
+      border-radius: 20px 20px 0 0;
       position: relative;
     }
     
@@ -368,22 +363,6 @@
       margin-bottom: 20px;
     }
 
-    .social-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(45deg, #db2777, #ec4899);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 14pt;
-      transition: all 0.3s ease;
-    }
-    
-    .social-icon:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
     
   </style>
 </head>
@@ -409,7 +388,7 @@
         </div>
       </div>
       
-      <div class="invoice-bubble">
+      <div class="invoice-badge">
         <h2>INVOICE</h2>
         <div class="number">#{{invoice.invoiceNumber}}</div>
       </div>
@@ -504,12 +483,8 @@
         </div>
         
         <div class="social-box">
-          <h4>
-          
-            <div class="social-icon">💬</div>
-            <div class="social-icon">🌐</div>
-          </div>
-          <p style="margin-top: 15px; color: #be185d; font-size: 9pt;">Thank you for your business! 🎉</p>
+          <h4>Thank You!</h4>
+          <p style="color: #be185d; font-size: 9pt;">We appreciate your business! 🎉</p>
         </div>
       </div>
     </div>
