@@ -11,19 +11,16 @@ Disallow: /private/
 # Specific rules for major search engines
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
 
 User-agent: Bingbot
 Allow: /
-Crawl-delay: 0
+Crawl-delay: 1
 
 User-agent: Slurp
 Allow: /
-Crawl-delay: 0
 
 User-agent: DuckDuckBot
 Allow: /
-Crawl-delay: 0
 
 # Block bad bots
 User-agent: AhrefsBot
