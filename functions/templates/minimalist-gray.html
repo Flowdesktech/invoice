@@ -19,15 +19,15 @@
     
     .invoice-container {
       max-width: 750px;
-      margin: 40px auto;
-      padding: 80px 70px;
+      margin: 20px auto;
+      padding: 40px;
       background: #ffffff;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
     }
     
     /* Ultra-minimal header */
     .header {
-      margin-bottom: 70px;
+      margin-bottom: 30px;
     }
     
     .header-top {
@@ -40,9 +40,9 @@
     }
     
     .invoice-title {
-      font-size: 42pt;
+      font-size: 28pt;
       font-weight: 100;
-      letter-spacing: -3px;
+      letter-spacing: -2px;
       color: #2d3748;
       line-height: 1;
     }
@@ -58,24 +58,24 @@
     .divider {
       height: 1px;
       background: #e5e7eb;
-      margin: 30px 0;
+      margin: 20px 0;
     }
     
     /* Minimal addresses layout */
     .addresses {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      margin-bottom: 25px;
+      gap: 40px;
+      margin-bottom: 20px;
     }
     
     .address-block h3 {
-      font-size: 9pt;
+      font-size: 8pt;
       font-weight: 400;
       color: #a0aec0;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
     }
     
     .address-block div {
@@ -92,9 +92,9 @@
     /* Minimal date display */
     .date-info {
       display: flex;
-      gap: 50px;
-      margin-bottom: 25px;
-      font-size: 9pt;
+      gap: 30px;
+      margin-bottom: 20px;
+      font-size: 8pt;
       color: #718096;
     }
     
@@ -120,19 +120,22 @@
     }
     
     .items-table th {
-      padding: 15px 0;
-      text-align: left;
-      font-size: 9pt;
+      padding: 10px 12px;
+      font-size: 8pt;
       font-weight: 400;
       color: #a0aec0;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       border-bottom: 1px solid #e2e8f0;
     }
     
+    .items-table th:first-child {
+      text-align: left;
+    }
+    
     .items-table td {
-      padding: 25px 0;
-      font-size: 9pt;
+      padding: 10px 12px;
+      font-size: 8pt;
       color: #4a5568;
       border-bottom: 1px solid #f7fafc;
     }
@@ -147,18 +150,18 @@
     }
     
     .text-right {
-      text-align: right;
+      text-align: right !important;
     }
     
     .text-center {
-      text-align: center;
+      text-align: center !important;
     }
     
     /* Minimal totals */
     .totals-section {
       display: flex;
       justify-content: flex-end;
-      margin-bottom: 80px;
+      margin-bottom: 40px;
     }
     
     .totals-box {
@@ -177,9 +180,9 @@
     .total-row:last-child {
       border-bottom: none;
       border-top: 1px solid #2d3748;
-      margin-top: 20px;
-      padding-top: 20px;
-      font-size: 13pt;
+      margin-top: 10px;
+      padding-top: 10px;
+      font-size: 11pt;
       font-weight: 400;
     }
     
@@ -201,23 +204,23 @@
     
     /* Minimal footer */
     .footer {
-      padding-top: 60px;
+      padding-top: 30px;
       border-top: 1px solid #e2e8f0;
     }
     
     .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 60px;
+      gap: 40px;
     }
     
     .notes-section h3 {
-      font-size: 9pt;
+      font-size: 8pt;
       font-weight: 400;
       color: #a0aec0;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
     }
     
     .notes-section p {
