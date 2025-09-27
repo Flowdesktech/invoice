@@ -24,6 +24,14 @@ import {
   TablePagination,
   InputBase,
   alpha,
+  useMediaQuery,
+  useTheme,
+  Card,
+  CardContent,
+  Stack,
+  Divider,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -35,6 +43,7 @@ import {
   Business as BusinessIcon,
   Person as PersonIcon,
   Home as HomeIcon,
+  MoreVert as MoreVertIcon,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
@@ -42,6 +51,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { customerAPI } from '../utils/api';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
+import CustomerCard from '../components/CustomerCard';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -93,7 +103,12 @@ const Customers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const { currentUser } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const {
     register,
@@ -245,6 +260,17 @@ const Customers = () => {
     setPage(0);
   };
 
+  // Mobile menu handlers
+  const handleMenuOpen = (event, customerId) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedCustomerId(customerId);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedCustomerId(null);
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
@@ -259,37 +285,53 @@ const Customers = () => {
       <title>Customers - FlowDesk Invoice Management</title>
       <meta name="description" content="Manage your customers efficiently. Add, edit, and track customer information, contact details, and billing addresses all in one place." />
       
-      <Container maxWidth="lg">
-        <Box sx={{ mb: 4 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h4" gutterBottom>
+      <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
+        <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
+          <Box 
+            display="flex" 
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            justifyContent={{ xs: 'flex-start', sm: 'space-between' }}
+            alignItems={{ xs: 'flex-start', sm: 'center' }}
+            gap={2}
+          >
+            <Typography variant="h4" sx={{ display: { xs: 'none', sm: 'block' } }}>
               Customers
             </Typography>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search customers..."
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </Search>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => handleOpenDialog()}
+            <Box 
+              display="flex" 
+              alignItems="center" 
+              gap={2}
+              sx={{ width: { xs: '100%', sm: 'auto' } }}
             >
-              Add Customer
-            </Button>
+              <Search sx={{ flexGrow: 1 }}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search customers..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  sx={{ width: '100%' }}
+                />
+              </Search>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => handleOpenDialog()}
+                sx={{ 
+                  minWidth: { xs: 'auto', sm: '150px' },
+                  px: { xs: 2, sm: 3 }
+                }}
+              >
+                {isMobile ? 'Add' : 'Add Customer'}
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
 
-      <Paper>
-        {filteredCustomers.length === 0 ? (
+      {filteredCustomers.length === 0 ? (
+        <Paper>
           <Box textAlign="center" py={8}>
             <Typography variant="h6" color="text.secondary" gutterBottom>
               {searchTerm ? 'No customers found matching your search' : 'No customers yet'}
@@ -305,24 +347,46 @@ const Customers = () => {
               </Button>
             )}
           </Box>
-        ) : (
-          <>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Phone</TableCell>
-                    <TableCell>Company</TableCell>
-                    <TableCell>City</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredCustomers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((customer) => (
+        </Paper>
+      ) : (
+        <>
+          {/* Mobile Card View */}
+          {isMobile ? (
+            <Stack spacing={1.5}>
+                {filteredCustomers
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((customer) => (
+                    <CustomerCard
+                      key={customer.id}
+                      customer={customer}
+                      onEdit={() => handleOpenDialog(customer)}
+                      onDelete={() => handleDeleteCustomer(customer.id)}
+                      anchorEl={anchorEl}
+                      onMenuOpen={handleMenuOpen}
+                      onMenuClose={handleMenuClose}
+                      selectedCustomerId={selectedCustomerId}
+                    />
+                  ))}
+              </Stack>
+            ) : (
+              /* Desktop Table View */
+              <Paper>
+                <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Phone</TableCell>
+                      <TableCell>Company</TableCell>
+                      <TableCell>City</TableCell>
+                      <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredCustomers
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((customer) => (
                       <TableRow key={customer.id}>
                         <TableCell>{customer.name}</TableCell>
                         <TableCell>{customer.email}</TableCell>
@@ -349,18 +413,41 @@ const Customers = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={filteredCustomers.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+              </Paper>
+            )}
+            
+            {/* Mobile-Friendly Pagination */}
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              mt: 2,
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 0 }
+            }}>
+              <TablePagination
+                rowsPerPageOptions={isMobile ? [5, 10] : [5, 10, 25]}
+                component="div"
+                count={filteredCustomers.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                sx={{
+                  '& .MuiTablePagination-selectLabel': {
+                    display: { xs: 'none', sm: 'block' }
+                  },
+                  '& .MuiTablePagination-displayedRows': {
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                  },
+                  '& .MuiTablePagination-select': {
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                  }
+                }}
+              />
+            </Box>
           </>
         )}
-      </Paper>
 
       {/* Customer Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>

@@ -24,6 +24,8 @@ import {
   Select,
   MenuItem,
   Autocomplete,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -56,6 +58,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const { userData, currentProfile, updateUserProfile, changePassword } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   
   // Re-initialize forms when currentProfile or userData changes
   useEffect(() => {
@@ -168,12 +173,12 @@ const Profile = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
+    <Container maxWidth="md" sx={{ px: { xs: 0, sm: 3 } }}>
+      <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
+        <Typography variant="h4" gutterBottom sx={{ display: { xs: 'none', sm: 'block' } }}>
           My Profile
         </Typography>
-        <Typography variant="body1" color="text.secondary" gutterBottom>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ display: { xs: 'none', sm: 'block' } }}>
           Manage your account settings and preferences
         </Typography>
         {currentProfile && (
@@ -194,12 +199,45 @@ const Profile = () => {
         )}
       </Box>
 
-      <Paper sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={activeTab} onChange={handleTabChange} aria-label="profile tabs">
-            <Tab label="Personal Information" icon={<PersonIcon />} iconPosition="start" />
-            <Tab label="Invoice Settings" icon={<SettingsIcon />} iconPosition="start" />
-            <Tab label="Security" icon={<LockIcon />} iconPosition="start" />
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
+          <Tabs 
+            value={activeTab} 
+            onChange={handleTabChange} 
+            aria-label="profile tabs"
+            variant={isMobile ? 'fullWidth' : 'standard'}
+            sx={{
+              '& .MuiTab-root': {
+                minHeight: { xs: 48, sm: 64 },
+                fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                padding: { xs: '6px 4px', sm: '12px 16px' },
+                minWidth: { xs: 0, sm: 160 },
+                '& .MuiTab-iconWrapper': {
+                  marginBottom: { xs: 0, sm: 4 },
+                  marginRight: { xs: 2, sm: 0 },
+                  fontSize: { xs: '1rem', sm: '1.5rem' }
+                }
+              },
+              '& .MuiTabs-flexContainer': {
+                justifyContent: { xs: 'space-between', sm: 'flex-start' }
+              }
+            }}
+          >
+            <Tab 
+              label={isMobile ? 'Personal' : 'Personal Information'} 
+              icon={<PersonIcon />} 
+              iconPosition={isMobile ? 'start' : 'top'} 
+            />
+            <Tab 
+              label={isMobile ? 'Invoice' : 'Invoice Settings'} 
+              icon={<SettingsIcon />} 
+              iconPosition={isMobile ? 'start' : 'top'} 
+            />
+            <Tab 
+              label="Security" 
+              icon={<LockIcon />} 
+              iconPosition={isMobile ? 'start' : 'top'} 
+            />
           </Tabs>
         </Box>
 

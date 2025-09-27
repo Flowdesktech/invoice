@@ -26,6 +26,15 @@ import {
   Tooltip,
   Skeleton,
   Avatar,
+  useMediaQuery,
+  useTheme,
+  Card,
+  CardContent,
+  Stack,
+  Divider,
+  Menu,
+  FormControlLabel,
+  Grid,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -38,6 +47,7 @@ import {
   FileCopy as FileCopyIcon,
   Schedule as ScheduleIcon,
   Send as SendIcon,
+  MoreVert as MoreVertIcon,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -47,6 +57,7 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { formatInvoiceNumber } from '../utils/formatters';
+import InvoiceCard from '../components/InvoiceCard';
 import { templates } from './InvoiceTemplates';
 import {downloadPdf} from "../utils/pdfUtils.js";
 
@@ -100,8 +111,13 @@ const Invoices = () => {
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState(null);
   const { currentUser, userData } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     fetchInvoices();
@@ -276,6 +292,17 @@ const Invoices = () => {
     }).format(amount || 0);
   };
 
+  // Mobile menu handlers
+  const handleMenuOpen = (event, invoiceId) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedInvoiceId(invoiceId);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedInvoiceId(null);
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'paid':
@@ -442,58 +469,9 @@ const Invoices = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper sx={{ p: 2, mb: 2 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Skeleton variant="text" width={200} height={40} />
-            <Box display="flex" gap={2}>
-              <Skeleton variant="rectangular" width={100} height={40} />
-              <Skeleton variant="rectangular" width={120} height={40} />
-            </Box>
-          </Box>
-        </Paper>
-        <Paper>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                    <Skeleton variant="rectangular" width={20} height={20} />
-                  </TableCell>
-                  {['Invoice #', 'Customer', 'Template', 'Date', 'Due Date', 'Amount', 'Status', 'Actions'].map((header) => (
-                    <TableCell key={header}>
-                      <Skeleton variant="text" width={header === 'Actions' ? 150 : 80} />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {[...Array(5)].map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell padding="checkbox">
-                      <Skeleton variant="rectangular" width={20} height={20} />
-                    </TableCell>
-                    <TableCell><Skeleton variant="text" width={100} /></TableCell>
-                    <TableCell><Skeleton variant="text" width={120} /></TableCell>
-                    <TableCell><Skeleton variant="rectangular" width={80} height={24} /></TableCell>
-                    <TableCell><Skeleton variant="text" width={80} /></TableCell>
-                    <TableCell><Skeleton variant="text" width={80} /></TableCell>
-                    <TableCell><Skeleton variant="text" width={60} /></TableCell>
-                    <TableCell><Skeleton variant="rectangular" width={80} height={30} /></TableCell>
-                    <TableCell>
-                      <Box display="flex" gap={0.5}>
-                        {[...Array(5)].map((_, i) => (
-                          <Skeleton key={i} variant="circular" width={30} height={30} />
-                        ))}
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      </Container>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
     );
   }
 
@@ -503,51 +481,69 @@ const Invoices = () => {
       <title>Invoices - FlowDesk Invoice Management</title>
       <meta name="description" content="View and manage all your invoices. Create, send, track payment status, and download PDF invoices. Filter by status and search across all invoices." />
       
-      <Container maxWidth="lg">
-        <Box sx={{ mb: 4 }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
-            <Typography variant="h4">
+      <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
+        <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
+          <Box 
+            display="flex" 
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            justifyContent={{ xs: 'flex-start', sm: 'space-between' }}
+            alignItems={{ xs: 'flex-start', sm: 'center' }}
+            gap={2}
+          >
+            <Typography variant="h4" sx={{ display: { xs: 'none', sm: 'block' } }}>
               Invoices
             </Typography>
-          <Box display="flex" alignItems="center" gap={2} flexWrap="wrap">
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search invoices..."
-                inputProps={{ 'aria-label': 'search' }}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </Search>
-            <FormControl size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={statusFilter}
-                label="Status"
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="draft">Draft</MenuItem>
-                <MenuItem value="pending">Pending</MenuItem>
-                <MenuItem value="paid">Paid</MenuItem>
-                <MenuItem value="overdue">Overdue</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => navigate('/invoices/create')}
+            <Box 
+              display="flex" 
+              alignItems="center" 
+              gap={2} 
+              flexWrap="wrap"
+              sx={{ width: { xs: '100%', sm: 'auto' } }}
             >
-              New Invoice
-            </Button>
+              <Search sx={{ flexGrow: { xs: 1, sm: 0 } }}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search invoices..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  sx={{ width: { xs: '100%', sm: 'auto' } }}
+                />
+              </Search>
+              <FormControl size="small" sx={{ minWidth: { xs: 100, sm: 120 } }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={statusFilter}
+                  label="Status"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  <MenuItem value="draft">Draft</MenuItem>
+                  <MenuItem value="pending">Pending</MenuItem>
+                  <MenuItem value="paid">Paid</MenuItem>
+                  <MenuItem value="overdue">Overdue</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => navigate('/invoices/create')}
+                sx={{ 
+                  minWidth: { xs: 'auto', sm: '140px' },
+                  px: { xs: 2, sm: 3 }
+                }}
+              >
+                {isMobile ? 'New' : 'New Invoice'}
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
 
-      <Paper>
-        {filteredInvoices.length === 0 ? (
+      {filteredInvoices.length === 0 ? (
+        <Paper>
+          
           <Box textAlign="center" py={8}>
             <Typography variant="h6" color="text.secondary" gutterBottom>
               {searchTerm || statusFilter !== 'all' 
@@ -565,9 +561,11 @@ const Invoices = () => {
               </Button>
             )}
           </Box>
-        ) : (
-          <>
-            {selectedInvoices.length > 0 && (
+        </Paper>
+      ) : (
+        <>
+          {selectedInvoices.length > 0 && (
+            <Paper sx={{ mb: 2 }}>
               <Toolbar
                 sx={{
                   pl: { sm: 2 },
@@ -622,33 +620,83 @@ const Invoices = () => {
                   </IconButton>
                 </Tooltip>
               </Toolbar>
-            )}
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        indeterminate={selectedInvoices.length > 0 && selectedInvoices.length < filteredInvoices.length}
-                        checked={filteredInvoices.length > 0 && selectedInvoices.length === filteredInvoices.length}
-                        onChange={handleSelectAllClick}
-                      />
-                    </TableCell>
-                    <TableCell>Invoice #</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell>Template</TableCell>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Due Date</TableCell>
-                    <TableCell>Amount</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
+            </Paper>
+          )}
+          {/* Mobile Card View */}
+          {isMobile ? (
+            <>
+              {selectedInvoices.length > 0 && (
+                <Box sx={{ p: 2, mb: 1, bgcolor: 'background.paper', borderRadius: 1 }}>
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Typography variant="body2" color="text.secondary">
+                      {selectedInvoices.length} selected
+                    </Typography>
+                    <Box>
+                      <IconButton size="small" onClick={handleBulkDuplicate}>
+                        <FileCopyIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small" onClick={handleBulkDelete} color="error">
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
+              <Stack spacing={1.5}>
                   {filteredInvoices
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((invoice) => (
+                      <InvoiceCard
+                        key={invoice.id}
+                        invoice={invoice}
+                        isSelected={isSelected(invoice.id)}
+                        onCheckboxChange={(event) => handleClick(event, invoice.id)}
+                        onView={() => navigate(`/invoices/${invoice.id}`)}
+                        onSend={() => navigate(`/invoices/${invoice.id}?send=true`)}
+                        onDuplicate={() => handleDuplicateInvoice(invoice)}
+                        onDownload={() => handleDownloadInvoice(invoice)}
+                        onEdit={() => navigate(`/invoices/${invoice.id}/edit`)}
+                        onDelete={() => handleDeleteInvoice(invoice.id)}
+                        showCheckbox={true}
+                        userData={userData}
+                        getStatusColor={getStatusColor}
+                        anchorEl={anchorEl}
+                        onMenuOpen={handleMenuOpen}
+                        onMenuClose={handleMenuClose}
+                        selectedInvoiceId={selectedInvoiceId}
+                      />
+                    ))}
+                </Stack>
+              </>
+            ) : (
+              /* Desktop Table View */
+              <Paper>
+                <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          indeterminate={selectedInvoices.length > 0 && selectedInvoices.length < filteredInvoices.length}
+                          checked={filteredInvoices.length > 0 && selectedInvoices.length === filteredInvoices.length}
+                          onChange={handleSelectAllClick}
+                        />
+                      </TableCell>
+                      <TableCell>Invoice #</TableCell>
+                      <TableCell>Customer</TableCell>
+                      <TableCell>Template</TableCell>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Due Date</TableCell>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredInvoices
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((invoice) => (
                       <TableRow 
                         key={invoice.id}
                         hover
@@ -812,18 +860,41 @@ const Invoices = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={filteredInvoices.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+              </Paper>
+            )}
+            
+            {/* Mobile-Friendly Pagination */}
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              mt: 2,
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 0 }
+            }}>
+              <TablePagination
+                rowsPerPageOptions={isMobile ? [5, 10] : [5, 10, 25]}
+                component="div"
+                count={filteredInvoices.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                sx={{
+                  '& .MuiTablePagination-selectLabel': {
+                    display: { xs: 'none', sm: 'block' }
+                  },
+                  '& .MuiTablePagination-displayedRows': {
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                  },
+                  '& .MuiTablePagination-select': {
+                    fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                  }
+                }}
+              />
+            </Box>
           </>
         )}
-      </Paper>
     </Container>
     </>
   );

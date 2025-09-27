@@ -16,6 +16,11 @@ import {
   Chip,
   IconButton,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
+  Stack,
+  Divider,
+  Button,
 } from '@mui/material';
 import {
   TrendingUp as TrendingUpIcon,
@@ -28,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { invoiceAPI, customerAPI } from '../utils/api';
 import { format } from 'date-fns';
+import InvoiceCard from '../components/InvoiceCard';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -40,6 +46,9 @@ const Dashboard = () => {
   const [recentInvoices, setRecentInvoices] = useState([]);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     fetchDashboardData();
@@ -123,9 +132,9 @@ const Dashboard = () => {
       <title>Dashboard - FlowDesk Invoice Management</title>
       <meta name="description" content="View your invoice dashboard with real-time stats, recent invoices, and business insights. Manage customers, track revenue, and monitor pending payments." />
       
-      <Container maxWidth="lg">
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" gutterBottom>
+      <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
+        <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
+          <Typography variant="h4" gutterBottom sx={{ display: { xs: 'none', sm: 'block' } }}>
             Dashboard
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -209,63 +218,86 @@ const Dashboard = () => {
       </Grid>
 
       {/* Recent Invoices */}
-      <Paper sx={{ p: 2 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h6">
-            Recent Invoices
-          </Typography>
-        </Box>
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2, px: { xs: 2, sm: 0 } }}>
+          Recent Invoices
+        </Typography>
         
         {recentInvoices.length === 0 ? (
-          <Box textAlign="center" py={4}>
-            <Typography color="text.secondary">
-              No invoices yet. Create your first invoice to get started!
-            </Typography>
-          </Box>
+          <Paper sx={{ p: 4 }}>
+            <Box textAlign="center">
+              <Typography color="text.secondary">
+                No invoices yet. Create your first invoice to get started!
+              </Typography>
+            </Box>
+          </Paper>
         ) : (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Invoice #</TableCell>
-                  <TableCell>Customer</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell align="right">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+          <>
+            {/* Mobile Card View */}
+            {isMobile ? (
+              <Stack spacing={1.5}>
                 {recentInvoices.map((invoice) => (
-                  <TableRow key={invoice.id}>
-                    <TableCell>{invoice.invoiceNumber}</TableCell>
-                    <TableCell>{invoice.customerName}</TableCell>
-                    <TableCell>
-                      {invoice.date ? format(new Date(invoice.date), 'MMM dd, yyyy') : '-'}
-                    </TableCell>
-                    <TableCell>{formatCurrency(invoice.total || 0)}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={invoice.status}
-                        color={getStatusColor(invoice.status)}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        size="small"
-                        onClick={() => navigate(`/invoices/${invoice.id}`)}
-                      >
-                        <ViewIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                  <InvoiceCard
+                    key={invoice.id}
+                    invoice={invoice}
+                    isSelected={false}
+                    onView={() => navigate(`/invoices/${invoice.id}`)}
+                    showCheckbox={false}
+                    getStatusColor={getStatusColor}
+                    anchorEl={null}
+                    onMenuOpen={() => {}}
+                    onMenuClose={() => {}}
+                    selectedInvoiceId={null}
+                  />
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              </Stack>
+            ) : (
+              /* Desktop Table View */
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Invoice #</TableCell>
+                      <TableCell>Customer</TableCell>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {recentInvoices.map((invoice) => (
+                      <TableRow key={invoice.id}>
+                        <TableCell>{invoice.invoiceNumber}</TableCell>
+                        <TableCell>{invoice.customerName}</TableCell>
+                        <TableCell>
+                          {invoice.date ? format(new Date(invoice.date), 'MMM dd, yyyy') : '-'}
+                        </TableCell>
+                        <TableCell>{formatCurrency(invoice.total || 0)}</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={invoice.status}
+                            color={getStatusColor(invoice.status)}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            size="small"
+                            onClick={() => navigate(`/invoices/${invoice.id}`)}
+                          >
+                            <ViewIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </>
         )}
-      </Paper>
+      </Box>
     </Container>
     </>
   );

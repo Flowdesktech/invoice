@@ -18,6 +18,9 @@ import {
   CircularProgress,
   Chip,
   IconButton,
+  useTheme,
+  useMediaQuery,
+  Stack,
 } from '@mui/material';
 import {
   Edit as EditIcon,
@@ -46,6 +49,9 @@ const ViewInvoice = () => {
   const [recurringDialogOpen, setRecurringDialogOpen] = useState(false);
   const [sendDialogOpen, setSendDialogOpen] = useState(false);
   const [customer, setCustomer] = useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     fetchInvoice();
@@ -201,53 +207,69 @@ const ViewInvoice = () => {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mb: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
-          <Box display="flex" alignItems="center" gap={2}>
-            <IconButton onClick={() => navigate('/invoices')}>
+    <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
+      <Box sx={{ mb: 3, px: { xs: 2, sm: 0 } }}>
+        <Box 
+          display="flex" 
+          flexDirection={{ xs: 'column', sm: 'row' }}
+          justifyContent={{ xs: 'flex-start', sm: 'space-between' }}
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          gap={2}
+        >
+          <Box display="flex" alignItems="center" gap={{ xs: 1, sm: 2 }} flexWrap="wrap">
+            <IconButton onClick={() => navigate('/invoices')} sx={{ mr: { xs: 0, sm: 1 } }}>
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h4">
-              Invoice #{formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
-            </Typography>
-            <Chip
-              label={invoice.status}
-              color={getStatusColor(invoice.status)}
-              size="medium"
-            />
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'flex-start', sm: 'center' }} gap={{ xs: 1, sm: 2 }}>
+              <Typography variant={isMobile ? 'h5' : 'h4'}>
+                Invoice #{formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
+              </Typography>
+              <Chip
+                label={invoice.status}
+                color={getStatusColor(invoice.status)}
+                size={isMobile ? 'small' : 'medium'}
+              />
+            </Box>
           </Box>
-          <Box display="flex" gap={2} flexWrap="wrap">
+          <Box display="flex" gap={{ xs: 1, sm: 2 }} flexWrap="wrap" justifyContent={{ xs: 'flex-start', sm: 'flex-end' }} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+            {!isMobile && (
+              <Button
+                variant="outlined"
+                startIcon={<ScheduleIcon />}
+                onClick={() => setRecurringDialogOpen(true)}
+                disabled={!!invoice.recurringInvoiceId}
+                title={invoice.recurringInvoiceId ? "This invoice was generated from a recurring template" : "Create recurring invoice from this template"}
+              >
+                Make Recurring
+              </Button>
+            )}
             <Button
               variant="outlined"
-              startIcon={<ScheduleIcon />}
-              onClick={() => setRecurringDialogOpen(true)}
-              disabled={!!invoice.recurringInvoiceId}
-              title={invoice.recurringInvoiceId ? "This invoice was generated from a recurring template" : "Create recurring invoice from this template"}
-            >
-              Make Recurring
-            </Button>
-            <Button
-              variant="outlined"
+              size={isMobile ? 'small' : 'medium'}
               startIcon={<PrintIcon />}
               onClick={handleDownloadPDF}
+              sx={{ minWidth: { xs: 'auto', sm: 120 } }}
             >
-              Download PDF
+              {isMobile ? 'PDF' : 'Download PDF'}
             </Button>
             <Button
               variant="outlined"
+              size={isMobile ? 'small' : 'medium'}
               startIcon={<EmailIcon />}
               onClick={() => setSendDialogOpen(true)}
               color="primary"
+              sx={{ minWidth: { xs: 'auto', sm: 120 } }}
             >
-              Send Invoice
+              {isMobile ? 'Send' : 'Send Invoice'}
             </Button>
             <Button
               variant="contained"
+              size={isMobile ? 'small' : 'medium'}
               startIcon={<EditIcon />}
               onClick={() => navigate(`/invoices/${id}/edit`)}
+              sx={{ minWidth: { xs: 'auto', sm: 120 } }}
             >
-              Edit Invoice
+              {isMobile ? 'Edit' : 'Edit Invoice'}
             </Button>
           </Box>
         </Box>
@@ -302,32 +324,63 @@ const ViewInvoice = () => {
           </Paper>
 
           {/* Line Items */}
-          <Paper sx={{ p: 3 }}>
+          <Paper sx={{ p: { xs: 2, sm: 3 } }}>
             <Typography variant="h6" gutterBottom>
               Line Items
             </Typography>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Description</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Rate</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {invoice.lineItems.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{item.description}</TableCell>
-                      <TableCell align="right">{item.quantity}</TableCell>
-                      <TableCell align="right">{formatCurrency(item.rate)}</TableCell>
-                      <TableCell align="right">{formatCurrency(item.amount)}</TableCell>
+            {isMobile ? (
+              // Mobile Card View
+              <Stack spacing={2}>
+                {invoice.lineItems.map((item, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      p: 2,
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      bgcolor: 'grey.50'
+                    }}
+                  >
+                    <Typography variant="body2" fontWeight="500" gutterBottom>
+                      {item.description}
+                    </Typography>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
+                      <Typography variant="caption" color="text.secondary">
+                        {item.quantity} × {formatCurrency(item.rate)}
+                      </Typography>
+                      <Typography variant="body1" fontWeight="600">
+                        {formatCurrency(item.amount)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            ) : (
+              // Desktop Table View
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Description</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell align="right">Rate</TableCell>
+                      <TableCell align="right">Amount</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {invoice.lineItems.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{item.description}</TableCell>
+                        <TableCell align="right">{item.quantity}</TableCell>
+                        <TableCell align="right">{formatCurrency(item.rate)}</TableCell>
+                        <TableCell align="right">{formatCurrency(item.amount)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
 
             {invoice.notes && (
               <Box mt={3}>

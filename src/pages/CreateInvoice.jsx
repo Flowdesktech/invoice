@@ -33,6 +33,7 @@ import {
   Autocomplete,
   FormControlLabel,
   Checkbox,
+  Stack,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -59,6 +60,8 @@ import { format, addDays, subDays, subWeeks, subMonths, subYears, getWeek, getQu
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { formatInvoiceNumber } from '../utils/formatters';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const CreateInvoice = () => {
   const { id } = useParams();
@@ -83,6 +86,9 @@ const CreateInvoice = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const { currentUser, userData, currentProfile } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const {
     control,
@@ -541,11 +547,11 @@ const CreateInvoice = () => {
   const { subtotal, taxAmount, total } = calculateTotals();
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ px: { xs: 0, sm: 3 } }}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ 
           mb: { xs: 3, sm: 4 },
-          px: { xs: 0, sm: 2, md: 3 }
+          px: { xs: 2, sm: 0 }
         }}>
           <Typography 
             variant="h4" 
@@ -554,7 +560,8 @@ const CreateInvoice = () => {
               fontWeight: 600, 
               color: 'text.primary',
               mb: 1,
-              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' }
+              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
+              display: { xs: 'none', sm: 'block' }
             }}
           >
             {isEditMode ? 'Edit Invoice' : 'Create Invoice'}
@@ -998,76 +1005,153 @@ const CreateInvoice = () => {
                 </Button>
               </Box>
               
-              <TableContainer sx={{ 
-                overflowX: 'auto',
-                '&::-webkit-scrollbar': {
-                  height: 8,
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: '#f1f1f1',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: '#888',
-                  borderRadius: 4,
-                },
-              }}>
-                <Table sx={{ minWidth: { xs: 600, sm: 700 } }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' } }}>Description</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 80, sm: 100 } }}>Qty</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 100, sm: 120 } }}>Rate</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 100, sm: 120 } }}>Amount</TableCell>
-                      <TableCell sx={{ width: 50 }}></TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {lineItems.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            value={item.description}
-                            onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
-                            placeholder="Item description"
-                          />
-                        </TableCell>
-                        <TableCell align="right">
+              {isMobile ? (
+                // Mobile Card View for Line Items
+                <Stack spacing={2} sx={{ mt: 2 }}>
+                  {lineItems.map((item, index) => (
+                    <Paper
+                      key={index}
+                      sx={{
+                        p: 2,
+                        borderRadius: 2,
+                        bgcolor: 'background.paper',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+                      }}
+                    >
+                      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
+                        <Typography variant="subtitle2" fontWeight="600">
+                          Item #{index + 1}
+                        </Typography>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleRemoveLineItem(index)}
+                          disabled={lineItems.length === 1}
+                          sx={{ mt: -1, mr: -1 }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                      
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label="Description"
+                        value={item.description}
+                        onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
+                        placeholder="Item description"
+                        sx={{ mb: 2 }}
+                      />
+                      
+                      <Grid container spacing={2}>
+                        <Grid size={4}>
                           <TextField
                             type="number"
                             size="small"
+                            label="Qty"
+                            fullWidth
                             value={item.quantity}
                             onChange={(e) => handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
                             inputProps={{ min: 0, step: 1 }}
                           />
-                        </TableCell>
-                        <TableCell align="right">
+                        </Grid>
+                        <Grid size={4}>
                           <TextField
                             type="number"
                             size="small"
+                            label="Rate"
+                            fullWidth
                             value={item.rate}
                             onChange={(e) => handleLineItemChange(index, 'rate', parseFloat(e.target.value) || 0)}
                             inputProps={{ min: 0, step: 0.01 }}
                           />
-                        </TableCell>
-                        <TableCell align="right">
-                          {formatCurrency(item.amount)}
-                        </TableCell>
-                        <TableCell>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleRemoveLineItem(index)}
-                            disabled={lineItems.length === 1}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
+                        </Grid>
+                        <Grid size={4}>
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Amount
+                            </Typography>
+                            <Typography variant="body1" fontWeight="600">
+                              {formatCurrency(item.amount)}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  ))}
+                </Stack>
+              ) : (
+                // Desktop Table View
+                <TableContainer sx={{ 
+                  overflowX: 'auto',
+                  '&::-webkit-scrollbar': {
+                    height: 8,
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#888',
+                    borderRadius: 4,
+                  },
+                }}>
+                  <Table sx={{ minWidth: { xs: 600, sm: 700 } }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' } }}>Description</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 80, sm: 100 } }}>Qty</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 100, sm: 120 } }}>Rate</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', sm: '1rem' }, width: { xs: 100, sm: 120 } }}>Amount</TableCell>
+                        <TableCell sx={{ width: 50 }}></TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {lineItems.map((item, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            <TextField
+                              fullWidth
+                              size="small"
+                              value={item.description}
+                              onChange={(e) => handleLineItemChange(index, 'description', e.target.value)}
+                              placeholder="Item description"
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={item.quantity}
+                              onChange={(e) => handleLineItemChange(index, 'quantity', parseFloat(e.target.value) || 0)}
+                              inputProps={{ min: 0, step: 1 }}
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            <TextField
+                              type="number"
+                              size="small"
+                              value={item.rate}
+                              onChange={(e) => handleLineItemChange(index, 'rate', parseFloat(e.target.value) || 0)}
+                              inputProps={{ min: 0, step: 0.01 }}
+                            />
+                          </TableCell>
+                          <TableCell align="right">
+                            {formatCurrency(item.amount)}
+                          </TableCell>
+                          <TableCell>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleRemoveLineItem(index)}
+                              disabled={lineItems.length === 1}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              )}
 
               <Box mt={4}>
                 <Divider sx={{ mb: 3 }} />
