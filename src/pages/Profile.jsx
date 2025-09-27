@@ -48,7 +48,7 @@ function TabPanel({ children, value, index, ...other }) {
       aria-labelledby={`profile-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ py: 0 }}>{children}</Box>}
     </div>
   );
 }
@@ -208,14 +208,14 @@ const Profile = () => {
             variant={isMobile ? 'fullWidth' : 'standard'}
             sx={{
               '& .MuiTab-root': {
-                minHeight: { xs: 48, sm: 64 },
+                minHeight: { xs: 48, sm: 48 },
                 fontSize: { xs: '0.7rem', sm: '0.875rem' },
-                padding: { xs: '6px 4px', sm: '12px 16px' },
-                minWidth: { xs: 0, sm: 160 },
+                padding: { xs: '6px 4px', sm: '6px 16px' },
+                minWidth: { xs: 0, sm: 140 },
                 '& .MuiTab-iconWrapper': {
-                  marginBottom: { xs: 0, sm: 4 },
-                  marginRight: { xs: 2, sm: 0 },
-                  fontSize: { xs: '1rem', sm: '1.5rem' }
+                  marginBottom: 0,
+                  marginRight: { xs: 2, sm: 8 },
+                  fontSize: { xs: '1rem', sm: '1.25rem' }
                 }
               },
               '& .MuiTabs-flexContainer': {
@@ -226,22 +226,22 @@ const Profile = () => {
             <Tab 
               label={isMobile ? 'Personal' : 'Personal Information'} 
               icon={<PersonIcon />} 
-              iconPosition={isMobile ? 'start' : 'top'} 
+              iconPosition="start" 
             />
             <Tab 
               label={isMobile ? 'Invoice' : 'Invoice Settings'} 
               icon={<SettingsIcon />} 
-              iconPosition={isMobile ? 'start' : 'top'} 
+              iconPosition="start" 
             />
             <Tab 
               label="Security" 
               icon={<LockIcon />} 
-              iconPosition={isMobile ? 'start' : 'top'} 
+              iconPosition="start" 
             />
           </Tabs>
         </Box>
 
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ px: 3, py: 2 }}>
           <TabPanel value={activeTab} index={0}>
             <form onSubmit={handleSubmitProfile(onSubmitProfile)}>
               <Grid container spacing={3}>
