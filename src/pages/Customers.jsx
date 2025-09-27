@@ -370,7 +370,7 @@ const Customers = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Name"
@@ -386,7 +386,7 @@ const Customers = () => {
                   {...register('name', { required: 'Name is required' })}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Email"
@@ -409,7 +409,7 @@ const Customers = () => {
                   })}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone"
@@ -423,7 +423,7 @@ const Customers = () => {
                   {...register('phone')}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Company"
@@ -437,12 +437,12 @@ const Customers = () => {
                   {...register('company')}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
                   Address
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   label="Street Address"
@@ -456,28 +456,28 @@ const Customers = () => {
                   {...register('address.street')}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="City"
                   {...register('address.city')}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="State/Province"
                   {...register('address.state')}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="ZIP/Postal Code"
                   {...register('address.zipCode')}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Country"

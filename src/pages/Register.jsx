@@ -112,7 +112,7 @@ const Register = () => {
           
           <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   label="Full Name *"
@@ -137,7 +137,7 @@ const Register = () => {
                 />
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   label="Email Address *"
@@ -162,7 +162,7 @@ const Register = () => {
                 />
               </Grid>
               
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Company Name"
@@ -178,7 +178,7 @@ const Register = () => {
                 />
               </Grid>
               
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -195,7 +195,7 @@ const Register = () => {
                 />
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   label="Password *"
@@ -231,7 +231,7 @@ const Register = () => {
                 />
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <TextField
                   fullWidth
                   label="Confirm Password *"

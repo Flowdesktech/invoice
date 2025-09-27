@@ -350,10 +350,10 @@
       <!-- Luxury Header -->
       <div class="header">
         <div class="company-crest">
-          {{#if userData.company}}{{userData.company.[0]}}{{else}}{{userData.displayName.[0]}}{{/if}}
+          {{senderDisplayNameInitial}}
         </div>
         <h1 class="company-name">
-          {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
+          {{senderDisplayName}}
         </h1>
         <p class="company-tagline">Excellence in Every Detail</p>
         <div class="company-details">

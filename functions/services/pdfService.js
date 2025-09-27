@@ -89,6 +89,26 @@ class PdfService {
         throw new Error(`Handlebars compilation failed: ${compileError.message}`);
       }
 
+      // Determine sender display name based on user preferences
+      const userSettings = profileData || userData;
+      const displayNameType = userSettings?.invoiceSettings?.displayNameType || 'business';
+      const customDisplayName = userSettings?.invoiceSettings?.invoiceDisplayName;
+      
+      let senderDisplayName;
+      if (displayNameType === 'business') {
+        senderDisplayName = userSettings?.company || userSettings?.displayName || '';
+      } else if (displayNameType === 'personal') {
+        senderDisplayName = userSettings?.displayName || '';
+      } else if (displayNameType === 'custom' && customDisplayName) {
+        senderDisplayName = customDisplayName;
+      } else {
+        // Fallback to company name or display name
+        senderDisplayName = userSettings?.company || userSettings?.displayName || '';
+      }
+
+      // Get the first letter for monogram/initial displays
+      const senderDisplayNameInitial = senderDisplayName ? senderDisplayName.charAt(0).toUpperCase() : '';
+
       // Prepare template data
       const templateData = {
         invoice: {
@@ -100,7 +120,9 @@ class PdfService {
         profileData,
         timezone,
         invoicePrefix,
-        currentDate: new Date().valueOf()
+        currentDate: new Date().valueOf(),
+        senderDisplayName, // Add the computed sender display name
+        senderDisplayNameInitial // Add the initial for monogram displays
       };
 
       // Generate HTML

@@ -307,7 +307,7 @@
 <!-- RUNNING_HEADER_START -->
 <div class="running-header">
   <div style="display: flex; justify-content: space-between; align-items: center;">
-    <div>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</div>
+    <div>{{senderDisplayName}}</div>
     <div>Invoice #{{invoice.invoiceNumber}} - {{formatDate invoice.date timezone=userData.timezone}}</div>
   </div>
 </div>

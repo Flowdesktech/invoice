@@ -254,11 +254,11 @@ const ViewInvoice = () => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid item size={{ xs: 12, md: 8 }}>
           {/* Invoice Details */}
           <Paper sx={{ p: 3, mb: 3 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Invoice Date
                 </Typography>
@@ -269,7 +269,7 @@ const ViewInvoice = () => {
                   }
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Due Date
                 </Typography>
@@ -280,7 +280,7 @@ const ViewInvoice = () => {
                   }
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Status
                 </Typography>
@@ -290,7 +290,7 @@ const ViewInvoice = () => {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item size={{ xs: 12, sm: 6 }}>
                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                   Payment Terms
                 </Typography>
@@ -342,7 +342,7 @@ const ViewInvoice = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item size={{ xs: 12, md: 4 }}>
           {/* Customer Info */}
           <Paper sx={{ p: 3, mb: 3 }}>
             <Typography variant="h6" gutterBottom>

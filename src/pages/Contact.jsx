@@ -175,7 +175,7 @@ const Contact = () => {
         <Container maxWidth="lg">
           <Grid container spacing={6}>
             {/* Contact Information */}
-            <Grid item xs={12} md={4}>
+            <Grid item size={{ xs: 12, md: 4 }}>
               <Fade in timeout={1000}>
                 <Box>
                   <Typography
@@ -302,7 +302,7 @@ const Contact = () => {
             </Grid>
             
             {/* Contact Form */}
-            <Grid item xs={12} md={8}>
+            <Grid item size={{ xs: 12, md: 8 }}>
               <Fade in timeout={1200}>
                 <Paper
                   elevation={0}

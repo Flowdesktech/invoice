@@ -346,7 +346,7 @@ const Features = () => {
           </Box>
           <Grid container spacing={4}>
             {coreFeatures.map((feature, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid item size={{ xs: 12, md: 6 }} key={index}>
                 <Grow in timeout={800 + index * 100}>
                   <Card
                     sx={{
@@ -487,7 +487,7 @@ const Features = () => {
           </Box>
           <Grid container spacing={3}>
             {advancedFeatures.map((feature, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                 <Fade in timeout={1000 + index * 50}>
                   <Box
                     sx={{

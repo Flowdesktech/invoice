@@ -86,6 +86,8 @@ const Profile = () => {
           paymentTerms: profileData.invoiceSettings?.paymentTerms || 'Due on receipt',
           dueDateDuration: profileData.invoiceSettings?.dueDateDuration || 7,
           autoIncrementNumber: profileData.invoiceSettings?.autoIncrementNumber !== false,
+          displayNameType: profileData.invoiceSettings?.displayNameType || 'business',
+          invoiceDisplayName: profileData.invoiceSettings?.invoiceDisplayName || '',
         },
       });
     }
@@ -103,6 +105,7 @@ const Profile = () => {
     handleSubmit: handleSubmitInvoice,
     control: controlInvoice,
     reset: resetInvoice,
+    watch: watchInvoice,
     formState: { errors: invoiceErrors },
   } = useForm();
 
@@ -204,7 +207,7 @@ const Profile = () => {
           <TabPanel value={activeTab} index={0}>
             <form onSubmit={handleSubmitProfile(onSubmitProfile)}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Full Name"
@@ -223,7 +226,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Company"
@@ -238,7 +241,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Email"
@@ -262,7 +265,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Phone"
@@ -277,13 +280,13 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Typography variant="h6" gutterBottom>
                     Address
                   </Typography>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <TextField
                     fullWidth
                     label="Street Address"
@@ -298,7 +301,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="City"
@@ -306,7 +309,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="State/Province"
@@ -314,7 +317,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="ZIP/Postal Code"
@@ -322,7 +325,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Country"
@@ -330,7 +333,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -347,7 +350,7 @@ const Profile = () => {
           <TabPanel value={activeTab} index={1}>
             <form onSubmit={handleSubmitInvoice(onSubmitInvoice)}>
               <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Invoice Prefix"
@@ -356,7 +359,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Next Invoice Number"
@@ -368,7 +371,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Default Tax Rate (%)"
@@ -380,7 +383,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <Controller
                     name="invoiceSettings.currency"
                     control={controlInvoice}
@@ -413,7 +416,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Default Due Date Duration (days)"
@@ -425,7 +428,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -437,7 +440,125 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12} style={{width: '300px'}}>
+                {/* Invoice Display Settings Section */}
+                <Grid item size={12}>
+                  <Box sx={{ mt: 4, mb: 3 }}>
+                    <Divider />
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        mt: 3, 
+                        mb: 1,
+                        fontWeight: 600,
+                        color: 'text.primary'
+                      }}
+                    >
+                      Invoice Display Name
+                    </Typography>
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary"
+                      sx={{ mb: 3 }}
+                    >
+                      Choose how your business name appears on invoices sent to customers
+                    </Typography>
+                  </Box>
+                </Grid>
+
+                <Grid item size={{ xs: 12, sm: 6 }}>
+                  <Controller
+                    name="invoiceSettings.displayNameType"
+                    control={controlInvoice}
+                    defaultValue={userData?.invoiceSettings?.displayNameType || 'business'}
+                    render={({ field }) => (
+                      <FormControl fullWidth>
+                        <InputLabel>Display As</InputLabel>
+                        <Select
+                          {...field}
+                          label="Display As"
+                        >
+                          <MenuItem value="business">Company/Business Name</MenuItem>
+                          <MenuItem value="personal">Personal Name</MenuItem>
+                          <MenuItem value="custom">Custom Display Name</MenuItem>
+                        </Select>
+                        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                          This name will appear at the top of your invoices
+                        </Typography>
+                      </FormControl>
+                    )}
+                  />
+                </Grid>
+
+                {/* Custom display name field - only show when custom is selected */}
+                {watchInvoice('invoiceSettings.displayNameType') === 'custom' && (
+                  <Grid item size={{ xs: 12, sm: 6 }}>
+                    <Controller
+                      name="invoiceSettings.invoiceDisplayName"
+                      control={controlInvoice}
+                      defaultValue={userData?.invoiceSettings?.invoiceDisplayName || ''}
+                      render={({ field, fieldState }) => (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label="Custom Display Name"
+                          placeholder="e.g., John Doe Consulting"
+                          error={!!fieldState.error}
+                          helperText="Enter the exact name to show on invoices"
+                          required
+                          autoFocus
+                        />
+                      )}
+                    />
+                  </Grid>
+                )}
+
+                {/* Preview section */}
+                <Grid item size={12}>
+                  <Paper 
+                    variant="outlined" 
+                    sx={{ 
+                      p: 2, 
+                      mt: 1,
+                      backgroundColor: 'grey.50',
+                      borderColor: 'grey.300',
+                      borderRadius: 2
+                    }}
+                  >
+                    <Box display="flex" alignItems="center" gap={2}>
+                      <BusinessIcon sx={{ color: 'primary.main', fontSize: 28 }} />
+                      <Box flex={1}>
+                        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
+                          Invoice Header Preview
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                          {(() => {
+                            const displayType = watchInvoice('invoiceSettings.displayNameType') || 'business';
+                            const customName = watchInvoice('invoiceSettings.invoiceDisplayName');
+                            const profileData = currentProfile || userData;
+                            
+                            if (displayType === 'business') {
+                              return profileData?.company || profileData?.displayName || 'Your Company Name';
+                            } else if (displayType === 'personal') {
+                              return profileData?.displayName || 'Your Name';
+                            } else if (displayType === 'custom' && customName) {
+                              return customName;
+                            }
+                            return 'Enter a custom display name';
+                          })()}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Paper>
+                </Grid>
+
+                {/* Additional spacing before timezone field */}
+                <Grid item size={12}>
+                  <Box sx={{ mt: 3, mb: 2 }}>
+                    <Divider />
+                  </Box>
+                </Grid>
+
+                <Grid item size={12}>
                   <Controller
                     name="invoiceSettings.timezone"
                     control={controlInvoice}
@@ -508,7 +629,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
                   <TextField
                     fullWidth
                     label="Payment Terms"
@@ -519,7 +640,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -536,13 +657,13 @@ const Profile = () => {
           <TabPanel value={activeTab} index={2}>
             <form onSubmit={handleSubmitPassword(onSubmitPassword)}>
               <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Alert severity="info" sx={{ mb: 2 }}>
                     For security reasons, you'll need to re-authenticate before changing your password.
                   </Alert>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <TextField
                     fullWidth
                     label="New Password"
@@ -566,7 +687,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <TextField
                     fullWidth
                     label="Confirm New Password"
@@ -588,7 +709,7 @@ const Profile = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item size={12}>
                   <Button
                     type="submit"
                     variant="contained"

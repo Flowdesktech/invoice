@@ -418,10 +418,10 @@
       <div class="header-content">
         <div class="company-badge">
           <div class="company-logo">
-            {{#if userData.company}}{{userData.company.[0]}}{{else}}{{userData.displayName.[0]}}{{/if}}
+            {{senderDisplayNameInitial}}
           </div>
           <div class="company-name">
-            {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}
+            {{senderDisplayName}}
           </div>
         </div>
         

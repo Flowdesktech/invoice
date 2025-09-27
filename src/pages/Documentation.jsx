@@ -185,7 +185,7 @@ const Documentation = () => {
                   The FlowDesk dashboard provides a comprehensive view of your business finances:
                 </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
+                  <Grid item size={{ xs: 12, md: 6 }}>
                     <Paper sx={{ p: 2, backgroundColor: '#f5f5f5' }}>
                       <Typography variant="subtitle1" fontWeight="bold">Key Metrics</Typography>
                       <List dense>
@@ -196,7 +196,7 @@ const Documentation = () => {
                       </List>
                     </Paper>
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item size={{ xs: 12, md: 6 }}>
                     <Paper sx={{ p: 2, backgroundColor: '#f5f5f5' }}>
                       <Typography variant="subtitle1" fontWeight="bold">Quick Actions</Typography>
                       <List dense>
@@ -270,7 +270,7 @@ const Documentation = () => {
             </Typography>
             
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{ xs: 12, md: 6 }}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>Invoice Features</Typography>
@@ -301,7 +301,7 @@ const Documentation = () => {
                 </Card>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item size={{ xs: 12, md: 6 }}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>Invoice States</Typography>
@@ -366,14 +366,14 @@ const Documentation = () => {
             </Alert>
 
             <Grid container spacing={3}>
-              <Grid item xs={12} lg={8}>
+              <Grid item size={{ xs: 12, lg: 8 }}>
                 <Paper sx={{ p: 3 }}>
                   <Typography variant="h6" gutterBottom>Customer Information</Typography>
                   <Typography paragraph>
                     Store comprehensive customer details:
                   </Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item size={{ xs: 12, md: 6 }}>
                       <List dense>
                         <ListItem>• Company/Personal Name</ListItem>
                         <ListItem>• Email & Phone</ListItem>
@@ -382,7 +382,7 @@ const Documentation = () => {
                         <ListItem>• Tax ID/VAT Number</ListItem>
                       </List>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item size={{ xs: 12, md: 6 }}>
                       <List dense>
                         <ListItem>• Payment Terms</ListItem>
                         <ListItem>• Preferred Currency</ListItem>
@@ -395,7 +395,7 @@ const Documentation = () => {
                 </Paper>
               </Grid>
 
-              <Grid item xs={12} lg={4}>
+              <Grid item size={{ xs: 12, lg: 4 }}>
                 <Paper sx={{ p: 3 }}>
                   <Typography variant="h6" gutterBottom>Import Options</Typography>
                   <List>
@@ -430,7 +430,7 @@ const Documentation = () => {
             </Alert>
 
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item size={{ xs: 12, md: 6 }}>
                 <Card sx={{ height: '100%' }}>
                   <CardContent>
                     <Box display="flex" alignItems="center" mb={2}>
@@ -461,7 +461,7 @@ const Documentation = () => {
                 </Card>
               </Grid>
 
-              <Grid item xs={12} md={6}>
+              <Grid item size={{ xs: 12, md: 6 }}>
                 <Card sx={{ height: '100%' }}>
                   <CardContent>
                     <Box display="flex" alignItems="center" mb={2}>
@@ -492,19 +492,19 @@ const Documentation = () => {
                 </Card>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Paper sx={{ p: 3, backgroundColor: '#f5f5f5' }}>
                   <Typography variant="h6" gutterBottom>Coming Soon: FlowBoost Analytics</Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
+                    <Grid item size={{ xs: 12, md: 4 }}>
                       <Typography variant="subtitle2" color="primary">Cash Flow Predictions</Typography>
                       <Typography variant="body2">AI-powered forecasting for better financial planning</Typography>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item size={{ xs: 12, md: 4 }}>
                       <Typography variant="subtitle2" color="primary">Customer Insights</Typography>
                       <Typography variant="body2">Payment behavior analysis and risk assessment</Typography>
                     </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item size={{ xs: 12, md: 4 }}>
                       <Typography variant="subtitle2" color="primary">Revenue Optimization</Typography>
                       <Typography variant="body2">Identify growth opportunities and pricing strategies</Typography>
                     </Grid>
@@ -602,7 +602,7 @@ const Documentation = () => {
             </Typography>
             
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Paper sx={{ p: 3 }}>
                   <Typography variant="h6" gutterBottom>Available Templates</Typography>
                   <Typography paragraph>
@@ -617,7 +617,7 @@ const Documentation = () => {
                       { name: 'Tech Gradient', desc: 'Modern tech companies', icon: <PaletteIcon /> },
                       { name: 'Startup Pink', desc: 'Fresh and innovative', icon: <PaletteIcon /> },
                     ].map((template) => (
-                      <Grid item xs={12} sm={6} md={4} key={template.name}>
+                      <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={template.name}>
                         <Card variant="outlined">
                           <CardContent>
                             <Box display="flex" alignItems="center" mb={1}>
@@ -637,7 +637,7 @@ const Documentation = () => {
                 </Paper>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item size={12}>
                 <Paper sx={{ p: 3 }}>
                   <Typography variant="h6" gutterBottom>Customization Options</Typography>
                   <List>

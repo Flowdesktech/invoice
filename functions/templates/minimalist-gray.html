@@ -261,7 +261,7 @@
       <div class="address-block">
         <h3>From</h3>
         <div>
-          <strong>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</strong><br>
+          <strong>{{senderDisplayName}}</strong><br>
           {{#if userData.address}}
             {{userData.address.street}}<br>
             {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>

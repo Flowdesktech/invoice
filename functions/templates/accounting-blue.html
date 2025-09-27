@@ -332,7 +332,7 @@
     <!-- Formal Header -->
     <div class="formal-header">
       <div class="firm-info">
-        <h1>{{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}</h1>
+        <h1>{{senderDisplayName}}</h1>
         <p class="firm-subtitle">Certified Public Accountants</p>
         <div class="firm-details">
           {{#if userData.email}}{{userData.email}}<br>{{/if}}
@@ -475,7 +475,7 @@
           <h4>REMITTANCE INFORMATION</h4>
           <p>
             Please include invoice number with payment.<br>
-            Make checks payable to: {{#if userData.company}}{{userData.company}}{{else}}{{userData.displayName}}{{/if}}<br>
+            Make checks payable to: {{senderDisplayName}}<br>
             For questions regarding this invoice, please contact our accounting department.
           </p>
           <div class="signature-line"></div>
