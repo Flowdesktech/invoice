@@ -190,7 +190,7 @@ const CreateInvoice = () => {
       // Reset form with duplicate data
       reset({
         customer: customer || null,
-        invoiceNumber: '', // Will be auto-generated
+        invoiceNumber: duplicateData.invoiceNumber || '', // Use the calculated next invoice number
         date: new Date(duplicateData.date),
         dueDate: new Date(duplicateData.dueDate),
         status: 'draft', // Always start duplicates as draft

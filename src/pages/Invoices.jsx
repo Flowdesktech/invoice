@@ -48,6 +48,7 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import { formatInvoiceNumber } from '../utils/formatters';
 import { templates } from './InvoiceTemplates';
+import {downloadPdf} from "../utils/pdfUtils.js";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -211,6 +212,20 @@ const Invoices = () => {
     const currentDate = new Date();
     const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
     
+    // Calculate next invoice number
+    let nextInvoiceNumber = invoice.invoiceNumber;
+    
+    // Extract the numeric part and increment it
+    const match = invoice.invoiceNumber.match(/^(.*?)(\d+)$/);
+    if (match) {
+      const prefix = match[1];
+      const number = parseInt(match[2]);
+      nextInvoiceNumber = prefix + (number + 1).toString().padStart(match[2].length, '0');
+    } else {
+      // If no number found, append "-2"
+      nextInvoiceNumber = invoice.invoiceNumber + '-2';
+    }
+    
     // Prepare duplicate data
     const duplicateData = {
       customerId: invoice.customerId,
@@ -220,6 +235,7 @@ const Invoices = () => {
       paymentTerms: invoice.paymentTerms,
       date: currentDate.getTime(),
       dueDate: dueDate.getTime(),
+      invoiceNumber: nextInvoiceNumber,
       isDuplicate: true
     };
     
@@ -235,31 +251,12 @@ const Invoices = () => {
       const response = await invoiceAPI.generatePdf(invoice.id);
       
       toast.dismiss(loadingToast);
-      
-      if (response.data?.pdf) {
-        // Convert base64 to blob and create download link
-        const base64Data = response.data.pdf;
-        const byteCharacters = atob(base64Data.replace(/^data:application\/pdf;base64,/, ''));
-        const byteNumbers = new Array(byteCharacters.length);
-        
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        
-        // Open in new tab
-        window.open(url, '_blank');
-        
-        // Clean up
-        setTimeout(() => window.URL.revokeObjectURL(url), 100);
-        
-        toast.success('PDF generated successfully!');
-      } else {
-        toast.error('Failed to generate PDF');
-      }
+
+      const formattedNumber = formatInvoiceNumber(
+          invoice.invoiceNumber,
+          userData?.invoiceSettings?.prefix || 'INV'
+      );
+      downloadPdf(response.data?.pdf, `Invoice_${formattedNumber}.pdf`);
     } catch (error) {
       toast.dismiss();
       console.error('Error generating PDF:', error);

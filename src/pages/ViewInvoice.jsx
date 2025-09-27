@@ -109,7 +109,7 @@ const ViewInvoice = () => {
         invoice.invoiceNumber,
         userData?.invoiceSettings?.prefix || 'INV'
       );
-      downloadPdf(response.data?.pdf, `invoice_${formattedNumber}.pdf`);
+      downloadPdf(response.data?.pdf, `Invoice_${formattedNumber}.pdf`);
     } catch (error) {
       if (loadingToast) toast.dismiss(loadingToast);
       console.error('Error generating PDF:', error);
