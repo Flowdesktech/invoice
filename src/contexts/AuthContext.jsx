@@ -14,6 +14,7 @@ import {
 import { auth } from '../config/firebase';
 import { profileAPI } from '../utils/api';
 import toast from 'react-hot-toast';
+import LoadingScreen from '../components/LoadingScreen';
 
 const AuthContext = createContext({});
 
@@ -457,7 +458,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? <LoadingScreen /> : children}
     </AuthContext.Provider>
   );
 };
