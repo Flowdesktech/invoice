@@ -272,7 +272,7 @@ const Invoices = () => {
           invoice.invoiceNumber,
           userData?.invoiceSettings?.prefix || 'INV'
       );
-      downloadPdf(response.data?.pdf, `Invoice_${formattedNumber}.pdf`);
+      downloadPdf(response.data?.pdf, `${formattedNumber}.pdf`);
     } catch (error) {
       toast.dismiss();
       console.error('Error generating PDF:', error);
