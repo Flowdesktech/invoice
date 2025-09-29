@@ -505,7 +505,7 @@ const InvoiceTemplates = () => {
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Grid container spacing={4}>
           {filteredTemplates.map((template) => (
-            <Grid item key={template.id} xs={12} sm={6} md={4}>
+            <Grid item key={template.id} size={{xs: 12, md: 6, lg: 4}}>
               <Card
                 sx={{
                   height: '100%',
