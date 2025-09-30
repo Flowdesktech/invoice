@@ -35,7 +35,6 @@ export const templates = [
     name: 'Modern Blue',
     description: 'Clean and professional with blue accents',
     category: 'Modern',
-    isPremium: true,
     preview: {
       primaryColor: '#1e3a8a',
       secondaryColor: '#3b82f6',
@@ -48,7 +47,6 @@ export const templates = [
     name: 'Minimalist Gray',
     description: 'Simple and elegant with subtle gray tones',
     category: 'Minimalist',
-    isPremium: true,
     preview: {
       primaryColor: '#374151',
       secondaryColor: '#9ca3af',
@@ -61,7 +59,6 @@ export const templates = [
     name: 'Corporate Dark',
     description: 'Professional dark theme for enterprises',
     category: 'Corporate',
-    isPremium: true,
     preview: {
       primaryColor: '#111827',
       secondaryColor: '#4b5563',
@@ -74,7 +71,6 @@ export const templates = [
     name: 'Creative Orange',
     description: 'Bold and creative with orange highlights',
     category: 'Creative',
-    isPremium: true,
     preview: {
       primaryColor: '#ea580c',
       secondaryColor: '#fb923c',
@@ -87,7 +83,6 @@ export const templates = [
     name: 'Elegant Purple',
     description: 'Sophisticated design with purple accents',
     category: 'Elegant',
-    isPremium: true,
     preview: {
       primaryColor: '#7c3aed',
       secondaryColor: '#a78bfa',
@@ -100,7 +95,6 @@ export const templates = [
     name: 'Fresh Green',
     description: 'Nature-inspired with fresh green colors',
     category: 'Modern',
-    isPremium: true,
     preview: {
       primaryColor: '#16a34a',
       secondaryColor: '#4ade80',
@@ -113,7 +107,6 @@ export const templates = [
     name: 'Classic Navy',
     description: 'Traditional design with navy blue theme',
     category: 'Classic',
-    isPremium: true,
     preview: {
       primaryColor: '#1e293b',
       secondaryColor: '#475569',
@@ -126,7 +119,6 @@ export const templates = [
     name: 'Tech Gradient',
     description: 'Modern gradient design for tech companies',
     category: 'Tech',
-    isPremium: true,
     preview: {
       primaryColor: '#6366f1',
       secondaryColor: '#818cf8',
@@ -139,7 +131,6 @@ export const templates = [
     name: 'Bold Contrast',
     description: 'High contrast black and yellow design',
     category: 'Bold',
-    isPremium: true,
     preview: {
       primaryColor: '#000000',
       secondaryColor: '#fbbf24',
@@ -152,7 +143,6 @@ export const templates = [
     name: 'Soft Pastel',
     description: 'Gentle pastel colors for a softer look',
     category: 'Soft',
-    isPremium: true,
     preview: {
       primaryColor: '#e0e7ff',
       secondaryColor: '#c7d2fe',
@@ -165,7 +155,6 @@ export const templates = [
     name: 'Professional Teal',
     description: 'Business-ready with teal accents',
     category: 'Professional',
-    isPremium: true,
     preview: {
       primaryColor: '#0d9488',
       secondaryColor: '#14b8a6',
@@ -178,7 +167,6 @@ export const templates = [
     name: 'Luxury Gold',
     description: 'Premium feel with gold highlights',
     category: 'Luxury',
-    isPremium: true,
     preview: {
       primaryColor: '#a16207',
       secondaryColor: '#d97706',
@@ -191,7 +179,6 @@ export const templates = [
     name: 'Startup Pink',
     description: 'Modern and energetic pink design',
     category: 'Startup',
-    isPremium: true,
     preview: {
       primaryColor: '#db2777',
       secondaryColor: '#ec4899',
@@ -204,7 +191,6 @@ export const templates = [
     name: 'Accounting Blue',
     description: 'Traditional accounting firm style',
     category: 'Accounting',
-    isPremium: true,
     preview: {
       primaryColor: '#1e40af',
       secondaryColor: '#2563eb',
@@ -217,7 +203,6 @@ export const templates = [
     name: 'Consulting Gray',
     description: 'Professional consulting firm template',
     category: 'Consulting',
-    isPremium: true,
     preview: {
       primaryColor: '#4b5563',
       secondaryColor: '#6b7280',
@@ -436,8 +421,8 @@ const InvoiceTemplates = () => {
   return (
     <>
       {/* React 19 Metadata */}
-      <title>Invoice Templates - FlowDesk | 15 Professional Designs</title>
-      <meta name="description" content="Choose from 15 professional invoice templates. Premium designs now free for early adopters. Modern, minimalist, corporate, and creative styles available." />
+      <title>Invoice Templates - FlowDesk Business Management Platform | 15 Professional Designs</title>
+      <meta name="description" content="Choose from 15 professional invoice templates in FlowDesk's free forever business management platform. Modern, minimalist, corporate, and creative styles - all features included free, no credit card required." />
 
       {/* Hero Section */}
       <Box
@@ -450,7 +435,7 @@ const InvoiceTemplates = () => {
         <Container maxWidth="lg">
           <Box textAlign="center">
             <Chip
-              label="Premium Templates - Free for Early Adopters!"
+              label="All Premium Templates Included Free Forever"
               color="success"
               size="small"
               sx={{ mb: 2 }}
@@ -472,7 +457,7 @@ const InvoiceTemplates = () => {
               variant="h6"
               sx={{ mb: 4, color: '#64748b', maxWidth: 600, mx: 'auto' }}
             >
-              Choose from 15 beautifully designed templates. Premium features available free during our early access period.
+              Choose from 15 beautifully designed templates. All premium features are included in our free forever business management platform.
             </Typography>
           </Box>
         </Container>
@@ -523,7 +508,7 @@ const InvoiceTemplates = () => {
                 {template.isPremium && (
                   <Chip
                     icon={<StarIcon sx={{ fontSize: '0.9rem' }} />}
-                    label="Premium - Free for Early Adopters"
+                    label="Premium - Included Free Forever"
                     size="small"
                     color="success"
                     sx={{

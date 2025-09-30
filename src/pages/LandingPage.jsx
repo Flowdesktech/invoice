@@ -89,14 +89,14 @@ const LandingPage = () => {
   return (
     <>
       {/* React 19 Metadata - Optimized for SEO with FlowBoost */}
-      <title>FlowDesk + FlowBoost - Invoice & Earn $150-500/Month | Free Invoice Software with Micro-Tasks</title>
-      <meta name="description" content="Revolutionary: Invoice clients AND earn $150-500/month with FlowBoost micro-tasks. Free invoice software with built-in earning opportunities. Complete surveys, tasks, and consultations during downtime." />
-      <meta name="keywords" content="flowboost, earn money invoicing, micro tasks platform, invoice software with earnings, make money business downtime, freelancer side income, invoice generator with tasks, flowdesk flowboost, earn while invoicing, business productivity income" />
+      <title>FlowDesk - Free Forever Business Management Platform | Invoice Management & More</title>
+      <meta name="description" content="FlowDesk is a comprehensive business management platform with invoice management, customer tracking, payment monitoring & FlowBoost rewards. 100% free forever - no credit card required. All premium features included." />
+      <meta name="keywords" content="free business management platform, free forever business software, invoice management system, customer relationship management, payment tracking software, recurring billing platform, flowdesk business platform, flowboost rewards, free crm invoicing, business automation software" />
       <link rel="canonical" href="https://flowdesk.tech" />
       
       {/* Open Graph for Social Sharing */}
-      <meta property="og:title" content="FlowDesk + FlowBoost - Invoice Clients & Earn Daily Income" />
-      <meta property="og:description" content="Industry First: Invoice management software with built-in earning platform. Make $150-500/month completing micro-tasks matched to your skills. No other users needed - start earning today!" />
+      <meta property="og:title" content="FlowDesk - Free Forever Business Management Platform with FlowBoost Rewards" />
+      <meta property="og:description" content="Complete business management platform: invoice management, customer tracking, recurring billing, payment monitoring + FlowBoost rewards system. 100% free forever. No credit card required." />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://flowdesk.tech" />
       <meta property="og:image" content="https://flowdesk.tech/flowboost-hero.png" />
@@ -104,8 +104,8 @@ const LandingPage = () => {
       
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="FlowDesk - Get Paid Faster with Free Invoice Software" />
-      <meta name="twitter:description" content="Professional invoicing made simple. Create, send, track invoices and get paid faster. Free forever for small businesses." />
+      <meta name="twitter:title" content="FlowDesk - Free Forever Business Management Platform | No Credit Card Required" />
+      <meta name="twitter:description" content="Complete business management platform - 100% free forever. Invoice management, customer tracking, payment monitoring, recurring billing & FlowBoost rewards. No trials, no credit cards. Start managing your business in seconds." />
       <meta name="twitter:image" content="https://flowdesk.tech/twitter-card.png" />
       
       {/* Additional SEO Meta Tags */}
@@ -119,16 +119,18 @@ const LandingPage = () => {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "FlowDesk with FlowBoost",
+          "name": "FlowDesk Business Management Platform",
           "alternativeName": "FlowDesk + FlowBoost",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
-          "description": "Revolutionary: Invoice management software with built-in earning platform. Invoice clients AND earn $150-500/month with FlowBoost micro-tasks during business downtime. Industry first!",
+          "description": "Comprehensive business management platform featuring invoice management, customer tracking, recurring billing, payment monitoring, financial reporting, and FlowBoost rewards system. 100% free forever with all premium features included.",
           "offers": {
             "@type": "Offer",
             "price": "0",
             "priceCurrency": "USD",
-            "priceValidUntil": "2025-12-31"
+            "priceValidUntil": "2099-12-31",
+            "availability": "https://schema.org/InStock",
+            "description": "Free forever - no trials, no credit card required"
           },
           "aggregateRating": {
             "@type": "AggregateRating",
@@ -166,7 +168,7 @@ const LandingPage = () => {
             "name": "What is FlowBoost?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "FlowBoost is an industry-first feature that lets you earn $150-500/month by completing micro-tasks matched to your skills during business downtime. It's integrated directly into FlowDesk invoice software."
+              "text": "FlowBoost is an innovative rewards system integrated into FlowDesk's business management platform. Once launched, it will let you earn $150-500/month by completing micro-tasks matched to your skills during business downtime."
             }
           }, {
             "@type": "Question",
@@ -177,10 +179,24 @@ const LandingPage = () => {
             }
           }, {
             "@type": "Question",
-            "name": "Is FlowBoost available immediately?",
+            "name": "Is FlowDesk really free forever?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes! FlowBoost works from day one. No need to wait for other users. We partner with established providers like Swagbucks, Toluna, and UserTesting."
+              "text": "Yes! FlowDesk is 100% free forever with no hidden fees or credit card required. All features including invoice management, customer tracking, recurring billing, and premium templates are included free. No trials, no limits."
+            }
+          }, {
+            "@type": "Question",
+            "name": "What features does FlowDesk include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FlowDesk is a complete business management platform that includes: invoice creation & management, customer database, payment tracking, recurring invoices, multi-currency support, 15+ professional templates, email integration, PDF export, financial reporting, and the upcoming FlowBoost rewards system."
+            }
+          }, {
+            "@type": "Question",
+            "name": "When will FlowBoost launch?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FlowBoost is currently in development. Join our waitlist to be notified when it launches. We're building partnerships with reputable task providers to ensure quality earning opportunities."
             }
           }]
         })}
@@ -366,7 +382,7 @@ const LandingPage = () => {
                         letterSpacing: '0.5px',
                       }}
                     >
-                      PROFESSIONAL INVOICE SOFTWARE
+                      PROFESSIONAL BUSINESS MANAGEMENT PLATFORM
                     </Typography>
                   </Box>
                   
@@ -381,7 +397,7 @@ const LandingPage = () => {
                       letterSpacing: '-0.02em',
                     }}
                   >
-                    Professional Invoicing
+                    Professional Business Management
                     <Box
                       component="span"
                       sx={{
@@ -392,7 +408,7 @@ const LandingPage = () => {
                         backgroundClip: 'text',
                       }}
                     >
-                      Made Simple & Free
+                      Made Simple & Free Forever
                     </Box>
                   </Typography>
                   
@@ -407,8 +423,8 @@ const LandingPage = () => {
                       maxWidth: '600px',
                     }}
                   >
-                    Create, send, and track invoices in seconds. <strong>Coming Soon:</strong> FlowBoost™ 
-                    will revolutionize how you earn during business downtime.
+                    Create, send, and track invoices in seconds with our <strong>free forever</strong> invoice software. 
+                    No hidden fees, no credit card required. <strong>Coming Soon:</strong> FlowBoost™ rewards.
                   </Typography>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                     <Button
@@ -461,15 +477,15 @@ const LandingPage = () => {
                   <Box sx={{ mt: 6, display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
                     <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
-                      No credit card required
+                      Free forever - no trial expiration
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
-                      Setup in under 2 minutes
+                      Unlimited invoices & customers
                     </Typography>
                     <Typography variant="body2" sx={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: 0.5 }}>
                       <CheckIcon sx={{ fontSize: 16, color: '#10b981' }} />
-                      Cancel anytime
+                      No credit card required ever
                     </Typography>
                   </Box>
                 </Box>
@@ -821,7 +837,7 @@ const LandingPage = () => {
                 lineHeight: 1.2,
               }}
             >
-              Built for modern businesses
+              Built for modern businesses - Free Forever
             </Typography>
             <Typography
               variant="h5"
@@ -834,7 +850,7 @@ const LandingPage = () => {
                 lineHeight: 1.6,
               }}
             >
-              Everything you need to manage invoices, track payments, and grow your business
+              Everything you need to manage invoices, track payments, and grow your business - completely free forever, no strings attached
             </Typography>
           </Box>
           
@@ -966,7 +982,7 @@ const LandingPage = () => {
                 </Typography>
                 <Typography variant="body1" mb={4} sx={{ opacity: 0.9 }} color="white">
                   From freelancers to growing companies, FlowDesk helps businesses 
-                  of all sizes manage their invoicing efficiently.
+                  of all sizes manage their invoicing efficiently. Enjoy all premium features absolutely free forever - no trial periods, no credit card needed.
                 </Typography>
                 <Button
                   variant="contained"
