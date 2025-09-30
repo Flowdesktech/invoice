@@ -266,11 +266,9 @@
                 <p>{{customer.email}}</p>
                 {{#if customer.phone}}<p>{{customer.phone}}</p>{{/if}}
                 {{#if customer.company}}<p>{{customer.company}}</p>{{/if}}
-                {{#if customer.address.street}}
-                <p>{{customer.address.street}}</p>
-                <p>{{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}</p>
-                {{#if customer.address.country}}<p>{{customer.address.country}}</p>{{/if}}
-                {{/if}}
+                {{#if customerAddressStreet}}<p>{{customerAddressStreet}}</p>{{/if}}
+                {{#if customerAddressCityStateZip}}<p>{{customerAddressCityStateZip}}</p>{{/if}}
+                {{#if customerAddressCountry}}<p>{{customerAddressCountry}}</p>{{/if}}
             </div>
             <div class="invoice-details">
                 <h3>Invoice Details</h3>

@@ -133,6 +133,25 @@ class PdfService {
       
       const senderAddressCountry = senderAddress?.country || '';
 
+      // Process customer address information with same formatting logic
+      const customerAddress = customer?.address || {};
+      const customerAddressStreet = customerAddress?.street || '';
+      
+      // Build customer city/state/zip line with proper formatting
+      let customerAddressCityStateZip = '';
+      const customerParts = [];
+      if (customerAddress?.city) customerParts.push(customerAddress.city);
+      if (customerAddress?.state) customerParts.push(customerAddress.state);
+      
+      if (customerParts.length > 0) {
+        customerAddressCityStateZip = customerParts.join(', ');
+        if (customerAddress?.zipCode) {
+          customerAddressCityStateZip += ' ' + customerAddress.zipCode;
+        }
+      }
+      
+      const customerAddressCountry = customerAddress?.country || '';
+
       // Prepare template data
       const templateData = {
         invoice: {
@@ -153,7 +172,11 @@ class PdfService {
         senderAddress,
         senderAddressStreet,
         senderAddressCityStateZip,
-        senderAddressCountry
+        senderAddressCountry,
+        // Add processed customer address information
+        customerAddressStreet,
+        customerAddressCityStateZip,
+        customerAddressCountry
       };
 
       // Generate HTML

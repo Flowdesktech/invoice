@@ -325,11 +325,9 @@
           <strong>{{customer.name}}</strong><br>
           {{#if customer.email}}{{customer.email}}<br>{{/if}}
           {{#if customer.phone}}{{customer.phone}}<br>{{/if}}
-          {{#if customer.address}}
-            {{customer.address.street}}<br>
-            {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
-            {{customer.address.country}}
-          {{/if}}
+          {{#if customerAddressStreet}}{{customerAddressStreet}}<br>{{/if}}
+          {{#if customerAddressCityStateZip}}{{customerAddressCityStateZip}}<br>{{/if}}
+          {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
         </div>
       </div>
       

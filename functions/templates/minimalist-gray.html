@@ -274,10 +274,9 @@
         <h3>To</h3>
         <div>
           <strong>{{customer.name}}</strong><br>
-          {{#if customer.address}}
-            {{customer.address.street}}<br>
-            {{customer.address.city}}, {{customer.address.state}} {{customer.address.zipCode}}<br>
-          {{/if}}
+          {{#if customerAddressStreet}}{{customerAddressStreet}}<br>{{/if}}
+          {{#if customerAddressCityStateZip}}{{customerAddressCityStateZip}}<br>{{/if}}
+          {{#if customerAddressCountry}}{{customerAddressCountry}}<br>{{/if}}
           {{#if customer.email}}{{customer.email}}<br>{{/if}}
           {{#if customer.phone}}{{customer.phone}}{{/if}}
         </div>
