@@ -241,23 +241,12 @@
         <!-- Header -->
         <div class="invoice-header">
             <div class="company-info">
-                <h1>{{#if profileData.company}}{{profileData.company}}{{else}}{{userData.company}}{{/if}}</h1>
-                <p>{{#if profileData.displayName}}{{profileData.displayName}}{{else}}{{userData.displayName}}{{/if}}</p>
-                <p>{{#if profileData.email}}{{profileData.email}}{{else}}{{userData.email}}{{/if}}</p>
-                {{#if profileData.phone}}<p>{{profileData.phone}}</p>{{else}}{{#if userData.phone}}<p>{{userData.phone}}</p>{{/if}}{{/if}}
-                {{#if profileData.address}}
-                    {{#if profileData.address.street}}
-                    <p>{{profileData.address.street}}</p>
-                    <p>{{profileData.address.city}}, {{profileData.address.state}} {{profileData.address.zipCode}}</p>
-                    {{#if profileData.address.country}}<p>{{profileData.address.country}}</p>{{/if}}
-                    {{/if}}
-                {{else}}
-                    {{#if userData.address.street}}
-                    <p>{{userData.address.street}}</p>
-                    <p>{{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}</p>
-                    {{#if userData.address.country}}<p>{{userData.address.country}}</p>{{/if}}
-                    {{/if}}
-                {{/if}}
+                <h1>{{senderDisplayName}}</h1>
+                {{#if senderEmail}}<p>{{senderEmail}}</p>{{/if}}
+                {{#if senderPhone}}<p>{{senderPhone}}</p>{{/if}}
+                {{#if senderAddressStreet}}<p>{{senderAddressStreet}}</p>{{/if}}
+                {{#if senderAddressCityStateZip}}<p>{{senderAddressCityStateZip}}</p>{{/if}}
+                {{#if senderAddressCountry}}<p>{{senderAddressCountry}}</p>{{/if}}
             </div>
             <div class="invoice-title">
                 <h2>INVOICE</h2>

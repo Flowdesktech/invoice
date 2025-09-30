@@ -364,10 +364,10 @@
           <h1>{{senderDisplayName}}</h1>
           <p class="eco-tagline">🌍 Eco-Friendly Business Solutions</p>
           <div class="company-details">
-            {{#if userData.email}}📧 {{userData.email}}<br>{{/if}}
-            {{#if userData.phone}}📱 {{userData.phone}}<br>{{/if}}
-            {{#if userData.address}}
-              📍 {{userData.address.street}}, {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+            {{#if senderEmail}}📧 {{senderEmail}}<br>{{/if}}
+            {{#if senderPhone}}📱 {{senderPhone}}<br>{{/if}}
+            {{#if senderAddressStreet}}
+              📍 {{senderAddressStreet}}, {{senderAddressCityStateZip}}
             {{/if}}
           </div>
         </div>

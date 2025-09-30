@@ -461,12 +461,10 @@
           <h3><div class="info-icon">📍</div> From</h3>
           <div class="info-content">
             <strong>{{userData.displayName}}</strong><br>
-            {{#if userData.email}}{{userData.email}}<br>{{/if}}
-            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
-            {{#if userData.address}}
-              {{userData.address.street}}<br>
-              {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
-            {{/if}}
+            {{#if senderEmail}}{{senderEmail}}<br>{{/if}}
+            {{#if senderPhone}}{{senderPhone}}<br>{{/if}}
+            {{#if senderAddressStreet}}{{senderAddressStreet}}<br>{{/if}}
+            {{#if senderAddressCityStateZip}}{{senderAddressCityStateZip}}{{/if}}
           </div>
         </div>
       </div>

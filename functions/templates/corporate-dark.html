@@ -312,12 +312,11 @@
         <h3>From</h3>
         <p>
           {{#if userData.displayName}}{{userData.displayName}}<br>{{/if}}
-          {{#if userData.address}}
-            {{userData.address.street}}<br>
-            {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>
-          {{/if}}
-          {{#if userData.email}}{{userData.email}}<br>{{/if}}
-          {{#if userData.phone}}{{userData.phone}}{{/if}}
+          {{#if senderAddressStreet}}{{senderAddressStreet}}<br>{{/if}}
+          {{#if senderAddressCityStateZip}}{{senderAddressCityStateZip}}<br>{{/if}}
+          {{#if senderAddressCountry}}{{senderAddressCountry}}<br>{{/if}}
+          {{#if senderEmail}}{{senderEmail}}<br>{{/if}}
+          {{#if senderPhone}}{{senderPhone}}{{/if}}
         </p>
       </div>
       

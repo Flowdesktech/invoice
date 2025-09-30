@@ -109,6 +109,30 @@ class PdfService {
       // Get the first letter for monogram/initial displays
       const senderDisplayNameInitial = senderDisplayName ? senderDisplayName.charAt(0).toUpperCase() : '';
 
+      // Process sender information - prioritize profileData over userData
+      const senderData = profileData || userData;
+      const senderEmail = senderData?.email || '';
+      const senderPhone = senderData?.phone || '';
+      const senderAddress = senderData?.address || {};
+      
+      // Format sender address components
+      const senderAddressStreet = senderAddress?.street || '';
+      
+      // Build city/state/zip line with proper formatting
+      let senderAddressCityStateZip = '';
+      const parts = [];
+      if (senderAddress?.city) parts.push(senderAddress.city);
+      if (senderAddress?.state) parts.push(senderAddress.state);
+      
+      if (parts.length > 0) {
+        senderAddressCityStateZip = parts.join(', ');
+        if (senderAddress?.zipCode) {
+          senderAddressCityStateZip += ' ' + senderAddress.zipCode;
+        }
+      }
+      
+      const senderAddressCountry = senderAddress?.country || '';
+
       // Prepare template data
       const templateData = {
         invoice: {
@@ -122,7 +146,14 @@ class PdfService {
         invoicePrefix,
         currentDate: new Date().valueOf(),
         senderDisplayName, // Add the computed sender display name
-        senderDisplayNameInitial // Add the initial for monogram displays
+        senderDisplayNameInitial, // Add the initial for monogram displays
+        // Add processed sender information
+        senderEmail,
+        senderPhone,
+        senderAddress,
+        senderAddressStreet,
+        senderAddressCityStateZip,
+        senderAddressCountry
       };
 
       // Generate HTML

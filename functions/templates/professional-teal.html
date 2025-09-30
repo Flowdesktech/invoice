@@ -342,10 +342,10 @@
         <h1>{{senderDisplayName}}</h1>
         <p>
           Professional Services<br>
-          {{#if userData.email}}{{userData.email}}{{/if}}
-          {{#if userData.phone}} | {{userData.phone}}{{/if}}
-          {{#if userData.address}}
-            <br>{{userData.address.street}} • {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+          {{#if senderEmail}}{{senderEmail}}{{/if}}
+          {{#if senderPhone}} | {{senderPhone}}{{/if}}
+          {{#if senderAddressStreet}}
+            <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
           {{/if}}
         </p>
       </div>

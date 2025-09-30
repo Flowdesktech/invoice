@@ -357,10 +357,10 @@
         </h1>
         <p class="company-tagline">Excellence in Every Detail</p>
         <div class="company-details">
-          {{#if userData.email}}{{userData.email}} {{/if}}
-          {{#if userData.phone}}| {{userData.phone}}{{/if}}
-          {{#if userData.address}}
-            <br>{{userData.address.street}} • {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
+          {{#if senderEmail}}{{senderEmail}} {{/if}}
+          {{#if senderPhone}}| {{senderPhone}}{{/if}}
+          {{#if senderAddressStreet}}
+            <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
           {{/if}}
         </div>
       </div>

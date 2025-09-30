@@ -272,13 +272,11 @@
         <div class="company-section">
           <h1>{{senderDisplayName}}</h1>
           <div class="company-details">
-            {{#if userData.email}}{{userData.email}}<br>{{/if}}
-            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
-            {{#if userData.address}}
-              {{userData.address.street}}<br>
-              {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}<br>
-              {{userData.address.country}}
-            {{/if}}
+            {{#if senderEmail}}{{senderEmail}}<br>{{/if}}
+            {{#if senderPhone}}{{senderPhone}}<br>{{/if}}
+            {{#if senderAddressStreet}}{{senderAddressStreet}}<br>{{/if}}
+            {{#if senderAddressCityStateZip}}{{senderAddressCityStateZip}}<br>{{/if}}
+            {{#if senderAddressCountry}}{{senderAddressCountry}}{{/if}}
           </div>
         </div>
         

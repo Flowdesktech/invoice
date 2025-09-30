@@ -385,11 +385,10 @@
         <div class="company-info">
           <h1>{{senderDisplayName}}</h1>
           <p>
-            {{#if userData.email}}{{userData.email}} • {{/if}}
-            {{#if userData.phone}}{{userData.phone}}<br>{{/if}}
-            {{#if userData.address}}
-              {{userData.address.street}}, {{userData.address.city}}, {{userData.address.state}} {{userData.address.zipCode}}
-            {{/if}}
+            {{#if senderEmail}}{{senderEmail}} • {{/if}}
+            {{#if senderPhone}}{{senderPhone}}<br>{{/if}}
+            {{#if senderAddressStreet}}{{senderAddressStreet}}, {{/if}}
+            {{#if senderAddressCityStateZip}}{{senderAddressCityStateZip}}{{/if}}
           </p>
         </div>
         
