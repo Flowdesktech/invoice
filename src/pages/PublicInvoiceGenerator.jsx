@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -364,8 +365,20 @@ const PublicInvoiceGenerator = () => {
     setValidationErrors({});
   };
 
-  const clearDraft = () => {
-    if (confirm('Are you sure you want to clear all data?')) {
+  const clearDraft = async () => {
+    const result = await Swal.fire({
+      title: 'Clear Draft',
+      text: 'Are you sure you want to clear all data? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, clear all data',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed) {
       localStorage.removeItem(DRAFT_KEY);
       setHasDraft(false);
       // Reset to initial state
