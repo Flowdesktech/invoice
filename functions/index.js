@@ -12,6 +12,7 @@ const userRoutes = require('./routes/userRoutes');
 const recurringInvoiceRoutes = require('./routes/recurringInvoiceRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const flowBoostRoutes = require('./routes/flowBoostRoutes');
+const publicInvoiceRoutes = require('./routes/publicInvoiceRoutes');
 
 // Import middleware
 const { errorHandler } = require('./middleware/errorHandler');
@@ -54,7 +55,10 @@ app.get('/health', (req, res) => {
 // Handle preflight requests explicitly
 app.options('*', corsMiddleware);
 
-// API Routes
+// Public routes (no authentication required)
+app.use('/', publicInvoiceRoutes);
+
+// API Routes (require authentication)
 app.use('/customers', customerRoutes);
 app.use('/invoices', invoiceRoutes);
 app.use('/users', userRoutes); // Profile and stats routes

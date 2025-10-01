@@ -52,6 +52,14 @@
     <priority>0.75</priority>
   </url>
   
+  <!-- Free Invoice Generator Page (No Signup Required) -->
+  <url>
+    <loc>https://flowdesk.tech/try-now</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
   <!-- Login Page -->
   <url>
     <loc>https://flowdesk.tech/login</loc>

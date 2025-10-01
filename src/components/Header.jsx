@@ -182,6 +182,27 @@ const Header = () => {
               // Show Sign In and Get Started buttons for non-authenticated users
               <>
                 <Button
+                  variant="contained"
+                  onClick={() => navigate('/try-now')}
+                  sx={{
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: 'white',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    px: 3,
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 14px 0 rgba(16, 185, 129, 0.3)',
+                    '&:hover': {
+                      background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                      boxShadow: '0 6px 20px 0 rgba(16, 185, 129, 0.4)',
+                      transform: 'translateY(-1px)',
+                    },
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
+                >
+                  Create Invoice Now
+                </Button>
+                <Button
                   variant="outlined"
                   onClick={() => navigate('/login')}
                   sx={{
@@ -333,6 +354,30 @@ const Header = () => {
             </Button>
           ) : (
             <>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={() => {
+                  navigate('/try-free');
+                  setMobileMenuOpen(false);
+                }}
+                sx={{
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  color: 'white',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  py: 1.5,
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 14px 0 rgba(16, 185, 129, 0.3)',
+                  mb: 1,
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                    boxShadow: '0 6px 20px 0 rgba(16, 185, 129, 0.4)',
+                  },
+                }}
+              >
+                Create Invoice Now
+              </Button>
               <Button
                 variant="outlined"
                 fullWidth

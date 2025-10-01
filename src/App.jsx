@@ -26,6 +26,7 @@ const Documentation = React.lazy(() => import('./pages/Documentation'));
 const About = React.lazy(() => import('./pages/About'));
 const Blog = React.lazy(() => import('./pages/Blog'));
 const InvoiceTemplates = React.lazy(() => import('./pages/InvoiceTemplates'));
+const PublicInvoiceGenerator = React.lazy(() => import('./pages/PublicInvoiceGenerator'));
 
 // Import components
 import PrivateRoute from './components/PrivateRoute';
@@ -238,6 +239,10 @@ const router = createBrowserRouter([
       {
         path: '/blog',
         element: <Blog />,
+      },
+      {
+        path: '/try-now',
+        element: <PublicInvoiceGenerator />,
       },
       {
         path: '/',

@@ -430,6 +430,42 @@ const LandingPage = () => {
                     <Button
                       variant="contained"
                       size="large"
+                      onClick={() => navigate('/try-now')}
+                      sx={{
+                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        color: 'white',
+                        py: 2,
+                        px: 5,
+                        fontSize: '1.125rem',
+                        fontWeight: 600,
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 14px 0 rgba(16, 185, 129, 0.4)',
+                        textTransform: 'none',
+                        '&:hover': {
+                          background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 6px 20px 0 rgba(16, 185, 129, 0.4)',
+                        },
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      }}
+                      endIcon={<ReceiptIcon />}
+                    >
+                      Create Invoice Now
+                    </Button>
+                    <Typography 
+                      variant="caption" 
+                      sx={{ 
+                        display: 'block',
+                        mt: 1,
+                        color: 'text.secondary',
+                        fontSize: '0.875rem'
+                      }}
+                    >
+                      No signup • No credit card • Instant access
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      size="large"
                       onClick={() => navigate('/register')}
                       sx={{
                         background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
@@ -450,7 +486,7 @@ const LandingPage = () => {
                       }}
                       endIcon={<ArrowForwardIcon />}
                     >
-                      Start Free - No Card Required
+                      Sign Up Free
                     </Button>
                     <Button
                       variant="text"
@@ -469,7 +505,7 @@ const LandingPage = () => {
                         transition: 'all 0.3s',
                       }}
                     >
-                      Already have an account?
+                      Login
                     </Button>
                   </Stack>
 
