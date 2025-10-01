@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import SEO from '../components/SEO';
 import Header from '../components/Header';
@@ -23,6 +23,8 @@ import {
     useTheme,
     useMediaQuery,
     Fade, Alert,
+    Link,
+    CircularProgress
 } from '@mui/material';
 import {
   Speed as SpeedIcon,
@@ -39,6 +41,58 @@ import {
   Schedule as ScheduleIcon,
   Receipt as ReceiptIcon,
 } from '@mui/icons-material';
+
+// LazyImage component for lazy loading images
+const LazyImage = ({ src, alt, placeholder, onError, sx }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, []);
+
+  return (
+    <Box ref={imgRef} sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+      {!isLoaded && placeholder}
+      {isInView && (
+        <Box
+          component="img"
+          src={src}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          onError={onError}
+          sx={{
+            ...sx,
+            opacity: isLoaded ? 1 : 0,
+            transition: 'opacity 0.3s ease-in-out'
+          }}
+        />
+      )}
+    </Box>
+  );
+};
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -426,7 +480,8 @@ const LandingPage = () => {
                     Create, send, and track invoices in seconds with our <strong>free forever</strong> invoice software. 
                     No hidden fees, no credit card required. <strong>Coming Soon:</strong> FlowBoost™ rewards.
                   </Typography>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  {/* Primary CTA Section */}
+                  <Box sx={{ mb: 4, textAlign: 'center' }}>
                     <Button
                       variant="contained"
                       size="large"
@@ -435,12 +490,14 @@ const LandingPage = () => {
                         background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                         color: 'white',
                         py: 2,
-                        px: 5,
-                        fontSize: '1.125rem',
+                        px: 6,
+                        fontSize: '1.25rem',
                         fontWeight: 600,
-                        borderRadius: '8px',
+                        borderRadius: '12px',
                         boxShadow: '0 4px 14px 0 rgba(16, 185, 129, 0.4)',
                         textTransform: 'none',
+                        display: 'inline-flex',
+                        whiteSpace: 'nowrap',
                         '&:hover': {
                           background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
                           transform: 'translateY(-2px)',
@@ -453,54 +510,101 @@ const LandingPage = () => {
                       Create Invoice Now
                     </Button>
                     <Typography 
-                      variant="caption" 
+                      variant="body2" 
                       sx={{ 
                         display: 'block',
-                        mt: 1,
+                        textAlign: 'center',
+                        mt: 2,
                         color: 'text.secondary',
-                        fontSize: '0.875rem'
+                        fontSize: '0.9rem',
+                        letterSpacing: '0.025em'
                       }}
                     >
                       No signup • No credit card • Instant access
                     </Typography>
+                  </Box>
+                  
+                  {/* Divider */}
+                  <Box sx={{ 
+                    position: 'relative', 
+                    my: 4,
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: '50%',
+                      left: 0,
+                      right: 0,
+                      height: 1,
+                      bgcolor: 'divider',
+                      transform: 'translateY(-50%)'
+                    }
+                  }}>
+                    <Typography 
+                      sx={{ 
+                        position: 'relative',
+                        display: 'inline-block',
+                        px: 2,
+                        bgcolor: 'background.paper',
+                        color: 'text.secondary',
+                        fontSize: '0.875rem',
+                        mx: 'auto',
+                        left: '50%',
+                        transform: 'translateX(-50%)'
+                      }}
+                    >
+                      or
+                    </Typography>
+                  </Box>
+                  
+                  {/* Secondary Actions */}
+                  <Stack 
+                    direction={{ xs: 'column', sm: 'row' }} 
+                    spacing={2} 
+                    justifyContent="center"
+                  >
                     <Button
-                      variant="contained"
+                      variant="outlined"
                       size="large"
                       onClick={() => navigate('/register')}
                       sx={{
-                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                        color: 'white',
+                        borderColor: '#e2e8f0',
+                        color: '#1e293b',
                         py: 2,
-                        px: 5,
+                        px: 6,
                         fontSize: '1.125rem',
                         fontWeight: 600,
                         borderRadius: '8px',
-                        boxShadow: '0 4px 14px 0 rgba(59, 130, 246, 0.4)',
                         textTransform: 'none',
+                        borderWidth: 2,
                         '&:hover': {
-                          background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                          transform: 'translateY(-2px)',
-                          boxShadow: '0 6px 20px 0 rgba(59, 130, 246, 0.4)',
+                          borderColor: '#3b82f6',
+                          bgcolor: 'rgba(59, 130, 246, 0.04)',
+                          borderWidth: 2,
                         },
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transition: 'all 0.3s',
                       }}
                       endIcon={<ArrowForwardIcon />}
                     >
                       Sign Up Free
                     </Button>
                     <Button
-                      variant="text"
+                      variant="outlined"
                       size="large"
                       onClick={() => navigate('/login')}
                       sx={{
+                        borderColor: '#e2e8f0',
                         color: '#64748b',
                         py: 2,
-                        px: 3,
-                        fontSize: '1rem',
-                        fontWeight: 500,
+                        px: 6,
+                        fontSize: '1.125rem',
+                        fontWeight: 600,
+                        borderRadius: '8px',
+                        borderWidth: 2,
+                        textTransform: 'none',
                         '&:hover': {
-                          bgcolor: 'rgba(148, 163, 184, 0.08)',
-                          color: '#475569',
+                          borderColor: '#cbd5e1',
+                          bgcolor: 'rgba(148, 163, 184, 0.04)',
+                          borderWidth: 2,
                         },
                         transition: 'all 0.3s',
                       }}
@@ -1378,13 +1482,32 @@ const LandingPage = () => {
                       }}
                     >
                       {/* Check if preview image exists */}
-                      <Box
-                        component="img"
+                      <LazyImage
                         src={`/template-previews/${template.id}-preview.png`}
                         alt={template.name}
+                        placeholder={
+                          <Box
+                            sx={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              bgcolor: 'grey.100',
+                            }}
+                          >
+                            <CircularProgress size={40} />
+                          </Box>
+                        }
                         onError={(e) => {
                           e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
+                          const fallback = e.target.parentElement.parentElement.nextSibling;
+                          if (fallback) {
+                            fallback.style.display = 'flex';
+                          }
                         }}
                         sx={{
                           position: 'absolute',
@@ -1563,12 +1686,8 @@ const LandingPage = () => {
               Join thousands of businesses that trust FlowDesk to manage their invoicing and get paid on time
             </Typography>
             
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={3}
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box sx={{ textAlign: 'center' }}>
+              {/* Primary CTA */}
               <Button
                 variant="contained"
                 size="large"
@@ -1576,13 +1695,14 @@ const LandingPage = () => {
                 sx={{
                   background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                   color: 'white',
-                  py: 2.5,
-                  px: 6,
-                  fontSize: '1.25rem',
-                  fontWeight: 600,
-                  borderRadius: '12px',
+                  py: 3,
+                  px: 10,
+                  fontSize: '1.375rem',
+                  fontWeight: 700,
+                  borderRadius: '16px',
                   boxShadow: '0 8px 32px rgba(59, 130, 246, 0.4)',
                   textTransform: 'none',
+                  mb: 3,
                   '&:hover': {
                     background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
                     transform: 'translateY(-2px)',
@@ -1594,49 +1714,76 @@ const LandingPage = () => {
               >
                 Get Started Free
               </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                component={Link}
-                to="/features"
-                sx={{
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
-                  color: 'white',
-                  py: 2.5,
-                  px: 5,
-                  fontSize: '1.125rem',
-                  fontWeight: 500,
-                  borderRadius: '12px',
-                  '&:hover': {
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
-                    bgcolor: 'rgba(255, 255, 255, 0.05)',
-                  },
-                  transition: 'all 0.3s',
-                }}
-              >
-                View All Features
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                component={Link}
-                to="/contact"
-                sx={{
-                  borderColor: '#cbd5e1',
-                  color: 'white',
-                  py: 2,
-                  px: 4,
-                  fontSize: '1.1rem',
-                  borderRadius: 2,
-                  '&:hover': {
-                    borderColor: '#94a3b8',
-                      bgcolor: 'rgba(255, 255, 255, 0.05)',
-                  },
-                }}
-              >
-                Contact Us
-              </Button>
-            </Stack>
+              
+              {/* Links */}
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 4,
+                flexWrap: 'wrap'
+              }}>
+                <Link
+                  component={RouterLink}
+                  to="/features"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    textDecoration: 'none',
+                    fontSize: '1.125rem',
+                    fontWeight: 500,
+                    position: 'relative',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      bottom: -2,
+                      left: 0,
+                      width: 0,
+                      height: 2,
+                      bgcolor: 'white',
+                      transition: 'width 0.3s'
+                    },
+                    '&:hover': {
+                      color: 'white',
+                      '&::after': {
+                        width: '100%'
+                      }
+                    }
+                  }}
+                >
+                  View All Features
+                </Link>
+                <Typography sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>•</Typography>
+                <Link
+                  component={RouterLink}
+                  to="/contact"
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    textDecoration: 'none',
+                    fontSize: '1.125rem',
+                    fontWeight: 500,
+                    position: 'relative',
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      bottom: -2,
+                      left: 0,
+                      width: 0,
+                      height: 2,
+                      bgcolor: 'white',
+                      transition: 'width 0.3s'
+                    },
+                    '&:hover': {
+                      color: 'white',
+                      '&::after': {
+                        width: '100%'
+                      }
+                    }
+                  }}
+                >
+                  Contact Us
+                </Link>
+              </Box>
+            </Box>
           </Box>
         </Container>
       </Box>

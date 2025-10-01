@@ -102,6 +102,9 @@ const PublicInvoiceGenerator = () => {
       price: 0
     }],
     
+    // Tax
+    taxRate: 0,
+    
     // Payment terms
     paymentTerms: 'Due on receipt',
     
@@ -129,6 +132,7 @@ const PublicInvoiceGenerator = () => {
       { description: 'Logo Design', quantity: 1, price: 1500 },
       { description: 'Monthly Maintenance (3 months)', quantity: 3, price: 500 }
     ],
+    taxRate: 10,
     paymentTerms: 'Net 30',
     notes: 'Thank you for your business! Please remit payment within 30 days.'
   };
@@ -265,10 +269,21 @@ const PublicInvoiceGenerator = () => {
     );
   };
 
+  const calculateTax = () => {
+    const subtotal = calculateSubtotal();
+    return subtotal * ((parseFloat(invoiceData.taxRate) || 0) / 100);
+  };
+
+  const calculateTotal = () => {
+    return calculateSubtotal() + calculateTax();
+  };
+
   const generatePreview = async () => {
     setLoadingPreview(true);
     try {
       const subtotal = calculateSubtotal();
+      const taxAmount = calculateTax();
+      const total = calculateTotal();
       const invoicePayload = {
         ...invoiceData,
         lineItems: invoiceData.items.map(item => ({
@@ -277,7 +292,9 @@ const PublicInvoiceGenerator = () => {
           rate: parseFloat(item.price) || 0
         })),
         subtotal,
-        total: subtotal,
+        taxRate: parseFloat(invoiceData.taxRate) || 0,
+        taxAmount,
+        total,
         templateId: selectedTemplate.id
       };
       
@@ -296,6 +313,8 @@ const PublicInvoiceGenerator = () => {
     setLoadingDownload(true);
     try {
       const subtotal = calculateSubtotal();
+      const taxAmount = calculateTax();
+      const total = calculateTotal();
       const invoicePayload = {
         ...invoiceData,
         lineItems: invoiceData.items.map(item => ({
@@ -304,7 +323,9 @@ const PublicInvoiceGenerator = () => {
           rate: parseFloat(item.price) || 0
         })),
         subtotal,
-        total: subtotal,
+        taxRate: parseFloat(invoiceData.taxRate) || 0,
+        taxAmount,
+        total,
         templateId: selectedTemplate.id
       };
       
@@ -365,6 +386,7 @@ const PublicInvoiceGenerator = () => {
           quantity: 1,
           price: 0
         }],
+        taxRate: 0,
         paymentTerms: 'Due on receipt',
         notes: ''
       });
@@ -931,14 +953,48 @@ const PublicInvoiceGenerator = () => {
                 elevation={0} 
                 sx={{ 
                   p: 2.5, 
-                  bgcolor: 'primary.50',
+                  bgcolor: 'grey.50',
                   border: '1px solid',
-                  borderColor: 'primary.200'
+                  borderColor: 'divider',
+                  minWidth: 300
                 }}
               >
-                <Typography variant="h6" fontWeight={600} color="primary.main">
-                  Subtotal: {formatCurrency(calculateSubtotal(), invoiceData.currency)}
-                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="body1">Subtotal:</Typography>
+                    <Typography variant="body1" fontWeight={500}>
+                      {formatCurrency(calculateSubtotal(), invoiceData.currency)}
+                    </Typography>
+                  </Box>
+                  
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="body1">Tax</Typography>
+                      <TextField
+                        size="small"
+                        type="number"
+                        value={invoiceData.taxRate}
+                        onChange={(e) => updateInvoiceData('taxRate', e.target.value)}
+                        InputProps={{
+                          endAdornment: <Typography variant="body2" sx={{ ml: 0.5 }}>%</Typography>,
+                        }}
+                        sx={{ width: 80 }}
+                      />
+                    </Box>
+                    <Typography variant="body1" fontWeight={500}>
+                      {formatCurrency(calculateTax(), invoiceData.currency)}
+                    </Typography>
+                  </Box>
+                  
+                  <Divider />
+                  
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h6" fontWeight={600}>Total:</Typography>
+                    <Typography variant="h6" fontWeight={600} color="primary.main">
+                      {formatCurrency(calculateTotal(), invoiceData.currency)}
+                    </Typography>
+                  </Box>
+                </Box>
               </Paper>
             </Box>
           </Paper>
