@@ -229,10 +229,10 @@ const Invoices = () => {
     const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
     
     // Calculate next invoice number
-    let nextInvoiceNumber = invoice.invoiceNumber;
+    let nextInvoiceNumber;
     
     // Extract the numeric part and increment it
-    const match = invoice.invoiceNumber.match(/^(.*?)(\d+)$/);
+    const match = `${invoice.invoiceNumber}`.match(/^(.*?)(\d+)$/);
     if (match) {
       const prefix = match[1];
       const number = parseInt(match[2]);
