@@ -51,7 +51,8 @@ export const AuthProvider = ({ children }) => {
     // If activeProfileId is null, user is using personal account
     if (activeProfileId === null) return null;
     
-    if (!userData?.profiles) return null;
+    // Ensure profiles is an array before using find
+    if (!userData?.profiles || !Array.isArray(userData.profiles)) return null;
     return userData.profiles.find(p => p.id === activeProfileId) || userData.profiles[0];
   };
 
@@ -230,6 +231,10 @@ export const AuthProvider = ({ children }) => {
           };
         } else {
           // Business profile - update the specific profile in the profiles array
+          // Ensure profiles is an array
+          if (!userData?.profiles || !Array.isArray(userData.profiles)) {
+            throw new Error('No profiles found');
+          }
           const updatedProfiles = userData.profiles.map(profile => {
             if (profile.id === activeProfileId) {
               return {
@@ -298,7 +303,11 @@ export const AuthProvider = ({ children }) => {
         toast.success('Switched to Personal Account');
       } else {
         // Switching to a business profile
-        const profile = userData?.profiles?.find(p => p.id === profileId);
+        // Ensure profiles is an array before using find
+        if (!userData?.profiles || !Array.isArray(userData.profiles)) {
+          throw new Error('No profiles found');
+        }
+        const profile = userData.profiles.find(p => p.id === profileId);
         if (!profile) {
           throw new Error('Profile not found');
         }
@@ -374,7 +383,32 @@ export const AuthProvider = ({ children }) => {
   const fetchUserData = async (user) => {
     try {
       const response = await profileAPI.get();
-      setUserData(response.data);
+      // Ensure profiles is an array if it exists
+      const data = response.data;
+      if (data && !Array.isArray(data.profiles)) {
+        // If profiles is not an array or doesn't exist, create a default profile array
+        data.profiles = [{
+          id: 'default',
+          name: 'Main Business',
+          displayName: data.displayName || user.displayName || '',
+          company: data.company || '',
+          phone: data.phone || '',
+          address: data.address || {},
+          invoiceSettings: data.invoiceSettings || {
+            prefix: 'INV',
+            nextNumber: 1,
+            taxRate: 0,
+            currency: 'USD',
+            paymentTerms: 'Due on receipt',
+            dueDateDuration: 7,
+            autoIncrementNumber: true
+          },
+          isDefault: true,
+          createdAt: new Date().valueOf()
+        }];
+        data.activeProfileId = 'default';
+      }
+      setUserData(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
       // If profile doesn't exist, create one with default profile
@@ -430,11 +464,14 @@ export const AuthProvider = ({ children }) => {
 
   // Update profiles when userData changes
   useEffect(() => {
-    if (userData?.profiles) {
+    if (userData?.profiles && Array.isArray(userData.profiles)) {
       setProfiles(userData.profiles);
       if (userData.activeProfileId) {
         setActiveProfileId(userData.activeProfileId);
       }
+    } else if (userData) {
+      // If userData exists but profiles is not an array, set empty array
+      setProfiles([]);
     }
   }, [userData]);
 

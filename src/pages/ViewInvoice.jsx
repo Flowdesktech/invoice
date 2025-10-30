@@ -566,7 +566,8 @@ const ViewInvoice = () => {
             ...invoice,
             formattedInvoiceNumber: formatInvoiceNumber(
               invoice.invoiceNumber,
-              userData?.profiles?.find(p => p.id === userData?.activeProfileId)?.invoiceSettings?.prefix || 
+              (Array.isArray(userData?.profiles) ? 
+                userData.profiles.find(p => p.id === userData?.activeProfileId)?.invoiceSettings?.prefix : null) || 
               userData?.invoiceSettings?.prefix || 
               'INV'
             ),

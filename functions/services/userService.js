@@ -1,5 +1,6 @@
 const { db, admin } = require('../config/firebase');
 const { FieldValue } = require('firebase-admin/firestore');
+const migrationService = require('./migrationService');
 
 class UserService {
   constructor() {
@@ -16,7 +17,14 @@ class UserService {
       return null;
     }
 
-    return { id: doc.id, ...doc.data() };
+    // Check if user needs migration
+    const userData = doc.data();
+    if (!userData.profiles || !Array.isArray(userData.profiles)) {
+      // Migrate this user
+      return await migrationService.migrateSingleUser(userId);
+    }
+
+    return { id: doc.id, ...userData };
   }
 
   /**

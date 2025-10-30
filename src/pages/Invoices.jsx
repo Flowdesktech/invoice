@@ -252,6 +252,8 @@ const Invoices = () => {
       date: currentDate.getTime(),
       dueDate: dueDate.getTime(),
       invoiceNumber: nextInvoiceNumber,
+      templateId: invoice.templateId, // Copy template
+      currency: invoice.currency || 'USD', // Copy currency with fallback
       isDuplicate: true
     };
     

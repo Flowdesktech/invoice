@@ -168,7 +168,7 @@ const AccountSwitcher = ({ currentProfile, profiles = [], onSwitchProfile, onAdd
           </Typography>
         </Box>
         
-        {profiles && profiles.length > 0 && profiles.map((profile) => (
+        {profiles && Array.isArray(profiles) && profiles.length > 0 && profiles.map((profile) => (
           <MenuItem
             key={profile.id}
             onClick={() => handleSwitch(profile.id)}

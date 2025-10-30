@@ -209,6 +209,14 @@ const CreateInvoice = () => {
       // Set line items
       setLineItems(duplicateData.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
       
+      // Set template if provided
+      if (duplicateData.templateId) {
+        const template = templates.find(t => t.id === duplicateData.templateId);
+        if (template) {
+          setSelectedTemplate(template);
+        }
+      }
+      
       // Generate new invoice number for duplicate
       generateInvoiceNumber();
       
