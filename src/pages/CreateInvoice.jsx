@@ -120,13 +120,13 @@ const CreateInvoice = () => {
     if (!isEditMode && !isDuplicateMode) {
       generateInvoiceNumber();
     }
-    
+
     // Restore saved form data when returning from template selection
     const savedFormData = localStorage.getItem('invoiceFormData');
     if (savedFormData && !isEditMode && !isDuplicateMode) {
       try {
         const formData = JSON.parse(savedFormData);
-        
+
         // Restore form values using setValue
         if (formData.selectedCustomer) {
           setValue('customer', formData.selectedCustomer);
@@ -149,15 +149,15 @@ const CreateInvoice = () => {
         if (formData.tax !== undefined) {
           setValue('taxRate', formData.tax);
         }
-        
+
         // Restore line items
         if (formData.items && formData.items.length > 0) {
           setLineItems(formData.items);
         }
-        
+
         // Clear the saved data after restoration
         localStorage.removeItem('invoiceFormData');
-        
+
         // Show a message to indicate data was restored
         toast.success('Your invoice data has been restored');
       } catch (error) {
@@ -189,10 +189,10 @@ const CreateInvoice = () => {
   useEffect(() => {
     if (isDuplicateMode && customers.length > 0 && location.state?.duplicateData) {
       const duplicateData = location.state.duplicateData;
-      
+
       // Find the customer object from the customers list
       const customer = customers.find(c => c.id === duplicateData.customerId);
-      
+
       // Reset form with duplicate data
       reset({
         customer: customer || null,
@@ -205,10 +205,10 @@ const CreateInvoice = () => {
         paymentTerms: duplicateData.paymentTerms || 'Due on receipt',
         currency: duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
       });
-      
+
       // Set line items
       setLineItems(duplicateData.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
-      
+
       // Set template if provided
       if (duplicateData.templateId) {
         const template = templates.find(t => t.id === duplicateData.templateId);
@@ -216,10 +216,10 @@ const CreateInvoice = () => {
           setSelectedTemplate(template);
         }
       }
-      
+
       // Generate new invoice number for duplicate
       generateInvoiceNumber();
-      
+
       // Show success message
       toast.success('Invoice duplicated successfully');
     }
@@ -236,10 +236,10 @@ const CreateInvoice = () => {
       setLoadingInvoice(true);
       const response = await invoiceAPI.getById(id);
       const invoice = response.data;
-      
+
       // Find the customer object from the customers list
       const customer = customers.find(c => c.id === invoice.customerId);
-      
+
       // Reset form with invoice data
       reset({
         customer: customer || null,
@@ -252,10 +252,10 @@ const CreateInvoice = () => {
         paymentTerms: invoice.paymentTerms || 'Due on receipt',
         currency: invoice.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
       });
-      
+
       // Set line items
       setLineItems(invoice.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
-      
+
       // Restore selected template if available
       // Only set template from invoice data if there's no templateId in query params
       const queryTemplateId = searchParams.get('templateId');
@@ -315,7 +315,7 @@ const CreateInvoice = () => {
 
   const handleCustomerUpdated = (updatedCustomer) => {
     // Update the customer in the list
-    setCustomers(prevCustomers => 
+    setCustomers(prevCustomers =>
       prevCustomers.map(c => c.id === updatedCustomer.id ? updatedCustomer : c)
     );
     // Update the selected customer
@@ -328,7 +328,7 @@ const CreateInvoice = () => {
   const handlePreview = async () => {
     try {
       setPreviewLoading(true);
-      
+
       // Process line items to replace template placeholders
       const processedLineItems = lineItems
         .filter(item => item.description)
@@ -336,7 +336,7 @@ const CreateInvoice = () => {
           ...item,
           description: processTemplateDescription(item.description, watch('date'))
         }));
-      
+
       // Prepare invoice data for preview
       const invoiceData = {
         customerId: selectedCustomer.id,
@@ -351,10 +351,10 @@ const CreateInvoice = () => {
         currency: watch('currency') || 'USD',  // Include currency for preview
         templateId: selectedTemplate?.id || null,  // Include template ID for preview
       };
-      
+
       // Call backend preview API
       const response = await invoiceAPI.preview(invoiceData);
-      
+
       // Use common utility to open PDF
       openPdfInNewTab(response.data?.pdf, {
         filename: `invoice_${invoiceData.invoiceNumber}_preview.pdf`
@@ -377,36 +377,59 @@ const CreateInvoice = () => {
     if (!description || !description.includes('{{')) {
       return description;
     }
-    
+
     // Calculate period dates based on a monthly frequency (most common)
     const endDate = new Date(invoiceDate);
     const startDate = subMonths(endDate, 1);
-    
+
     // Replace placeholders with actual dates
     let processed = description;
-    
+
     // Date range placeholders
     processed = processed.replace(/\{\{PERIOD_START\}\}/gi, format(startDate, 'MMM d'));
     processed = processed.replace(/\{\{PERIOD_END\}\}/gi, format(endDate, 'MMM d'));
-    
+
     // Month placeholders
     processed = processed.replace(/\{\{MONTH_NAME\}\}/gi, format(startDate, 'MMMM'));
     processed = processed.replace(/\{\{MONTH_SHORT\}\}/gi, format(startDate, 'MMM'));
-    
+
     // Year and other placeholders
     processed = processed.replace(/\{\{YEAR\}\}/gi, format(startDate, 'yyyy'));
     processed = processed.replace(/\{\{WEEK_NUMBER\}\}/gi, getWeek(endDate).toString());
     processed = processed.replace(/\{\{QUARTER\}\}/gi, getQuarter(startDate).toString());
-    
+
     return processed;
   };
 
   const generateInvoiceNumber = async () => {
-    if (!userData?.invoiceSettings) return;
+    try {
+      // Fetch fresh profile data to ensure we have the latest invoice number
+      const response = await profileAPI.get();
+      const latestUserData = response.data;
 
-    const { nextNumber } = userData.invoiceSettings;
-    // Store only the number in the form
-    setValue('invoiceNumber', nextNumber);
+      let settings;
+      // Determine which settings to use based on active profile
+      if (latestUserData.activeProfileId && latestUserData.activeProfileId !== 'personal' && Array.isArray(latestUserData.profiles)) {
+        const activeProfile = latestUserData.profiles.find(p => p.id === latestUserData.activeProfileId);
+        settings = activeProfile?.invoiceSettings;
+      } else {
+        // Use default/personal settings
+        settings = latestUserData.invoiceSettings;
+      }
+
+      if (settings?.nextNumber) {
+        setValue('invoiceNumber', settings.nextNumber);
+      } else if (userData?.invoiceSettings?.nextNumber) {
+        // Fallback to context data
+        setValue('invoiceNumber', userData.invoiceSettings.nextNumber);
+      }
+    } catch (error) {
+      console.error('Error fetching fresh invoice number:', error);
+      // Fallback to context data
+      if (userData?.invoiceSettings?.nextNumber) {
+        setValue('invoiceNumber', userData.invoiceSettings.nextNumber);
+      }
+    }
   };
 
   const handleAddLineItem = () => {
@@ -462,7 +485,7 @@ const CreateInvoice = () => {
           ...item,
           description: processTemplateDescription(item.description, data.date)
         }));
-      
+
       // Prepare invoice data for API
       const invoiceData = {
         customerId: selectedCustomer.id,
@@ -486,7 +509,7 @@ const CreateInvoice = () => {
         // Create new invoice
         const response = await invoiceAPI.create(invoiceData);
         toast.success('Invoice created successfully with PDF!');
-        
+
         // If set as recurring is checked, open the recurring dialog
         if (setAsRecurring) {
           // Validate the response contains valid invoice data
@@ -496,7 +519,7 @@ const CreateInvoice = () => {
             navigate('/invoices');
             return;
           }
-          
+
           // Ensure we have the complete invoice data including lineItems from our local state
           const completeInvoiceData = {
             ...response.data,
@@ -508,7 +531,7 @@ const CreateInvoice = () => {
             notes: data.notes,
             paymentTerms: data.paymentTerms
           };
-          
+
           setCreatedInvoice(completeInvoiceData);
           setRecurringDialogOpen(true);
         } else {
@@ -516,7 +539,7 @@ const CreateInvoice = () => {
         }
         return;
       }
-      
+
       // For edit mode, navigate back to invoice view
       navigate(`/invoices/${id}`);
     } catch (error) {
@@ -557,15 +580,15 @@ const CreateInvoice = () => {
   return (
     <Container maxWidth="xl" sx={{ px: { xs: 0, sm: 3 } }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ 
+        <Box sx={{
           mb: { xs: 3, sm: 4 },
           px: { xs: 2, sm: 0 }
         }}>
-          <Typography 
-            variant="h4" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 600, 
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontWeight: 600,
               color: 'text.primary',
               mb: 1,
               fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
@@ -583,9 +606,9 @@ const CreateInvoice = () => {
           {/* Customer and Invoice Details */}
           <Grid size={{ xs: 12, md: 12, lg: 8, xl: 9 }}>
             {/* Template Selection */}
-            <Paper 
-              sx={{ 
-                p: { xs: 2, sm: 3 }, 
+            <Paper
+              sx={{
+                p: { xs: 2, sm: 3 },
                 mb: 3,
                 borderRadius: 2,
                 border: '1px solid',
@@ -634,15 +657,15 @@ const CreateInvoice = () => {
                       Invoice Template
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {selectedTemplate 
+                      {selectedTemplate
                         ? `${selectedTemplate.name} - ${selectedTemplate.description}`
                         : 'Using default template'
                       }
                     </Typography>
                     {selectedTemplate?.isPremium && (
-                      <Chip 
-                        label="Premium - Free for Early Adopters" 
-                        size="small" 
+                      <Chip
+                        label="Premium - Free for Early Adopters"
+                        size="small"
                         color="warning"
                         icon={<StarIcon sx={{ fontSize: 16 }} />}
                         sx={{ mt: 1 }}
@@ -667,18 +690,18 @@ const CreateInvoice = () => {
                       tax: currentValues.taxRate
                     };
                     localStorage.setItem('invoiceFormData', JSON.stringify(formData));
-                    
+
                     // Construct the return path with current query params preserved
                     let returnPath = isEditMode ? `/invoices/${id}/edit` : '/invoices/create';
-                    
+
                     // Preserve existing query parameters (except templateId which will be updated)
                     const currentParams = new URLSearchParams(window.location.search);
                     currentParams.delete('templateId'); // Remove old templateId if exists
-                    
+
                     if (currentParams.toString()) {
                       returnPath += '?' + currentParams.toString();
                     }
-                    
+
                     navigate('/invoice-templates', { state: { returnPath } });
                   }}
                   sx={{ minWidth: 150 }}
@@ -688,19 +711,19 @@ const CreateInvoice = () => {
               </Box>
             </Paper>
 
-            <Paper 
-              sx={{ 
-                p: { xs: 2, sm: 3, md: 4 }, 
+            <Paper
+              sx={{
+                p: { xs: 2, sm: 3, md: 4 },
                 mb: 3,
                 borderRadius: 2,
                 border: '1px solid',
                 borderColor: 'divider',
               }}
             >
-              <Typography 
-                variant="h6" 
+              <Typography
+                variant="h6"
                 gutterBottom
-                sx={{ 
+                sx={{
                   fontWeight: 600,
                   mb: 3,
                   pb: 2,
@@ -710,166 +733,166 @@ const CreateInvoice = () => {
               >
                 Customer Selection
               </Typography>
-              
+
               {/* Customer Selection - Separate Section */}
               <Box sx={{ mb: 4 }}>
                 <Controller
                   name="customer"
-                    control={control}
-                    rules={{ required: 'Customer is required' }}
-                    render={({ field }) => (
-                      <Autocomplete
-                        {...field}
-                        options={[{ id: 'new', name: '+ Add New Customer' }, ...customers]}
-                        getOptionLabel={(option) => option.name || ''}
-                        renderOption={(props, option) => {
-                          const { key, ...otherProps } = props;
-                          return (
-                            <Box
-                              component="li"
-                              key={key}
-                              {...otherProps}
-                              sx={{
-                                fontWeight: option.id === 'new' ? 600 : 400,
-                                color: option.id === 'new' ? 'primary.main' : 'inherit',
-                                borderBottom: option.id === 'new' ? '1px solid' : 'none',
-                                borderColor: 'divider',
-                                '&:hover': {
-                                  backgroundColor: option.id === 'new' ? 'primary.50' : 'action.hover',
-                                },
-                              }}
-                            >
-                              {option.id === 'new' && <AddIcon sx={{ mr: 1, fontSize: 20 }} />}
-                              {option.name}
-                            </Box>
-                          );
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Customer *"
-                            error={!!errors.customer}
-                            helperText={errors.customer?.message}
-                            fullWidth
-                          />
-                        )}
-                        onChange={(_, value) => {
-                          if (value?.id === 'new') {
-                            setCustomerDialogOpen(true);
-                          } else {
-                            field.onChange(value);
-                          }
-                        }}
-                      />
-                    )}
-                  />
+                  control={control}
+                  rules={{ required: 'Customer is required' }}
+                  render={({ field }) => (
+                    <Autocomplete
+                      {...field}
+                      options={[{ id: 'new', name: '+ Add New Customer' }, ...customers]}
+                      getOptionLabel={(option) => option.name || ''}
+                      renderOption={(props, option) => {
+                        const { key, ...otherProps } = props;
+                        return (
+                          <Box
+                            component="li"
+                            key={key}
+                            {...otherProps}
+                            sx={{
+                              fontWeight: option.id === 'new' ? 600 : 400,
+                              color: option.id === 'new' ? 'primary.main' : 'inherit',
+                              borderBottom: option.id === 'new' ? '1px solid' : 'none',
+                              borderColor: 'divider',
+                              '&:hover': {
+                                backgroundColor: option.id === 'new' ? 'primary.50' : 'action.hover',
+                              },
+                            }}
+                          >
+                            {option.id === 'new' && <AddIcon sx={{ mr: 1, fontSize: 20 }} />}
+                            {option.name}
+                          </Box>
+                        );
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Customer *"
+                          error={!!errors.customer}
+                          helperText={errors.customer?.message}
+                          fullWidth
+                        />
+                      )}
+                      onChange={(_, value) => {
+                        if (value?.id === 'new') {
+                          setCustomerDialogOpen(true);
+                        } else {
+                          field.onChange(value);
+                        }
+                      }}
+                    />
+                  )}
+                />
               </Box>
-                
+
               {/* Customer Information Display */}
               {selectedCustomer && (
                 <Box sx={{ mb: 4 }}>
-                    <Paper
-                      sx={{
-                        p: { xs: 2, sm: 3 },
-                        backgroundColor: '#f8fafc',
-                        border: '1px solid',
-                        borderColor: 'divider',
-                        borderRadius: 2,
-                      }}
-                    >
-                      <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                        <Typography variant="h6" fontWeight={600}>
-                          Customer Details
+                  <Paper
+                    sx={{
+                      p: { xs: 2, sm: 3 },
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
+                      <Typography variant="h6" fontWeight={600}>
+                        Customer Details
+                      </Typography>
+                      <Button
+                        size="small"
+                        startIcon={<EditIcon />}
+                        onClick={handleEditCustomer}
+                        sx={{ textTransform: 'none' }}
+                      >
+                        Edit Customer
+                      </Button>
+                    </Box>
+
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+                        <Box display="flex" alignItems="center" gap={1} mb={1}>
+                          <BusinessIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Name
+                          </Typography>
+                        </Box>
+                        <Typography variant="body1" fontWeight={500}>
+                          {selectedCustomer.name}
                         </Typography>
-                        <Button
-                          size="small"
-                          startIcon={<EditIcon />}
-                          onClick={handleEditCustomer}
-                          sx={{ textTransform: 'none' }}
-                        >
-                          Edit Customer
-                        </Button>
-                      </Box>
-                      
-                      <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-                          <Box display="flex" alignItems="center" gap={1} mb={1}>
-                            <BusinessIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
-                            <Typography variant="body2" color="text.secondary">
-                              Name
-                            </Typography>
-                          </Box>
-                          <Typography variant="body1" fontWeight={500}>
-                            {selectedCustomer.name}
+                        {selectedCustomer.company && (
+                          <Typography variant="body2" color="text.secondary">
+                            {selectedCustomer.company}
                           </Typography>
-                          {selectedCustomer.company && (
-                            <Typography variant="body2" color="text.secondary">
-                              {selectedCustomer.company}
-                            </Typography>
-                          )}
-                        </Grid>
-                        
-                        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-                          <Box display="flex" alignItems="center" gap={1} mb={1}>
-                            <EmailIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
-                            <Typography variant="body2" color="text.secondary">
-                              Contact
-                            </Typography>
-                          </Box>
-                          <Typography variant="body2">
-                            {selectedCustomer.email}
-                          </Typography>
-                          {selectedCustomer.phone && (
-                            <Box display="flex" alignItems="center" gap={1} mt={1}>
-                              <PhoneIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
-                              <Typography variant="body2">
-                                {selectedCustomer.phone}
-                              </Typography>
-                            </Box>
-                          )}
-                        </Grid>
-                        
-                        {selectedCustomer.address && (
-                          <Grid size={12}>
-                            <Box display="flex" alignItems="flex-start" gap={1} mb={1}>
-                              <LocationIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
-                              <Box>
-                                <Typography variant="body2" color="text.secondary" mb={0.5}>
-                                  Address
-                                </Typography>
-                                {selectedCustomer.address.street && (
-                                  <Typography variant="body2">
-                                    {selectedCustomer.address.street}
-                                  </Typography>
-                                )}
-                                {(selectedCustomer.address.city || selectedCustomer.address.state || selectedCustomer.address.zipCode) && (
-                                  <Typography variant="body2">
-                                    {[
-                                      selectedCustomer.address.city,
-                                      selectedCustomer.address.state,
-                                      selectedCustomer.address.zipCode
-                                    ].filter(Boolean).join(', ')}
-                                  </Typography>
-                                )}
-                                {selectedCustomer.address.country && (
-                                  <Typography variant="body2">
-                                    {selectedCustomer.address.country}
-                                  </Typography>
-                                )}
-                              </Box>
-                            </Box>
-                          </Grid>
                         )}
                       </Grid>
-                    </Paper>
+
+                      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+                        <Box display="flex" alignItems="center" gap={1} mb={1}>
+                          <EmailIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                          <Typography variant="body2" color="text.secondary">
+                            Contact
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2">
+                          {selectedCustomer.email}
+                        </Typography>
+                        {selectedCustomer.phone && (
+                          <Box display="flex" alignItems="center" gap={1} mt={1}>
+                            <PhoneIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                            <Typography variant="body2">
+                              {selectedCustomer.phone}
+                            </Typography>
+                          </Box>
+                        )}
+                      </Grid>
+
+                      {selectedCustomer.address && (
+                        <Grid size={12}>
+                          <Box display="flex" alignItems="flex-start" gap={1} mb={1}>
+                            <LocationIcon sx={{ fontSize: 20, color: 'text.secondary' }} />
+                            <Box>
+                              <Typography variant="body2" color="text.secondary" mb={0.5}>
+                                Address
+                              </Typography>
+                              {selectedCustomer.address.street && (
+                                <Typography variant="body2">
+                                  {selectedCustomer.address.street}
+                                </Typography>
+                              )}
+                              {(selectedCustomer.address.city || selectedCustomer.address.state || selectedCustomer.address.zipCode) && (
+                                <Typography variant="body2">
+                                  {[
+                                    selectedCustomer.address.city,
+                                    selectedCustomer.address.state,
+                                    selectedCustomer.address.zipCode
+                                  ].filter(Boolean).join(', ')}
+                                </Typography>
+                              )}
+                              {selectedCustomer.address.country && (
+                                <Typography variant="body2">
+                                  {selectedCustomer.address.country}
+                                </Typography>
+                              )}
+                            </Box>
+                          </Box>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </Paper>
                 </Box>
               )}
-              
+
               {/* Invoice Details Section */}
-              <Typography 
-                variant="h6" 
+              <Typography
+                variant="h6"
                 gutterBottom
-                sx={{ 
+                sx={{
                   fontWeight: 600,
                   mb: 3,
                   pb: 2,
@@ -879,7 +902,7 @@ const CreateInvoice = () => {
               >
                 Invoice Details
               </Typography>
-              
+
               <Grid container spacing={{ xs: 2, sm: 3 }}>
                 {/* Invoice Details Row */}
                 <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3, xl: 2 }}>
@@ -891,11 +914,11 @@ const CreateInvoice = () => {
                       const autoIncrement = profileData?.invoiceSettings?.autoIncrementNumber !== false;
                       const prefix = profileData?.invoiceSettings?.prefix || 'INV';
                       const nextNumber = profileData?.invoiceSettings?.nextNumber || 1;
-                      
+
                       // Display only the number without prefix
                       const displayValue = field.value || '';
                       const nextInvoiceNumberFormatted = formatInvoiceNumber(nextNumber, prefix);
-                      
+
                       return (
                         <TextField
                           {...field}
@@ -912,13 +935,13 @@ const CreateInvoice = () => {
                           disabled={false}
                           placeholder={!isEditMode && autoIncrement ? String(nextNumber) : ''}
                           helperText={
-                            isEditMode 
-                              ? "Update invoice number" 
-                              : autoIncrement 
+                            isEditMode
+                              ? "Update invoice number"
+                              : autoIncrement
                                 ? `Will be saved as: ${nextInvoiceNumberFormatted}`
                                 : "Enter invoice number"
                           }
-                          inputProps={{ 
+                          inputProps={{
                             style: { textAlign: 'right' }
                           }}
                           sx={{
@@ -943,7 +966,7 @@ const CreateInvoice = () => {
                     render={({ field }) => {
                       const profileData = currentProfile || userData;
                       const dueDateDuration = profileData?.invoiceSettings?.dueDateDuration || 7;
-                      
+
                       return (
                         <DatePicker
                           label="Invoice Date *"
@@ -996,7 +1019,7 @@ const CreateInvoice = () => {
             </Paper>
 
             {/* Line Items */}
-            <Paper sx={{ 
+            <Paper sx={{
               p: { xs: 2, sm: 3 },
               overflow: 'hidden'
             }}>
@@ -1012,7 +1035,7 @@ const CreateInvoice = () => {
                   Add Item
                 </Button>
               </Box>
-              
+
               {isMobile ? (
                 // Mobile Card View for Line Items
                 <Stack spacing={2} sx={{ mt: 2 }}>
@@ -1039,7 +1062,7 @@ const CreateInvoice = () => {
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </Box>
-                      
+
                       <TextField
                         fullWidth
                         size="small"
@@ -1049,7 +1072,7 @@ const CreateInvoice = () => {
                         placeholder="Item description"
                         sx={{ mb: 2 }}
                       />
-                      
+
                       <Grid container spacing={2}>
                         <Grid size={4}>
                           <TextField
@@ -1089,7 +1112,7 @@ const CreateInvoice = () => {
                 </Stack>
               ) : (
                 // Desktop Table View
-                <TableContainer sx={{ 
+                <TableContainer sx={{
                   overflowX: 'auto',
                   '&::-webkit-scrollbar': {
                     height: 8,
@@ -1163,76 +1186,76 @@ const CreateInvoice = () => {
 
               <Box mt={4}>
                 <Divider sx={{ mb: 3 }} />
-                <Typography 
-                  variant="subtitle1" 
-                  sx={{ 
-                    fontWeight: 600, 
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 600,
                     color: 'text.primary',
-                    mb: 2 
+                    mb: 2
                   }}
                 >
                   Additional Information
                 </Typography>
-                <Grid container spacing={{ xs: 2, sm: 3 }} style={{width: '100%'}}>
-                    <Controller
-                      name="notes"
-                      control={control}
-                      render={({ field }) => (
-                        <TextField
-                          {...field}
-                          label="Notes & Terms"
-                          multiline
-                          rows={4}
-                          fullWidth
-                          placeholder="Enter any additional notes, terms, or special instructions for this invoice"
-                          variant="outlined"
-                          sx={{
-                            '& .MuiOutlinedInput-root': {
-                              backgroundColor: '#f8fafc',
-                              '&:hover': {
-                                backgroundColor: '#f1f5f9',
-                              },
-                              '&.Mui-focused': {
-                                backgroundColor: '#ffffff',
-                              },
+                <Grid container spacing={{ xs: 2, sm: 3 }} style={{ width: '100%' }}>
+                  <Controller
+                    name="notes"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Notes & Terms"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        placeholder="Enter any additional notes, terms, or special instructions for this invoice"
+                        variant="outlined"
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            backgroundColor: '#f8fafc',
+                            '&:hover': {
+                              backgroundColor: '#f1f5f9',
                             },
-                            '& .MuiInputLabel-root': {
-                              fontWeight: 500,
+                            '&.Mui-focused': {
+                              backgroundColor: '#ffffff',
                             },
-                          }}
-                        />
-                      )}
-                    />
-                  </Grid>
+                          },
+                          '& .MuiInputLabel-root': {
+                            fontWeight: 500,
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
               </Box>
             </Paper>
           </Grid>
 
           {/* Summary and Actions */}
-          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }} sx={{ 
-            order: { xs: -1, sm: -1, md: 2, lg: 2 } 
+          <Grid size={{ xs: 12, sm: 12, md: 6, lg: 4, xl: 3 }} sx={{
+            order: { xs: -1, sm: -1, md: 2, lg: 2 }
           }}>
-            <Box sx={{ 
-              position: { lg: 'sticky' }, 
+            <Box sx={{
+              position: { lg: 'sticky' },
               top: { lg: 20 }
             }}>
-              <Paper 
-                sx={{ 
-                  p: { xs: 2, sm: 2.5, md: 3 }, 
+              <Paper
+                sx={{
+                  p: { xs: 2, sm: 2.5, md: 3 },
                   mb: { xs: 2, sm: 3 },
                   borderRadius: { xs: 1, sm: 2 },
                   border: '1px solid',
                   borderColor: 'divider',
-                  background: { 
+                  background: {
                     xs: '#ffffff',
                     sm: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)'
                   }
                 }}
               >
-                <Typography 
-                  variant="h6" 
+                <Typography
+                  variant="h6"
                   gutterBottom
-                  sx={{ 
+                  sx={{
                     fontWeight: 600,
                     mb: { xs: 2, sm: 3 },
                     pb: { xs: 1.5, sm: 2 },
@@ -1243,12 +1266,12 @@ const CreateInvoice = () => {
                 >
                   Invoice Summary
                 </Typography>
-              
+
                 {selectedCustomer && (
-                  <Box 
-                    mb={{ xs: 2, sm: 3 }} 
-                    sx={{ 
-                      p: { xs: 1, sm: 1.5, md: 2 }, 
+                  <Box
+                    mb={{ xs: 2, sm: 3 }}
+                    sx={{
+                      p: { xs: 1, sm: 1.5, md: 2 },
                       backgroundColor: '#f8fafc',
                       borderRadius: 1,
                       border: '1px solid',
@@ -1256,9 +1279,9 @@ const CreateInvoice = () => {
                       display: { xs: 'none', sm: 'block' }
                     }}
                   >
-                    <Typography 
-                      variant="subtitle2" 
-                      sx={{ 
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
                         fontWeight: 600,
                         color: 'primary.main',
                         mb: 0.5,
@@ -1267,8 +1290,8 @@ const CreateInvoice = () => {
                     >
                       Bill To:
                     </Typography>
-                    <Typography variant="body2" sx={{ 
-                      fontWeight: 600, 
+                    <Typography variant="body2" sx={{
+                      fontWeight: 600,
                       mb: 0.5,
                       fontSize: { xs: '0.75rem', sm: '0.875rem' }
                     }}>
@@ -1294,19 +1317,57 @@ const CreateInvoice = () => {
                   </Box>
                 )}
 
-              <Divider sx={{ my: { xs: 1.5, sm: 2 }, display: { xs: 'none', sm: 'block' } }} />
+                <Divider sx={{ my: { xs: 1.5, sm: 2 }, display: { xs: 'none', sm: 'block' } }} />
 
-              <Grid container spacing={2} mb={{ xs: 2, sm: 3 }}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <Controller
-                    name="currency"
-                    control={control}
-                    render={({ field }) => (
-                      <FormControl fullWidth size="small">
-                        <InputLabel>Currency</InputLabel>
-                        <Select
+                <Grid container spacing={2} mb={{ xs: 2, sm: 3 }}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <Controller
+                      name="currency"
+                      control={control}
+                      render={({ field }) => (
+                        <FormControl fullWidth size="small">
+                          <InputLabel>Currency</InputLabel>
+                          <Select
+                            {...field}
+                            label="Currency"
+                            sx={{
+                              '& .MuiInputBase-root': {
+                                backgroundColor: '#ffffff',
+                              },
+                              '& .MuiInputLabel-root': {
+                                fontSize: { xs: '0.875rem', sm: '1rem' }
+                              }
+                            }}
+                          >
+                            {currencyOptions.map((currencyOption) => (
+                              <MenuItem key={currencyOption.value} value={currencyOption.value}>
+                                <Box display="flex" alignItems="center" gap={1}>
+                                  <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                    {currencyOption.symbol}
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {currencyOption.label}
+                                  </Typography>
+                                </Box>
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      )}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <Controller
+                      name="taxRate"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
                           {...field}
-                          label="Currency"
+                          label="Tax Rate (%)"
+                          type="number"
+                          size="small"
+                          fullWidth
+                          inputProps={{ min: 0, step: 0.01 }}
                           sx={{
                             '& .MuiInputBase-root': {
                               backgroundColor: '#ffffff',
@@ -1315,36 +1376,22 @@ const CreateInvoice = () => {
                               fontSize: { xs: '0.875rem', sm: '1rem' }
                             }
                           }}
-                        >
-                          {currencyOptions.map((currencyOption) => (
-                            <MenuItem key={currencyOption.value} value={currencyOption.value}>
-                              <Box display="flex" alignItems="center" gap={1}>
-                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                                  {currencyOption.symbol}
-                                </Typography>
-                                <Typography variant="body2">
-                                  {currencyOption.label}
-                                </Typography>
-                              </Box>
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    )}
-                  />
+                        />
+                      )}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
+
+                <Box mb={3}>
                   <Controller
-                    name="taxRate"
+                    name="paymentTerms"
                     control={control}
                     render={({ field }) => (
                       <TextField
                         {...field}
-                        label="Tax Rate (%)"
-                        type="number"
+                        label="Payment Terms"
                         size="small"
                         fullWidth
-                        inputProps={{ min: 0, step: 0.01 }}
                         sx={{
                           '& .MuiInputBase-root': {
                             backgroundColor: '#ffffff',
@@ -1356,35 +1403,11 @@ const CreateInvoice = () => {
                       />
                     )}
                   />
-                </Grid>
-              </Grid>
+                </Box>
 
-              <Box mb={3}>
-                <Controller
-                  name="paymentTerms"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Payment Terms"
-                      size="small"
-                      fullWidth
-                      sx={{
-                        '& .MuiInputBase-root': {
-                          backgroundColor: '#ffffff',
-                        },
-                        '& .MuiInputLabel-root': {
-                          fontSize: { xs: '0.875rem', sm: '1rem' }
-                        }
-                      }}
-                    />
-                  )}
-                />
-              </Box>
-
-                <Box 
-                  sx={{ 
-                    p: { xs: 1.5, sm: 2, md: 3 }, 
+                <Box
+                  sx={{
+                    p: { xs: 1.5, sm: 2, md: 3 },
                     backgroundColor: '#f1f5f9',
                     borderRadius: { xs: 1, sm: 2 },
                     border: '1px solid',
@@ -1392,147 +1415,147 @@ const CreateInvoice = () => {
                     mb: { xs: 2, sm: 3 }
                   }}
                 >
-                <Box display="flex" justifyContent="space-between" mb={{ xs: 1, sm: 2 }}>
-                  <Typography variant="body1" color="text.secondary" sx={{
-                    fontSize: { xs: '0.875rem', sm: '1rem' }
-                  }}>
-                    Subtotal
-                  </Typography>
-                  <Typography variant="body1" fontWeight={500} sx={{
-                    fontSize: { xs: '0.875rem', sm: '1rem' }
-                  }}>
-                    {formatCurrency(subtotal)}
-                  </Typography>
+                  <Box display="flex" justifyContent="space-between" mb={{ xs: 1, sm: 2 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
+                      Subtotal
+                    </Typography>
+                    <Typography variant="body1" fontWeight={500} sx={{
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
+                      {formatCurrency(subtotal)}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" justifyContent="space-between" mb={{ xs: 1, sm: 2 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
+                      Tax ({taxRate || 0}%)
+                    </Typography>
+                    <Typography variant="body1" fontWeight={500} sx={{
+                      fontSize: { xs: '0.875rem', sm: '1rem' }
+                    }}>
+                      {formatCurrency(taxAmount)}
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: { xs: 1.5, sm: 2 }, borderColor: 'divider' }} />
+                  <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h6" fontWeight={600} sx={{
+                      fontSize: { xs: '1rem', sm: '1.25rem' }
+                    }}>
+                      Total Due
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      fontWeight={700}
+                      sx={{
+                        color: 'primary.main',
+                        fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.875rem' }
+                      }}
+                    >
+                      {formatCurrency(total)}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Box display="flex" justifyContent="space-between" mb={{ xs: 1, sm: 2 }}>
-                  <Typography variant="body1" color="text.secondary" sx={{
-                    fontSize: { xs: '0.875rem', sm: '1rem' }
-                  }}>
-                    Tax ({taxRate || 0}%)
-                  </Typography>
-                  <Typography variant="body1" fontWeight={500} sx={{
-                    fontSize: { xs: '0.875rem', sm: '1rem' }
-                  }}>
-                    {formatCurrency(taxAmount)}
-                  </Typography>
-                </Box>
-                <Divider sx={{ my: { xs: 1.5, sm: 2 }, borderColor: 'divider' }} />
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Typography variant="h6" fontWeight={600} sx={{
-                    fontSize: { xs: '1rem', sm: '1.25rem' }
-                  }}>
-                    Total Due
-                  </Typography>
-                  <Typography 
-                    variant="h5" 
-                    fontWeight={700}
-                    sx={{ 
-                      color: 'primary.main',
-                      fontSize: { xs: '1.25rem', sm: '1.5rem', md: '1.875rem' }
-                    }}
-                  >
-                    {formatCurrency(total)}
-                  </Typography>
-                </Box>
-              </Box>
 
                 <Box display="flex" flexDirection="column" gap={{ xs: 1, sm: 1.5, md: 2 }}>
-                {!isEditMode && (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={setAsRecurring}
-                        onChange={(e) => setSetAsRecurring(e.target.checked)}
-                        color="primary"
-                      />
-                    }
-                    label="Set as recurring invoice"
+                  {!isEditMode && (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={setAsRecurring}
+                          onChange={(e) => setSetAsRecurring(e.target.checked)}
+                          color="primary"
+                        />
+                      }
+                      label="Set as recurring invoice"
+                      sx={{
+                        mb: 1,
+                        '& .MuiFormControlLabel-label': {
+                          fontSize: { xs: '0.875rem', sm: '1rem' },
+                          fontWeight: 500
+                        }
+                      }}
+                    />
+                  )}
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    size="large"
+                    startIcon={<PreviewIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
+                    onClick={handlePreview}
+                    disabled={!selectedCustomer || lineItems.every(item => !item.description) || previewLoading}
                     sx={{
-                      mb: 1,
-                      '& .MuiFormControlLabel-label': {
-                        fontSize: { xs: '0.875rem', sm: '1rem' },
-                        fontWeight: 500
+                      py: { xs: 1, sm: 1.5 },
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      fontSize: { xs: '0.875rem', sm: '1rem' },
+                      borderWidth: { xs: 1, sm: 2 },
+                      borderColor: 'secondary.main',
+                      color: 'secondary.main',
+                      '&:hover': {
+                        borderWidth: { xs: 1, sm: 2 },
+                        borderColor: 'secondary.dark',
+                        backgroundColor: 'secondary.50',
+                      },
+                      '&.Mui-disabled': {
+                        borderWidth: { xs: 1, sm: 2 },
                       }
                     }}
-                  />
-                )}
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  size="large"
-                  startIcon={<PreviewIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
-                  onClick={handlePreview}
-                  disabled={!selectedCustomer || lineItems.every(item => !item.description) || previewLoading}
-                  sx={{
-                    py: { xs: 1, sm: 1.5 },
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    fontSize: { xs: '0.875rem', sm: '1rem' },
-                    borderWidth: { xs: 1, sm: 2 },
-                    borderColor: 'secondary.main',
-                    color: 'secondary.main',
-                    '&:hover': {
+                  >
+                    {previewLoading ? 'Generating...' : 'Preview Invoice'}
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    startIcon={loading ? null : <SaveIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
+                    disabled={loading}
+                    sx={{
+                      py: { xs: 1, sm: 1.5 },
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      fontSize: { xs: '0.875rem', sm: '1rem' },
+                      boxShadow: { xs: 1, sm: 2 },
+                      '&:hover': {
+                        boxShadow: { xs: 2, sm: 4 },
+                      }
+                    }}
+                  >
+                    {loading ? <CircularProgress size={24} color="inherit" /> : (isEditMode ? 'Update Invoice' : 'Create Invoice')}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    size="medium"
+                    startIcon={<CancelIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />}
+                    onClick={() => navigate('/invoices')}
+                    disabled={loading}
+                    sx={{
+                      py: { xs: 0.75, sm: 1 },
+                      textTransform: 'none',
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
                       borderWidth: { xs: 1, sm: 2 },
-                      borderColor: 'secondary.dark',
-                      backgroundColor: 'secondary.50',
-                    },
-                    '&.Mui-disabled': {
-                      borderWidth: { xs: 1, sm: 2 },
-                    }
-                  }}
-                >
-                  {previewLoading ? 'Generating...' : 'Preview Invoice'}
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  startIcon={loading ? null : <SaveIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />}
-                  disabled={loading}
-                  sx={{
-                    py: { xs: 1, sm: 1.5 },
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    fontSize: { xs: '0.875rem', sm: '1rem' },
-                    boxShadow: { xs: 1, sm: 2 },
-                    '&:hover': {
-                      boxShadow: { xs: 2, sm: 4 },
-                    }
-                  }}
-                >
-                  {loading ? <CircularProgress size={24} color="inherit" /> : (isEditMode ? 'Update Invoice' : 'Create Invoice')}
-                </Button>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  size="medium"
-                  startIcon={<CancelIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />}
-                  onClick={() => navigate('/invoices')}
-                  disabled={loading}
-                  sx={{
-                    py: { xs: 0.75, sm: 1 },
-                    textTransform: 'none',
-                    fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                    borderWidth: { xs: 1, sm: 2 },
-                    borderColor: 'divider',
-                    color: 'text.secondary',
-                    '&:hover': {
-                      borderWidth: { xs: 1, sm: 2 },
-                      borderColor: 'text.secondary',
-                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
-                    }
-                  }}
-                >
-                  Cancel
-                </Button>
+                      borderColor: 'divider',
+                      color: 'text.secondary',
+                      '&:hover': {
+                        borderWidth: { xs: 1, sm: 2 },
+                        borderColor: 'text.secondary',
+                        backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                      }
+                    }}
+                  >
+                    Cancel
+                  </Button>
                 </Box>
               </Paper>
             </Box>
           </Grid>
         </Grid>
       </form>
-      
+
       {/* Customer Dialog */}
       <CustomerDialog
         open={customerDialogOpen}
@@ -1546,9 +1569,9 @@ const CreateInvoice = () => {
         customer={customerToEdit}
         editMode={customerEditMode}
       />
-      
 
-      
+
+
       {/* Recurring Invoice Dialog */}
       {createdInvoice && (
         <RecurringInvoiceDialog

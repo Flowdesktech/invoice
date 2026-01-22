@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { 
+import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   const getCurrentProfile = () => {
     // If activeProfileId is null, user is using personal account
     if (activeProfileId === null) return null;
-    
+
     // Ensure profiles is an array before using find
     if (!userData?.profiles || !Array.isArray(userData.profiles)) return null;
     return userData.profiles.find(p => p.id === activeProfileId) || userData.profiles[0];
@@ -61,10 +61,10 @@ export const AuthProvider = ({ children }) => {
     try {
       // Create user account
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      
+
       // Update display name
       await updateProfile(user, { displayName });
-      
+
       // Create user profile with default business profile
       const userDoc = {
         uid: user.uid,
@@ -91,13 +91,13 @@ export const AuthProvider = ({ children }) => {
           createdAt: new Date().valueOf()
         }]
       };
-      
+
       // Wait for auth state to update before making API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const response = await profileAPI.update(userDoc);
       setUserData(response.data);
-      
+
       toast.success('Account created successfully!');
       return user;
     } catch (error) {
@@ -114,13 +114,13 @@ export const AuthProvider = ({ children }) => {
       return user;
     } catch (error) {
       console.log('Auth error:', error.code, error.message);
-      
+
       // Firebase v9+ specific error handling
       // When a user tries to sign in with password but the account uses a different provider
-      if (error.code === 'auth/invalid-credential' || 
-          error.code === 'auth/invalid-login-credentials' ||
-          error.code === 'auth/wrong-password') {
-        
+      if (error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/invalid-login-credentials' ||
+        error.code === 'auth/wrong-password') {
+
         // Since fetchSignInMethodsForEmail is deprecated, we'll provide helpful guidance
         // based on the error pattern
         toast.error(
@@ -128,11 +128,11 @@ export const AuthProvider = ({ children }) => {
           'please use "Sign in with Google" instead.',
           { duration: 5000 }
         );
-        
+
         // Still throw the special error to trigger UI effects
         throw new Error('EMAIL_LINKED_TO_GOOGLE');
       }
-      
+
       // Show user-friendly error messages for other cases
       const errorMessages = {
         'auth/user-not-found': 'No account found with this email address.',
@@ -141,7 +141,7 @@ export const AuthProvider = ({ children }) => {
         'auth/too-many-requests': 'Too many failed attempts. Please try again later.',
         'auth/network-request-failed': 'Network error. Please check your connection.',
       };
-      
+
       const friendlyMessage = errorMessages[error.code] || 'Authentication failed. Please try again.';
       toast.error(friendlyMessage);
       throw error;
@@ -153,7 +153,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const provider = new GoogleAuthProvider();
       const { user } = await signInWithPopup(auth, provider);
-      
+
       // Check if this is a new user (first time Google sign-in)
       const response = await profileAPI.get();
       if (!response.data || !response.data.profiles) {
@@ -183,10 +183,10 @@ export const AuthProvider = ({ children }) => {
             createdAt: new Date().valueOf()
           }]
         };
-        
+
         await profileAPI.update(userDoc);
       }
-      
+
       toast.success('Signed in with Google successfully!');
       return user;
     } catch (error) {
@@ -220,7 +220,7 @@ export const AuthProvider = ({ children }) => {
     try {
       if (currentUser && userData) {
         let updateData = {};
-        
+
         if (activeProfileId === null) {
           // Personal account - update userData directly
           updateData = {
@@ -247,16 +247,16 @@ export const AuthProvider = ({ children }) => {
             }
             return profile;
           });
-          
+
           updateData = { profiles: updatedProfiles };
         }
-        
+
         // Update the user document
         const response = await profileAPI.update(updateData);
-        
+
         // Update local userData
         setUserData(response.data);
-        
+
         toast.success('Profile updated successfully!');
       }
     } catch (error) {
@@ -296,10 +296,10 @@ export const AuthProvider = ({ children }) => {
         // Switching to personal account (no profileId)
         setActiveProfileId(null);
         localStorage.removeItem('flowdesk_active_profile');
-        
+
         // Update user's active profile in database
         await profileAPI.update({ activeProfileId: null });
-        
+
         toast.success('Switched to Personal Account');
       } else {
         // Switching to a business profile
@@ -311,17 +311,20 @@ export const AuthProvider = ({ children }) => {
         if (!profile) {
           throw new Error('Profile not found');
         }
-        
+
         setActiveProfileId(profileId);
-        
+
         // Update user's active profile in database
         await profileAPI.update({ activeProfileId: profileId });
-        
+
         toast.success(`Switched to ${profile.displayName || profile.company}`);
       }
-      
-      // Reload the page to refresh all data for the new profile
-      window.location.reload();
+
+
+      // Refresh user data to update the UI with new profile settings
+      if (currentUser) {
+        await fetchUserData(currentUser);
+      }
     } catch (error) {
       toast.error(error.message);
       throw error;
@@ -350,28 +353,28 @@ export const AuthProvider = ({ children }) => {
         },
         createdAt: new Date().valueOf()
       };
-      
+
       // Ensure profiles is an array
       const currentProfiles = Array.isArray(userData?.profiles) ? userData.profiles : [];
       const updatedProfiles = [...currentProfiles, newProfile];
-      
+
       // Update user document with new profile
-      const updateData = { 
+      const updateData = {
         profiles: updatedProfiles,
-        activeProfileId: newProfile.id 
+        activeProfileId: newProfile.id
       };
-      
+
       // console.log('AuthContext - Data being sent to API:', JSON.stringify(updateData, null, 2));
       const response = await profileAPI.update(updateData);
-      
+
       setUserData(response.data);
       setActiveProfileId(newProfile.id);
-      
+
       toast.success('New profile created successfully!');
-      
+
       // Reload to refresh all data
       window.location.reload();
-      
+
       return newProfile;
     } catch (error) {
       toast.error(error.message);
@@ -490,7 +493,8 @@ export const AuthProvider = ({ children }) => {
     changePassword,
     resetPassword,
     switchProfile,
-    addProfile
+    addProfile,
+    refreshUserProfile: () => currentUser && fetchUserData(currentUser)
   };
 
   return (

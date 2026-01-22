@@ -228,20 +228,6 @@ const Invoices = () => {
     const currentDate = new Date();
     const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
     
-    // Calculate next invoice number
-    let nextInvoiceNumber;
-    
-    // Extract the numeric part and increment it
-    const match = `${invoice.invoiceNumber}`.match(/^(.*?)(\d+)$/);
-    if (match) {
-      const prefix = match[1];
-      const number = parseInt(match[2]);
-      nextInvoiceNumber = prefix + (number + 1).toString().padStart(match[2].length, '0');
-    } else {
-      // If no number found, append "-2"
-      nextInvoiceNumber = invoice.invoiceNumber + '-2';
-    }
-    
     // Prepare duplicate data
     const duplicateData = {
       customerId: invoice.customerId,
@@ -251,7 +237,7 @@ const Invoices = () => {
       paymentTerms: invoice.paymentTerms,
       date: currentDate.getTime(),
       dueDate: dueDate.getTime(),
-      invoiceNumber: nextInvoiceNumber,
+      invoiceNumber: null, // Let CreateInvoice generate the next number
       templateId: invoice.templateId, // Copy template
       currency: invoice.currency || 'USD', // Copy currency with fallback
       isDuplicate: true
