@@ -236,7 +236,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email support@invoicemanager.com or open an issue in the GitHub repository.
+For support, email contact@flowdesk.tech or open an issue in the GitHub repository.
 
 ## Changelog
 
