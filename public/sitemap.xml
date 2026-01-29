@@ -28,6 +28,14 @@
     <priority>0.9</priority>
   </url>
   
+  <!-- Free Invoice Generator Page (No Signup Required) -->
+  <url>
+    <loc>https://flowdesk.tech/try-now</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
   <!-- Documentation Page -->
   <url>
     <loc>https://flowdesk.tech/docs</loc>
@@ -50,14 +58,6 @@
     <lastmod>2025-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
-  </url>
-  
-  <!-- Free Invoice Generator Page (No Signup Required) -->
-  <url>
-    <loc>https://flowdesk.tech/try-now</loc>
-    <lastmod>2025-10-01</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
   </url>
   
   <!-- Login Page -->
@@ -100,32 +100,4 @@
     <priority>0.5</priority>
   </url>
   
-  <!-- App Pages (requires auth, but good to index) -->
-  <url>
-    <loc>https://flowdesk.tech/dashboard</loc>
-    <lastmod>2025-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  
-  <url>
-    <loc>https://flowdesk.tech/customers</loc>
-    <lastmod>2025-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <url>
-    <loc>https://flowdesk.tech/invoices</loc>
-    <lastmod>2025-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <url>
-    <loc>https://flowdesk.tech/recurring-invoices</loc>
-    <lastmod>2025-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
-  </url>
 </urlset>

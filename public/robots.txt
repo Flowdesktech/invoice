@@ -1,12 +1,31 @@
 # FlowDesk Invoice Management System
 # https://flowdesk.tech
 
-# Allow all search engines to crawl the site
+# Allow all search engines to crawl public pages
 User-agent: *
 Allow: /
+Allow: /blog
+Allow: /features
+Allow: /try-now
+Allow: /docs
+Allow: /about
+Allow: /invoice-templates
+Allow: /login
+Allow: /register
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+# Disallow protected/authenticated routes (these redirect to login)
+Disallow: /dashboard
+Disallow: /customers
+Disallow: /invoices
+Disallow: /recurring-invoices
+Disallow: /profile
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
+Disallow: /generate-social-images
 
 # Specific rules for major search engines
 User-agent: Googlebot
