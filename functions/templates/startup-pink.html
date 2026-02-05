@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 900px;
       margin: 20px auto;
@@ -28,7 +29,7 @@
       box-shadow: 0 15px 40px rgba(219, 39, 119, 0.1);
       border-radius: 24px;
     }
-    
+
     /* Dynamic startup header */
     .startup-header {
       background: linear-gradient(45deg, #db2777 0%, #ec4899 50%, #f9a8d4 100%);
@@ -37,13 +38,13 @@
       clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
       margin-bottom: 15px;
     }
-    
+
     /* Animated shapes */
     .shape {
       position: absolute;
       opacity: 0.1;
     }
-    
+
     .shape-1 {
       width: 100px;
       height: 50px;
@@ -53,7 +54,7 @@
       right: 100px;
       animation: morph 8s ease-in-out infinite;
     }
-    
+
     .shape-2 {
       width: 80px;
       height: 40px;
@@ -63,25 +64,32 @@
       left: 50px;
       animation: morph 8s ease-in-out infinite reverse;
     }
-    
+
     @keyframes morph {
-      0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-      50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+
+      0%,
+      100% {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      }
+
+      50% {
+        border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+      }
     }
-    
+
     .header-content {
       position: relative;
       z-index: 2;
       color: white;
     }
-    
+
     .startup-logo {
       display: inline-flex;
       align-items: center;
       gap: 15px;
       margin-bottom: 15px;
     }
-    
+
     .logo-icon {
       width: 50px;
       height: 50px;
@@ -93,19 +101,19 @@
       justify-content: center;
       font-size: 18pt;
     }
-    
+
     .company-name {
       font-size: 18pt;
       font-weight: 700;
       letter-spacing: -0.5px;
     }
-    
+
     .tagline {
       font-size: 9pt;
       opacity: 0.9;
       margin-bottom: 10px;
     }
-    
+
     .invoice-badge {
       position: absolute;
       top: 30px;
@@ -117,30 +125,37 @@
       text-align: center;
       box-shadow: 0 5px 20px rgba(219, 39, 119, 0.2);
     }
-    
+
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
-    
+
     .invoice-badge h2 {
       font-size: 8pt;
       margin-bottom: 3px;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .invoice-badge .number {
       font-size: 14pt;
       font-weight: 700;
     }
-    
+
     /* Dynamic content */
     .content {
       padding: 0 25px 25px;
       margin-top: -20px;
     }
-    
+
     /* Customer card with gradient border */
     .customer-card {
       background: white;
@@ -150,7 +165,7 @@
       position: relative;
       box-shadow: 0 3px 15px rgba(219, 39, 119, 0.1);
     }
-    
+
     .customer-card::before {
       content: '';
       position: absolute;
@@ -164,19 +179,26 @@
       background-size: 400% 400%;
       animation: gradientShift 5s ease infinite;
     }
-    
+
     @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
     }
-    
+
     .card-header {
       display: flex;
       align-items: center;
       gap: 15px;
       margin-bottom: 15px;
     }
-    
+
     .card-icon {
       width: 40px;
       height: 40px;
@@ -188,13 +210,13 @@
       color: white;
       font-size: 16pt;
     }
-    
+
     .card-title {
       font-size: 13pt;
       color: #831843;
       font-weight: 600;
     }
-    
+
     /* Dynamic date pills */
     .date-container {
       display: flex;
@@ -202,7 +224,7 @@
       margin-bottom: 15px;
       flex-wrap: wrap;
     }
-    
+
     .date-pill {
       background: #fce7f3;
       padding: 15px 25px;
@@ -212,12 +234,12 @@
       text-align: center;
       transition: all 0.3s ease;
     }
-    
+
     .date-pill:hover {
       background: #fbcfe8;
       transform: translateY(-2px);
     }
-    
+
     .date-pill-label {
       font-size: 9pt;
       color: #be185d;
@@ -225,13 +247,13 @@
       letter-spacing: 0.5px;
       margin-bottom: 5px;
     }
-    
+
     .date-pill-value {
       font-size: 9pt;
       font-weight: 700;
       color: #831843;
     }
-    
+
     /* Modern table */
     .modern-table {
       background: white;
@@ -240,7 +262,7 @@
       box-shadow: 0 5px 20px rgba(219, 39, 119, 0.1);
       margin-bottom: 20px;
     }
-    
+
     .table-header {
       background: linear-gradient(45deg, #db2777, #ec4899);
       color: white;
@@ -253,7 +275,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .table-row {
       padding: 10px 15px;
       display: grid;
@@ -262,31 +284,31 @@
       border-bottom: 1px solid #fce7f3;
       transition: all 0.3s ease;
     }
-    
+
     .table-row:hover {
       background: #fdf2f8;
       padding-left: 20px;
     }
-    
+
     .table-row:last-child {
       border-bottom: none;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Dynamic totals */
     .totals-wrapper {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 20px;
     }
-    
+
     .totals-card {
       background: linear-gradient(135deg, #831843, #be185d, #db2777);
       color: white;
@@ -296,7 +318,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .totals-card::after {
       content: '💰';
       position: absolute;
@@ -306,7 +328,7 @@
       opacity: 0.1;
       transform: rotate(-15deg);
     }
-    
+
     .total-row {
       display: flex;
       justify-content: space-between;
@@ -314,7 +336,7 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .total-row.final {
       margin-top: 20px;
       padding-top: 25px;
@@ -322,7 +344,7 @@
       font-size: 12pt;
       font-weight: 700;
     }
-    
+
     /* Social footer */
     .social-footer {
       background: #fdf2f8;
@@ -330,25 +352,25 @@
       border-radius: 20px 20px 0 0;
       position: relative;
     }
-    
+
     .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
     }
-    
+
     .footer-notes h3 {
       color: #db2777;
       font-size: 9pt;
       margin-bottom: 20px;
       font-weight: 600;
     }
-    
+
     .footer-notes p {
       color: #be185d;
       line-height: 1.4;
     }
-    
+
     .social-box {
       background: white;
       padding: 15px;
@@ -356,16 +378,15 @@
       text-align: center;
       box-shadow: 0 5px 15px rgba(219, 39, 119, 0.1);
     }
-    
+
     .social-box h4 {
       color: #db2777;
       font-size: 9pt;
       margin-bottom: 20px;
     }
-
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Dynamic Startup Header -->
@@ -383,17 +404,17 @@
           {{#if senderEmail}}✉️ {{senderEmail}}{{/if}}
           {{#if senderPhone}} | 📱 {{senderPhone}}{{/if}}
           {{#if senderAddressStreet}}
-            <br>📍 {{senderAddressStreet}}, {{senderAddressCityStateZip}}
+          <br>📍 {{senderAddressStreet}}, {{senderAddressCityStateZip}}
           {{/if}}
         </div>
       </div>
-      
+
       <div class="invoice-badge">
         <h2>INVOICE</h2>
         <div class="number">#{{invoice.invoiceNumber}}</div>
       </div>
     </div>
-    
+
     <!-- Dynamic Content -->
     <div class="content">
       <!-- Customer Card with Gradient Border -->
@@ -411,7 +432,7 @@
           {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
         </div>
       </div>
-      
+
       <!-- Dynamic Date Pills -->
       <div class="date-container">
         <div class="date-pill">
@@ -427,7 +448,7 @@
           <div class="date-pill-value">{{invoice.paymentTerms}}</div>
         </div>
       </div>
-      
+
       <!-- Modern Table -->
       <div class="modern-table">
         <div class="table-header">
@@ -436,7 +457,7 @@
           <div class="text-right">Rate</div>
           <div class="text-right">Amount</div>
         </div>
-        
+
         {{#each invoice.lineItems}}
         <div class="table-row">
           <div>{{this.description}}</div>
@@ -446,7 +467,7 @@
         </div>
         {{/each}}
       </div>
-      
+
       <!-- Dynamic Totals -->
       <div class="totals-wrapper">
         <div class="totals-card">
@@ -467,19 +488,19 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Social Footer -->
     <div class="social-footer">
       <div class="footer-content">
         <div class="footer-notes">
           {{#if invoice.notes}}
-            <h3>Notes</h3>
-            <p>{{invoice.notes}}</p>
+          <h3>Notes</h3>
+          <p>{{{nl2br invoice.notes}}}</p>
           {{/if}}
           <h3 style="margin-top: 20px;">Payment Terms</h3>
           <p>{{invoice.paymentTerms}}</p>
         </div>
-        
+
         <div class="social-box">
           <h4>Thank You!</h4>
           <p style="color: #be185d; font-size: 9pt;">We appreciate your business! 🎉</p>
@@ -488,4 +509,5 @@
     </div>
   </div>
 </body>
+
 </html>

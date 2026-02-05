@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 800px;
       margin: 20px auto;
@@ -29,7 +30,7 @@
       overflow: hidden;
       padding: 50px;
     }
-    
+
     /* Soft pastel header */
     .pastel-header {
       background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 50%, #fce7f3 100%);
@@ -39,14 +40,14 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     /* Soft floating circles */
     .pastel-circle {
       position: absolute;
       border-radius: 50%;
       opacity: 0.3;
     }
-    
+
     .circle-1 {
       width: 120px;
       height: 60px;
@@ -54,7 +55,7 @@
       top: -60px;
       right: -60px;
     }
-    
+
     .circle-2 {
       width: 80px;
       height: 40px;
@@ -62,7 +63,7 @@
       bottom: -40px;
       left: 50px;
     }
-    
+
     .circle-3 {
       width: 60px;
       height: 60px;
@@ -70,13 +71,13 @@
       top: 50%;
       right: 20%;
     }
-    
+
     .header-content {
       position: relative;
       z-index: 2;
       text-align: center;
     }
-    
+
     .company-name {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 26pt;
@@ -85,14 +86,14 @@
       margin-bottom: 20px;
       letter-spacing: -0.5px;
     }
-    
+
     .company-info {
       font-size: 9pt;
       color: #6366f1;
       line-height: 1.4;
       margin-bottom: 15px;
     }
-    
+
     /* Soft invoice number */
     .invoice-badge-soft {
       display: inline-block;
@@ -101,7 +102,7 @@
       border-radius: 30px;
       box-shadow: 0 5px 20px rgba(99, 102, 241, 0.1);
     }
-    
+
     .invoice-label-soft {
       font-size: 9pt;
       color: #6366f1;
@@ -109,18 +110,18 @@
       letter-spacing: 2px;
       margin-bottom: 5px;
     }
-    
+
     .invoice-number-soft {
       font-size: 14pt;
       color: #3730a3;
       font-weight: 600;
     }
-    
+
     /* Soft content sections */
     .content {
       padding: 0 30px;
     }
-    
+
     /* Customer section */
     .info-cards {
       display: grid;
@@ -128,14 +129,14 @@
       gap: 15px;
       margin-bottom: 20px;
     }
-    
+
     .info-card-soft {
       background: #f5f3ff;
       padding: 15px;
       border-radius: 15px;
       border: 1px solid #e0e7ff;
     }
-    
+
     .info-card-title {
       font-size: 9pt;
       color: #3730a3;
@@ -145,7 +146,7 @@
       align-items: center;
       gap: 10px;
     }
-    
+
     .soft-icon {
       width: 30px;
       height: 30px;
@@ -156,17 +157,17 @@
       justify-content: center;
       font-size: 12pt;
     }
-    
+
     .info-content {
       line-height: 1.4;
       color: #6366f1;
     }
-    
+
     .info-content strong {
       color: #3730a3;
       font-weight: 600;
     }
-    
+
     /* Date section */
     .date-ribbon {
       background: linear-gradient(90deg, #f5f3ff 0%, #faf5ff 50%, #f5f3ff 100%);
@@ -177,11 +178,11 @@
       justify-content: space-around;
       border: 1px solid #e0e7ff;
     }
-    
+
     .date-item {
       text-align: center;
     }
-    
+
     .date-label {
       font-size: 9pt;
       color: #6366f1;
@@ -189,13 +190,13 @@
       letter-spacing: 1px;
       margin-bottom: 5px;
     }
-    
+
     .date-value {
       font-size: 9pt;
       color: #3730a3;
       font-weight: 600;
     }
-    
+
     /* Soft table */
     .soft-table {
       width: 100%;
@@ -205,11 +206,11 @@
       overflow: hidden;
       border: 1px solid #e0e7ff;
     }
-    
+
     .soft-table thead {
       background: #eef2ff;
     }
-    
+
     .soft-table th {
       padding: 20px;
       text-align: left;
@@ -219,36 +220,36 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .soft-table td {
       padding: 20px;
       color: #6366f1;
       border-top: 1px solid #f5f3ff;
     }
-    
+
     .soft-table tbody tr:first-child td {
       border-top: none;
     }
-    
+
     .soft-table tbody tr:hover {
       background: #f5f3ff;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Soft totals */
     .totals-container {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 20px;
     }
-    
+
     .totals-soft {
       background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
       padding: 35px;
@@ -256,14 +257,14 @@
       min-width: 350px;
       box-shadow: 0 5px 20px rgba(99, 102, 241, 0.1);
     }
-    
+
     .total-row {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
       color: #6366f1;
     }
-    
+
     .total-row.final {
       margin-top: 15px;
       padding-top: 20px;
@@ -272,7 +273,7 @@
       color: #3730a3;
       font-weight: 700;
     }
-    
+
     /* Soft footer */
     .soft-footer {
       background: #faf5ff;
@@ -282,18 +283,18 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .footer-pattern {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 20%, rgba(224, 231, 255, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(199, 210, 254, 0.3) 0%, transparent 50%);
     }
-    
+
     .footer-content {
       position: relative;
       z-index: 1;
@@ -301,7 +302,7 @@
       grid-template-columns: 2fr 1fr;
       gap: 20px;
     }
-    
+
     .notes-soft h3 {
       font-size: 9pt;
       color: #3730a3;
@@ -310,12 +311,12 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .notes-soft p {
       color: #6366f1;
       line-height: 1.4;
     }
-    
+
     .thank-you-soft {
       background: white;
       padding: 15px;
@@ -323,27 +324,27 @@
       text-align: center;
       box-shadow: 0 3px 10px rgba(99, 102, 241, 0.1);
     }
-    
+
     .thank-you-soft h4 {
       color: #3730a3;
       font-size: 9pt;
       margin-bottom: 20px;
       font-weight: 600;
     }
-    
+
     .thank-you-soft p {
       color: #6366f1;
       font-size: 9pt;
     }
-    
+
     .heart-icon {
       font-size: 18pt;
       color: #6b7280;
       margin-top: 10px;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Soft Pastel Header -->
@@ -357,17 +358,17 @@
           {{#if senderEmail}}{{senderEmail}}{{/if}}
           {{#if senderPhone}} • {{senderPhone}}{{/if}}
           {{#if senderAddressStreet}}
-            <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
+          <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
           {{/if}}
         </div>
-        
+
         <div class="invoice-badge-soft">
           <div class="invoice-label-soft">Invoice</div>
           <div class="invoice-number-soft">#{{invoice.invoiceNumber}}</div>
         </div>
       </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="content">
       <!-- Info Cards -->
@@ -386,7 +387,7 @@
             {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
           </div>
         </div>
-        
+
         <div class="info-card-soft">
           <h3 class="info-card-title">
             <div class="soft-icon">📋</div>
@@ -400,7 +401,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Date Ribbon -->
       <div class="date-ribbon">
         <div class="date-item">
@@ -416,7 +417,7 @@
           <div class="date-value">{{invoice.paymentTerms}}</div>
         </div>
       </div>
-      
+
       <!-- Soft Table -->
       <table class="soft-table">
         <thead>
@@ -438,7 +439,7 @@
           {{/each}}
         </tbody>
       </table>
-      
+
       <!-- Soft Totals -->
       <div class="totals-container">
         <div class="totals-soft">
@@ -459,20 +460,20 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Soft Footer -->
     <div class="soft-footer">
-      
+
       <div class="footer-content">
         <div class="notes-soft">
           {{#if invoice.notes}}
-            <h3>Notes</h3>
-            <p>{{invoice.notes}}</p>
+          <h3>Notes</h3>
+          <p>{{{nl2br invoice.notes}}}</p>
           {{/if}}
           <h3 style="margin-top: 20px;">Payment Information</h3>
           <p>{{invoice.paymentTerms}}</p>
         </div>
-        
+
         <div class="thank-you-soft">
           <h4>Thank You</h4>
           <p>We appreciate your business!</p>
@@ -482,4 +483,5 @@
     </div>
   </div>
 </body>
+
 </html>

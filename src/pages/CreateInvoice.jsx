@@ -55,7 +55,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate, useParams, useLocation, useSearchParams } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useAuth } from '../contexts/AuthContext';
-import { customerAPI, invoiceAPI } from '../utils/api';
+import { customerAPI, invoiceAPI, profileAPI } from '../utils/api';
 import { format, addDays, subDays, subWeeks, subMonths, subYears, getWeek, getQuarter } from 'date-fns';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
@@ -187,42 +187,46 @@ const CreateInvoice = () => {
 
   // Handle duplicate data
   useEffect(() => {
-    if (isDuplicateMode && customers.length > 0 && location.state?.duplicateData) {
-      const duplicateData = location.state.duplicateData;
+    const handleDuplicateData = async () => {
+      if (isDuplicateMode && customers.length > 0 && location.state?.duplicateData) {
+        const duplicateData = location.state.duplicateData;
 
-      // Find the customer object from the customers list
-      const customer = customers.find(c => c.id === duplicateData.customerId);
+        // Find the customer object from the customers list
+        const customer = customers.find(c => c.id === duplicateData.customerId);
 
-      // Reset form with duplicate data
-      reset({
-        customer: customer || null,
-        invoiceNumber: duplicateData.invoiceNumber || '', // Use the calculated next invoice number
-        date: new Date(duplicateData.date),
-        dueDate: new Date(duplicateData.dueDate),
-        status: 'draft', // Always start duplicates as draft
-        notes: duplicateData.notes || '',
-        taxRate: duplicateData.taxRate || 0,
-        paymentTerms: duplicateData.paymentTerms || 'Due on receipt',
-        currency: duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
-      });
+        // Set line items first
+        setLineItems(duplicateData.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
 
-      // Set line items
-      setLineItems(duplicateData.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
-
-      // Set template if provided
-      if (duplicateData.templateId) {
-        const template = templates.find(t => t.id === duplicateData.templateId);
-        if (template) {
-          setSelectedTemplate(template);
+        // Set template if provided
+        if (duplicateData.templateId) {
+          const template = templates.find(t => t.id === duplicateData.templateId);
+          if (template) {
+            setSelectedTemplate(template);
+          }
         }
+
+        // Use the invoice number passed from Invoices.jsx (duplicated invoice number + 1)
+        const nextNumber = duplicateData.invoiceNumber || 1;
+
+        // Reset form with duplicate data and the calculated invoice number
+        reset({
+          customer: customer || null,
+          invoiceNumber: nextNumber,
+          date: new Date(duplicateData.date),
+          dueDate: new Date(duplicateData.dueDate),
+          status: 'draft', // Always start duplicates as draft
+          notes: duplicateData.notes || '',
+          taxRate: duplicateData.taxRate || 0,
+          paymentTerms: duplicateData.paymentTerms || 'Due on receipt',
+          currency: duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
+        });
+
+        // Show success message
+        toast.success('Invoice duplicated successfully');
       }
+    };
 
-      // Generate new invoice number for duplicate
-      generateInvoiceNumber();
-
-      // Show success message
-      toast.success('Invoice duplicated successfully');
-    }
+    handleDuplicateData();
   }, [isDuplicateMode, customers, location.state]);
 
   useEffect(() => {

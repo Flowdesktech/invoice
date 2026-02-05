@@ -325,6 +325,11 @@ export const AuthProvider = ({ children }) => {
       if (currentUser) {
         await fetchUserData(currentUser);
       }
+
+      // Reload page after a short delay to ensure all data is refreshed
+      setTimeout(() => {
+        window.location.reload();
+      }, 150);
     } catch (error) {
       toast.error(error.message);
       throw error;

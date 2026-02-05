@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 800px;
       margin: 20px auto;
@@ -27,7 +28,7 @@
       position: relative;
       box-shadow: 0 5px 20px rgba(30, 58, 138, 0.1);
     }
-    
+
     /* Formal header */
     .formal-header {
       background: #1e3a8a;
@@ -38,26 +39,26 @@
       gap: 20px;
       align-items: center;
     }
-    
+
     .firm-info h1 {
       font-size: 16pt;
       font-weight: normal;
       letter-spacing: 1px;
       margin-bottom: 5px;
     }
-    
+
     .firm-subtitle {
       font-size: 9pt;
       font-style: italic;
       opacity: 0.9;
       margin-bottom: 20px;
     }
-    
+
     .firm-details {
       font-size: 9pt;
       line-height: 1.4;
     }
-    
+
     .invoice-stamp {
       background: white;
       color: #1e3a8a;
@@ -66,7 +67,7 @@
       border: 2px solid #dbeafe;
       position: relative;
     }
-    
+
     .invoice-stamp::before {
       content: '';
       position: absolute;
@@ -77,19 +78,19 @@
       border: 1px solid #93c5fd;
       pointer-events: none;
     }
-    
+
     .invoice-stamp h2 {
       font-size: 9pt;
       font-weight: normal;
       letter-spacing: 2px;
       margin-bottom: 5px;
     }
-    
+
     .invoice-stamp .number {
       font-size: 9pt;
       font-weight: bold;
     }
-    
+
     /* Document info bar */
     .document-bar {
       background: #dbeafe;
@@ -99,27 +100,27 @@
       font-size: 9pt;
       border-bottom: 1px solid #93c5fd;
     }
-    
+
     .doc-item {
       display: flex;
       gap: 10px;
     }
-    
+
     .doc-label {
       color: #1e40af;
       font-weight: bold;
     }
-    
+
     /* Main content */
     .formal-content {
       padding: 20px;
     }
-    
+
     /* Client section */
     .client-section {
       margin-bottom: 20px;
     }
-    
+
     .section-header {
       font-size: 9pt;
       color: #1e3a8a;
@@ -128,7 +129,7 @@
       padding-bottom: 5px;
       border-bottom: 1px solid #dbeafe;
     }
-    
+
     .client-box {
       background: #f0f9ff;
       border: 1px solid #dbeafe;
@@ -137,20 +138,20 @@
       grid-template-columns: 1fr 1fr;
       gap: 20px;
     }
-    
+
     .client-info {
       line-height: 1.4;
     }
-    
+
     .client-info strong {
       color: #1e3a8a;
       font-size: 9pt;
     }
-    
+
     .invoice-details {
       font-size: 9pt;
     }
-    
+
     .invoice-details dt {
       color: #1e40af;
       font-weight: bold;
@@ -158,12 +159,12 @@
       width: 120px;
       margin-bottom: 8px;
     }
-    
+
     .invoice-details dd {
       margin-left: 130px;
       margin-bottom: 8px;
     }
-    
+
     /* Accounting table */
     .accounting-table {
       width: 100%;
@@ -172,11 +173,11 @@
       margin-bottom: 20px;
       background: white;
     }
-    
+
     .accounting-table thead {
       background: #f0f9ff;
     }
-    
+
     .accounting-table th {
       border: 1px solid #93c5fd;
       padding: 12px;
@@ -187,96 +188,96 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .accounting-table td {
       border: 1px solid #dbeafe;
       padding: 12px;
       color: #1e40af;
     }
-    
+
     .accounting-table tbody tr:hover {
       background: #f0f9ff;
     }
-    
+
     .line-number {
       font-weight: bold;
       color: #1e3a8a;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Financial summary */
     .financial-summary {
       margin-bottom: 20px;
     }
-    
+
     .summary-grid {
       display: grid;
       grid-template-columns: 1fr 350px;
       gap: 20px;
     }
-    
+
     .notes-box {
       background: #f0f9ff;
       border: 1px solid #dbeafe;
       padding: 20px;
     }
-    
+
     .notes-box h3 {
       font-size: 9pt;
       color: #1e3a8a;
       margin-bottom: 20px;
       font-weight: bold;
     }
-    
+
     .notes-box p {
       font-size: 9pt;
       color: #1e40af;
       line-height: 1.4;
     }
-    
+
     .totals-table {
       width: 100%;
       border: 2px solid #1e3a8a;
       border-collapse: collapse;
     }
-    
+
     .totals-table tr {
       border-bottom: 1px solid #93c5fd;
     }
-    
+
     .totals-table td {
       padding: 10px 15px;
       font-size: 9pt;
     }
-    
+
     .totals-table .label {
       color: #1e40af;
       font-weight: bold;
     }
-    
+
     .totals-table .value {
       text-align: right;
       color: #1e3a8a;
       font-weight: bold;
     }
-    
+
     .totals-table .grand-total {
       background: #1e3a8a;
       color: white;
       font-size: 9pt;
     }
-    
+
     .totals-table .grand-total td {
       padding: 15px;
     }
-    
+
     /* Legal footer */
     .legal-footer {
       background: #f0f9ff;
@@ -286,32 +287,32 @@
       color: #1e40af;
       line-height: 1.4;
     }
-    
+
     .legal-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
       margin-bottom: 15px;
     }
-    
+
     .legal-section h4 {
       font-size: 9pt;
       color: #1e3a8a;
       margin-bottom: 20px;
       font-weight: bold;
     }
-    
+
     .signature-line {
       border-bottom: 1px solid #1e3a8a;
       margin: 30px 0 5px;
       width: 250px;
     }
-    
+
     .signature-label {
       font-size: 9pt;
       color: #1e40af;
     }
-    
+
     .certification {
       text-align: center;
       margin-top: 15px;
@@ -319,14 +320,14 @@
       background: white;
       border: 1px solid #93c5fd;
     }
-    
+
     .certification p {
       font-style: italic;
       color: #1e3a8a;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Formal Header -->
@@ -342,13 +343,13 @@
           {{#if senderAddressCountry}}{{senderAddressCountry}}{{/if}}
         </div>
       </div>
-      
+
       <div class="invoice-stamp">
         <h2>INVOICE</h2>
         <div class="number">No. {{invoice.invoiceNumber}}</div>
       </div>
     </div>
-    
+
     <!-- Document Bar -->
     <div class="document-bar">
       <div class="doc-item">
@@ -364,7 +365,7 @@
         <span>{{invoice.paymentTerms}}</span>
       </div>
     </div>
-    
+
     <!-- Formal Content -->
     <div class="formal-content">
       <!-- Client Section -->
@@ -380,23 +381,23 @@
             {{#if customerAddressCityStateZip}}{{customerAddressCityStateZip}}<br>{{/if}}
             {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
           </div>
-          
+
           <dl class="invoice-details">
             <dt>Invoice No:</dt>
             <dd>{{invoice.invoiceNumber}}</dd>
-            
+
             <dt>Invoice Date:</dt>
             <dd>{{formatDate invoice.date timezone=userData.timezone}}</dd>
-            
+
             <dt>Payment Due:</dt>
             <dd>{{formatDate invoice.dueDate timezone=userData.timezone}}</dd>
-            
+
             <dt>Currency:</dt>
             <dd>{{invoice.currency}}</dd>
           </dl>
         </div>
       </div>
-      
+
       <!-- Accounting Table -->
       <h2 class="section-header">ITEMIZED STATEMENT</h2>
       <table class="accounting-table">
@@ -421,19 +422,19 @@
           {{/each}}
         </tbody>
       </table>
-      
+
       <!-- Financial Summary -->
       <div class="financial-summary">
         <div class="summary-grid">
           <div class="notes-box">
             {{#if invoice.notes}}
-              <h3>NOTES & REMARKS</h3>
-              <p>{{invoice.notes}}</p>
+            <h3>NOTES & REMARKS</h3>
+            <p>{{{nl2br invoice.notes}}}</p>
             {{/if}}
-            <h3 {{#if invoice.notes}}style="margin-top: 20px;"{{/if}}>PAYMENT INSTRUCTIONS</h3>
+            <h3 {{#if invoice.notes}}style="margin-top: 20px;" {{/if}}>PAYMENT INSTRUCTIONS</h3>
             <p>{{invoice.paymentTerms}}</p>
           </div>
-          
+
           <table class="totals-table">
             <tr>
               <td class="label">Subtotal:</td>
@@ -453,20 +454,21 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Legal Footer -->
     <div class="legal-footer">
       <div class="legal-grid">
         <div class="legal-section">
           <h4>TERMS AND CONDITIONS</h4>
           <p>
-            Payment is due within the terms specified above. Interest may be charged on overdue accounts at the rate of 1.5% per month.
+            Payment is due within the terms specified above. Interest may be charged on overdue accounts at the rate of
+            1.5% per month.
             This invoice is subject to our standard terms and conditions.
           </p>
           <div class="signature-line"></div>
           <p class="signature-label">Authorized Signature</p>
         </div>
-        
+
         <div class="legal-section">
           <h4>REMITTANCE INFORMATION</h4>
           <p>
@@ -478,11 +480,12 @@
           <p class="signature-label">Date</p>
         </div>
       </div>
-      
+
       <div class="certification">
         <p>This is a computer-generated document. No signature is required.</p>
       </div>
     </div>
   </div>
 </body>
+
 </html>

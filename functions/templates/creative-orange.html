@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 850px;
       margin: 20px auto;
@@ -28,7 +29,7 @@
       box-shadow: 0 10px 40px rgba(234, 88, 12, 0.1);
       border-radius: 20px;
     }
-    
+
     /* Creative diagonal header */
     .header {
       position: relative;
@@ -38,7 +39,7 @@
       margin-bottom: 15px;
       transform-origin: top left;
     }
-    
+
     .header-content {
       transform: skewY(2deg);
       padding: 25px 40px;
@@ -49,7 +50,7 @@
       justify-content: space-between;
       align-items: flex-start;
     }
-    
+
     /* Floating circles decoration */
     .circle-decor {
       position: absolute;
@@ -58,19 +59,19 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
     }
-    
+
     .circle-1 {
       top: -100px;
       right: -100px;
     }
-    
+
     .circle-2 {
       bottom: -50px;
       left: 50px;
       width: 150px;
       height: 40px;
     }
-    
+
     .circle-3 {
       top: 100px;
       right: 100px;
@@ -78,20 +79,20 @@
       height: 40px;
       background: rgba(255, 255, 255, 0.2);
     }
-    
+
     .company-info h1 {
       font-size: 16pt;
       font-weight: 700;
       margin-bottom: 8px;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
+
     .company-info p {
       font-size: 9pt;
       line-height: 1.4;
       opacity: 0.95;
     }
-    
+
     /* Creative invoice badge */
     .invoice-badge {
       background: white;
@@ -103,18 +104,18 @@
       transform: rotate(-5deg);
       margin-top: -10px;
     }
-    
+
     .invoice-badge h2 {
       font-size: 9pt;
       font-weight: 700;
       margin-bottom: 5px;
     }
-    
+
     .invoice-badge .number {
       font-size: 14pt;
       font-weight: 700;
     }
-    
+
     /* Main content with cards */
     .content {
       padding: 0 30px 20px;
@@ -122,7 +123,7 @@
       position: relative;
       z-index: 3;
     }
-    
+
     /* Customer card */
     .customer-card {
       background: white;
@@ -133,7 +134,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .customer-card::before {
       content: '';
       position: absolute;
@@ -143,7 +144,7 @@
       height: 100%;
       background: linear-gradient(180deg, #ea580c 0%, #fb923c 100%);
     }
-    
+
     .card-title {
       font-size: 10pt;
       color: #ea580c;
@@ -153,7 +154,7 @@
       align-items: center;
       gap: 8px;
     }
-    
+
     .card-icon {
       width: 30px;
       height: 30px;
@@ -164,7 +165,7 @@
       justify-content: center;
       font-size: 14pt;
     }
-    
+
     /* Date pills */
     .date-pills {
       display: flex;
@@ -172,7 +173,7 @@
       margin-bottom: 15px;
       flex-wrap: wrap;
     }
-    
+
     .date-pill {
       background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
       padding: 10px 20px;
@@ -181,7 +182,7 @@
       flex: 1;
       min-width: 120px;
     }
-    
+
     .date-pill-label {
       font-size: 9pt;
       color: #92400e;
@@ -189,13 +190,13 @@
       letter-spacing: 0.5px;
       margin-bottom: 5px;
     }
-    
+
     .date-pill-value {
       font-size: 9pt;
       font-weight: 700;
       color: #451a03;
     }
-    
+
     /* Creative items table */
     .items-section {
       background: white;
@@ -204,7 +205,7 @@
       box-shadow: 0 3px 10px rgba(234, 88, 12, 0.1);
       margin-bottom: 15px;
     }
-    
+
     .items-header {
       display: grid;
       grid-template-columns: 2fr 0.5fr 0.75fr 0.75fr;
@@ -213,7 +214,7 @@
       border-bottom: 2px solid #fed7aa;
       margin-bottom: 10px;
     }
-    
+
     .items-header div {
       font-size: 9pt;
       font-weight: 700;
@@ -221,7 +222,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .item-row {
       display: grid;
       grid-template-columns: 2fr 0.5fr 0.75fr 0.75fr;
@@ -230,18 +231,18 @@
       border-bottom: 1px solid #fff7ed;
       position: relative;
     }
-    
+
     .item-row:last-child {
       border-bottom: none;
     }
-    
+
     .item-row:hover {
       background: #fffbeb;
       margin: 0 -20px;
       padding-left: 20px;
       padding-right: 20px;
     }
-    
+
     .item-number {
       position: absolute;
       left: -30px;
@@ -258,22 +259,22 @@
       font-size: 9pt;
       font-weight: 700;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Artistic totals section */
     .totals-wrapper {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 20px;
     }
-    
+
     .totals-card {
       background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
       color: white;
@@ -284,7 +285,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .totals-card::after {
       content: '';
       position: absolute;
@@ -295,7 +296,7 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
     }
-    
+
     .total-row {
       display: flex;
       justify-content: space-between;
@@ -303,7 +304,7 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .total-row.grand-total {
       margin-top: 15px;
       padding-top: 20px;
@@ -311,7 +312,7 @@
       font-size: 12pt;
       font-weight: 700;
     }
-    
+
     /* Creative footer */
     .footer {
       background: #fff7ed;
@@ -319,41 +320,39 @@
       border-radius: 20px 20px 0 0;
       position: relative;
     }
-    
+
     .footer-pattern {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       height: 10px;
-      background: repeating-linear-gradient(
-        45deg,
-        #ea580c,
-        #ea580c 10px,
-        #fb923c 10px,
-        #fb923c 20px
-      );
+      background: repeating-linear-gradient(45deg,
+          #ea580c,
+          #ea580c 10px,
+          #fb923c 10px,
+          #fb923c 20px);
     }
-    
+
     .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
       margin-top: 15px;
     }
-    
+
     .notes h3 {
       color: #ea580c;
       font-size: 9pt;
       margin-bottom: 15px;
       font-weight: 700;
     }
-    
+
     .notes p {
       line-height: 1.4;
       color: #92400e;
     }
-    
+
     .thank-you-box {
       background: white;
       padding: 15px;
@@ -361,21 +360,21 @@
       text-align: center;
       box-shadow: 0 3px 10px rgba(234, 88, 12, 0.1);
     }
-    
+
     .thank-you-box h4 {
       color: #ea580c;
       font-size: 12pt;
       font-weight: 700;
       margin-bottom: 15px;
     }
-    
+
     .thank-you-box p {
       color: #92400e;
       font-size: 9pt;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Creative Diagonal Header -->
@@ -391,14 +390,14 @@
             {{#if senderAddressCityStateZip}}{{senderAddressCityStateZip}}{{/if}}
           </p>
         </div>
-        
+
         <div class="invoice-badge">
           <h2>INVOICE</h2>
           <div class="number">#{{invoice.invoiceNumber}}</div>
         </div>
       </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="content">
       <!-- Customer Card -->
@@ -416,7 +415,7 @@
           {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
         </div>
       </div>
-      
+
       <!-- Date Pills -->
       <div class="date-pills">
         <div class="date-pill">
@@ -432,7 +431,7 @@
           <div class="date-pill-value">{{invoice.paymentTerms}}</div>
         </div>
       </div>
-      
+
       <!-- Creative Items Section -->
       <div class="items-section">
         <div class="items-header">
@@ -441,7 +440,7 @@
           <div class="text-right">Rate</div>
           <div class="text-right">Amount</div>
         </div>
-        
+
         {{#each invoice.lineItems}}
         <div class="item-row">
           <div class="item-number">{{@index}}</div>
@@ -452,7 +451,7 @@
         </div>
         {{/each}}
       </div>
-      
+
       <!-- Artistic Totals -->
       <div class="totals-wrapper">
         <div class="totals-card">
@@ -473,20 +472,20 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Creative Footer -->
     <div class="footer">
-      
+
       <div class="footer-content">
         <div class="notes">
           {{#if invoice.notes}}
-            <h3>Notes</h3>
-            <p>{{invoice.notes}}</p>
+          <h3>Notes</h3>
+          <p>{{{nl2br invoice.notes}}}</p>
           {{/if}}
           <h3 style="margin-top: 20px;">Payment Terms</h3>
           <p>{{invoice.paymentTerms}}</p>
         </div>
-        
+
         <div class="thank-you-box">
           <h4>Thank You!</h4>
           <p>We appreciate your business</p>
@@ -495,4 +494,5 @@
     </div>
   </div>
 </body>
+
 </html>

@@ -3,39 +3,46 @@
   /* ==========================================
      MULTI-PAGE SUPPORT CSS
      ========================================== */
-  
+
   @page {
     size: A4;
     margin: 12mm;
   }
-  
+
   /* Page numbers and running headers need to be handled differently 
      as inline-css parser doesn't support advanced @page rules */
-  
+
   /* Text flow control */
   body {
     orphans: 3;
     widows: 3;
   }
-  
-  p, li, h1, h2, h3, h4, h5, h6 {
+
+  p,
+  li,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     orphans: 3;
     widows: 3;
   }
-  
+
   /* Page break classes */
   .page-break-before {
     page-break-before: always;
   }
-  
+
   .page-break-after {
     page-break-after: always;
   }
-  
+
   .avoid-break {
     page-break-inside: avoid;
   }
-  
+
   /* Running header for pages 2+ */
   .running-header {
     position: running(header);
@@ -46,21 +53,22 @@
     font-size: 9pt;
     color: #6b7280;
   }
-  
+
   /* Table multi-page handling */
   .invoice-table {
     page-break-inside: auto;
   }
-  
+
   .invoice-table thead {
-    display: table-header-group; /* Repeat header on each page */
+    display: table-header-group;
+    /* Repeat header on each page */
   }
-  
+
   .invoice-table tbody tr {
     page-break-inside: avoid;
     page-break-after: auto;
   }
-  
+
   /* Table description cell handling for long content */
   .invoice-table td.description {
     max-width: 400px;
@@ -70,14 +78,14 @@
     hyphens: auto;
     white-space: pre-wrap;
   }
-  
+
   /* Ensure table cells don't grow infinitely */
   .invoice-table td {
     max-width: 500px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   /* Special handling for quantity and rate columns */
   .invoice-table td.quantity,
   .invoice-table td.rate,
@@ -85,7 +93,7 @@
     white-space: nowrap;
     text-align: right;
   }
-  
+
   /* Keep sections together */
   .header,
   .bill-to-section,
@@ -94,17 +102,17 @@
   .payment-terms {
     page-break-inside: avoid;
   }
-  
+
   /* ==========================================
      COMMON UTILITY CLASSES
      ========================================== */
-  
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-  
+
   /* Base Typography - Optimized for single page */
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -112,98 +120,144 @@
     line-height: 1.4;
     color: #1f2937;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: 0.5em;
   }
-  
-  h1 { font-size: 20pt; }
-  h2 { font-size: 16pt; }
-  h3 { font-size: 13pt; }
-  h4 { font-size: 11pt; }
-  h5 { font-size: 10pt; }
-  h6 { font-size: 9pt; }
-  
+
+  h1 {
+    font-size: 20pt;
+  }
+
+  h2 {
+    font-size: 16pt;
+  }
+
+  h3 {
+    font-size: 13pt;
+  }
+
+  h4 {
+    font-size: 11pt;
+  }
+
+  h5 {
+    font-size: 10pt;
+  }
+
+  h6 {
+    font-size: 9pt;
+  }
+
   p {
     margin-bottom: 1em;
   }
-  
+
   /* Common Spacing */
-  .mb-1 { margin-bottom: 0.5rem; }
-  .mb-2 { margin-bottom: 1rem; }
-  .mb-3 { margin-bottom: 1.5rem; }
-  .mb-4 { margin-bottom: 2rem; }
-  .mt-1 { margin-top: 0.5rem; }
-  .mt-2 { margin-top: 1rem; }
-  .mt-3 { margin-top: 1.5rem; }
-  .mt-4 { margin-top: 2rem; }
-  
+  .mb-1 {
+    margin-bottom: 0.5rem;
+  }
+
+  .mb-2 {
+    margin-bottom: 1rem;
+  }
+
+  .mb-3 {
+    margin-bottom: 1.5rem;
+  }
+
+  .mb-4 {
+    margin-bottom: 2rem;
+  }
+
+  .mt-1 {
+    margin-top: 0.5rem;
+  }
+
+  .mt-2 {
+    margin-top: 1rem;
+  }
+
+  .mt-3 {
+    margin-top: 1.5rem;
+  }
+
+  .mt-4 {
+    margin-top: 2rem;
+  }
+
   /* Text Alignment */
   .text-right {
     text-align: right;
   }
-  
+
   .text-center {
     text-align: center;
   }
-  
+
   .text-left {
     text-align: left;
   }
-  
+
   /* Table Improvements */
   table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 2rem;
   }
-  
-  th, td {
+
+  th,
+  td {
     padding: 8px 12px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
   }
-  
+
   th {
     font-weight: 600;
     background-color: #f9fafb;
     border-top: 1px solid #e5e7eb;
     border-bottom: 2px solid #e5e7eb;
   }
-  
+
   td {
     vertical-align: top;
   }
-  
+
   /* Invoice specific table styles */
   .invoice-table {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .invoice-table th {
     text-transform: uppercase;
     font-size: 9pt;
     letter-spacing: 0.05em;
   }
-  
+
   .invoice-table td {
     font-size: 9pt;
   }
-  
+
   .invoice-table .description {
     min-width: 300px;
   }
-  
+
   .invoice-table .quantity,
   .invoice-table .rate,
   .invoice-table .amount {
     text-align: right;
     white-space: nowrap;
   }
-  
+
   /* Invoice Container - Optimized for single page */
   .invoice-container {
     padding: 20px;
@@ -211,42 +265,42 @@
     margin: 0 auto;
     background: #ffffff;
   }
-  
+
   /* Section Spacing - Optimized for single page */
   .header {
     margin-bottom: 1.5rem;
   }
-  
+
   .invoice-details {
     margin-bottom: 1rem;
   }
-  
+
   .bill-to-section {
     margin-bottom: 1rem;
   }
-  
+
   .totals-section {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
-  
+
   .footer {
     margin-top: 1.5rem;
     padding-top: 1rem;
     border-top: 1px solid #e5e7eb;
   }
-  
+
   /* Better spacing for invoice details */
   .invoice-meta {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
   }
-  
-  .invoice-meta > div {
+
+  .invoice-meta>div {
     flex: 1;
   }
-  
+
   /* Remove unnecessary decorative elements */
   .social-icons,
   .decorative-element,
@@ -254,13 +308,13 @@
   .shape {
     display: none !important;
   }
-  
+
   /* Clean up addresses */
   address {
     font-style: normal;
     line-height: 1.8;
   }
-  
+
   /* Improve readability */
   .notes,
   .terms,
@@ -269,32 +323,43 @@
     color: #4b5563;
     margin-top: 1rem;
   }
-  
+
+  /* Preserve multi-line text formatting for notes */
+  .notes p,
+  .notes-section p,
+  .footer-notes p,
+  .notes-soft p,
+  .notes-box p,
+  .footer p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
   /* Better totals layout */
   .totals-table {
     margin-left: auto;
     width: auto;
     min-width: 300px;
   }
-  
+
   .totals-table td {
     padding: 8px 16px;
     border: none;
   }
-  
+
   .totals-table .total-row {
     font-size: 12pt;
     font-weight: 600;
     border-top: 2px solid #e5e7eb;
     padding-top: 8px;
   }
-  
+
   /* Prevent image overflow */
   img {
     max-width: 100%;
     height: auto;
   }
-  
+
   /* Common print adjustments */
   @media print {
     body {

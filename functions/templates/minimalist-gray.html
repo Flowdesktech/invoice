@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 9pt;
@@ -16,7 +17,7 @@
       color: #4a5568;
       background: #fafafa;
     }
-    
+
     .invoice-container {
       max-width: 750px;
       margin: 20px auto;
@@ -24,12 +25,12 @@
       background: #ffffff;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.04);
     }
-    
+
     /* Ultra-minimal header */
     .header {
       margin-bottom: 30px;
     }
-    
+
     .header-top {
       display: flex;
       justify-content: space-between;
@@ -38,7 +39,7 @@
       padding-bottom: 20px;
       border-bottom: 1px solid #e2e8f0;
     }
-    
+
     .invoice-title {
       font-size: 28pt;
       font-weight: 100;
@@ -46,21 +47,21 @@
       color: #2d3748;
       line-height: 1;
     }
-    
+
     .invoice-number {
       font-size: 9pt;
       color: #a0aec0;
       font-weight: 300;
       letter-spacing: 2px;
     }
-    
+
     /* Thin divider line */
     .divider {
       height: 1px;
       background: #e5e7eb;
       margin: 20px 0;
     }
-    
+
     /* Minimal addresses layout */
     .addresses {
       display: grid;
@@ -68,7 +69,7 @@
       gap: 40px;
       margin-bottom: 20px;
     }
-    
+
     .address-block h3 {
       font-size: 8pt;
       font-weight: 400;
@@ -77,18 +78,18 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .address-block div {
       font-size: 9pt;
       color: #4a5568;
       line-height: 1.4;
     }
-    
+
     .address-block strong {
       color: #2d3748;
       font-weight: 500;
     }
-    
+
     /* Minimal date display */
     .date-info {
       display: flex;
@@ -97,28 +98,28 @@
       font-size: 8pt;
       color: #718096;
     }
-    
+
     .date-item {
       display: flex;
       gap: 15px;
     }
-    
+
     .date-label {
       color: #a0aec0;
     }
-    
+
     .date-value {
       color: #4a5568;
       font-weight: 400;
     }
-    
+
     /* Ultra-minimal table */
     .items-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 25px;
     }
-    
+
     .items-table th {
       padding: 10px 12px;
       font-size: 8pt;
@@ -128,46 +129,46 @@
       letter-spacing: 1px;
       border-bottom: 1px solid #e2e8f0;
     }
-    
+
     .items-table th:first-child {
       text-align: left;
     }
-    
+
     .items-table td {
       padding: 10px 12px;
       font-size: 8pt;
       color: #4a5568;
       border-bottom: 1px solid #f7fafc;
     }
-    
+
     .items-table tbody tr:last-child td {
       border-bottom: none;
     }
-    
+
     .items-table tbody tr:hover td {
       background: none;
       color: #2d3748;
     }
-    
+
     .text-right {
       text-align: right !important;
     }
-    
+
     .text-center {
       text-align: center !important;
     }
-    
+
     /* Minimal totals */
     .totals-section {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 40px;
     }
-    
+
     .totals-box {
       width: 250px;
     }
-    
+
     .total-row {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -176,7 +177,7 @@
       font-size: 9pt;
       border-bottom: 1px solid #f7fafc;
     }
-    
+
     .total-row:last-child {
       border-bottom: none;
       border-top: 1px solid #2d3748;
@@ -185,35 +186,35 @@
       font-size: 11pt;
       font-weight: 400;
     }
-    
+
     .total-label {
       color: #a0aec0;
       font-weight: 300;
     }
-    
+
     .total-value {
       color: #4a5568;
       font-weight: 400;
     }
-    
+
     .total-row:last-child .total-label,
     .total-row:last-child .total-value {
       color: #2d3748;
       font-weight: 500;
     }
-    
+
     /* Minimal footer */
     .footer {
       padding-top: 30px;
       border-top: 1px solid #e2e8f0;
     }
-    
+
     .footer-content {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 40px;
     }
-    
+
     .notes-section h3 {
       font-size: 8pt;
       font-weight: 400;
@@ -222,30 +223,30 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .notes-section p {
       font-size: 9pt;
       color: #718096;
       line-height: 1.4;
     }
-    
+
     .payment-info {
       text-align: right;
       font-size: 9pt;
     }
-    
+
     .payment-terms {
       color: #a0aec0;
       margin-bottom: 10px;
     }
-    
+
     .payment-value {
       color: #4a5568;
       font-size: 9pt;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Minimalist Header -->
@@ -255,7 +256,7 @@
         <div class="invoice-number">#{{invoice.invoiceNumber}}</div>
       </div>
     </div>
-    
+
     <!-- Minimal Address Layout -->
     <div class="addresses">
       <div class="address-block">
@@ -269,7 +270,7 @@
           {{#if senderPhone}}{{senderPhone}}{{/if}}
         </div>
       </div>
-      
+
       <div class="address-block">
         <h3>To</h3>
         <div>
@@ -282,7 +283,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Date Information -->
     <div class="date-info">
       <div class="date-item">
@@ -298,7 +299,7 @@
         <span class="date-value">{{invoice.paymentTerms}}</span>
       </div>
     </div>
-    
+
     <!-- Minimal Items Table -->
     <table class="items-table">
       <thead>
@@ -320,7 +321,7 @@
         {{/each}}
       </tbody>
     </table>
-    
+
     <!-- Totals Section -->
     <div class="totals-section">
       <div class="totals-box">
@@ -340,17 +341,17 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Footer Section -->
     <div class="footer">
       <div class="footer-content">
         {{#if invoice.notes}}
         <div class="notes-section">
           <h3>Notes</h3>
-          <p>{{invoice.notes}}</p>
+          <p>{{{nl2br invoice.notes}}}</p>
         </div>
         {{/if}}
-        
+
         <div class="payment-info">
           <div class="payment-terms">Payment Terms</div>
           <div class="payment-value">
@@ -361,4 +362,5 @@
     </div>
   </div>
 </body>
+
 </html>

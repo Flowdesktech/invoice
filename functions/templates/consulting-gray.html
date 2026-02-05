@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 850px;
       margin: 20px auto;
@@ -27,7 +28,7 @@
       box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
       border: 1px solid #e5e7eb;
     }
-    
+
     /* Executive header */
     .executive-header {
       background: #f9fafb;
@@ -35,14 +36,14 @@
       border-bottom: 1px solid #e5e7eb;
       position: relative;
     }
-    
+
     .header-content {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 30px;
       align-items: flex-start;
     }
-    
+
     .executive-branding h1 {
       font-size: 18pt;
       color: #1f2937;
@@ -50,20 +51,20 @@
       letter-spacing: -1px;
       margin-bottom: 5px;
     }
-    
+
     .executive-tagline {
       font-size: 9pt;
       color: #6b7280;
       font-style: italic;
       margin-bottom: 20px;
     }
-    
+
     .contact-info {
       font-size: 9pt;
       color: #4b5563;
       line-height: 1.4;
     }
-    
+
     .invoice-plaque {
       background: #1f2937;
       color: white;
@@ -71,7 +72,7 @@
       text-align: center;
       min-width: 200px;
     }
-    
+
     .invoice-plaque h2 {
       font-size: 9pt;
       font-weight: 300;
@@ -79,12 +80,12 @@
       margin-bottom: 10px;
       text-transform: uppercase;
     }
-    
+
     .invoice-plaque .number {
       font-size: 12pt;
       font-weight: 400;
     }
-    
+
     /* Executive info bar */
     .executive-bar {
       background: #374151;
@@ -94,11 +95,11 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
     }
-    
+
     .exec-item {
       text-align: center;
     }
-    
+
     .exec-label {
       font-size: 9pt;
       opacity: 0.8;
@@ -106,17 +107,17 @@
       letter-spacing: 0.5px;
       margin-bottom: 5px;
     }
-    
+
     .exec-value {
       font-size: 9pt;
       font-weight: 500;
     }
-    
+
     /* Main content */
     .executive-content {
       padding: 25px;
     }
-    
+
     /* Client information */
     .client-container {
       display: grid;
@@ -124,14 +125,14 @@
       gap: 30px;
       margin-bottom: 20px;
     }
-    
+
     .info-card {
       background: #f9fafb;
       padding: 15px;
       border: 1px solid #e5e7eb;
       position: relative;
     }
-    
+
     .info-card::before {
       content: '';
       position: absolute;
@@ -141,7 +142,7 @@
       height: 100%;
       background: #6b7280;
     }
-    
+
     .info-card h3 {
       font-size: 9pt;
       color: #1f2937;
@@ -150,18 +151,18 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .info-content {
       font-size: 9pt;
       line-height: 1.4;
       color: #4b5563;
     }
-    
+
     .info-content strong {
       color: #1f2937;
       font-weight: 600;
     }
-    
+
     /* Executive table */
     .executive-table {
       width: 100%;
@@ -169,11 +170,11 @@
       border: 1px solid #e5e7eb;
       background: white;
     }
-    
+
     .executive-table thead {
       background: #f3f4f6;
     }
-    
+
     .executive-table th {
       padding: 8px 12px;
       text-align: left;
@@ -184,36 +185,36 @@
       letter-spacing: 0.5px;
       border-bottom: 1px solid #e5e7eb;
     }
-    
+
     .executive-table td {
       padding: 20px;
       border-bottom: 1px solid #f3f4f6;
       color: #1f2937;
     }
-    
+
     .executive-table tbody tr:last-child td {
       border-bottom: none;
     }
-    
+
     .executive-table tbody tr:hover {
       background: #f9fafb;
     }
-    
+
     .service-code {
       font-family: 'Consolas', 'Monaco', monospace;
       font-size: 9pt;
       color: #6b7280;
       margin-right: 10px;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Financial breakdown */
     .financial-section {
       display: grid;
@@ -221,13 +222,13 @@
       gap: 50px;
       margin-bottom: 20px;
     }
-    
+
     .summary-notes {
       padding: 15px;
       background: #f9fafb;
       border-left: 4px solid #374151;
     }
-    
+
     .summary-notes h3 {
       font-size: 9pt;
       color: #1f2937;
@@ -236,59 +237,59 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    
+
     .summary-notes p {
       color: #4b5563;
       line-height: 1.4;
       font-size: 9pt;
     }
-    
+
     .financial-summary {
       background: white;
       border: 2px solid #1f2937;
     }
-    
+
     .summary-row {
       display: flex;
       justify-content: space-between;
       padding: 15px 25px;
       border-bottom: 1px solid #e5e7eb;
     }
-    
+
     .summary-row:last-child {
       border-bottom: none;
     }
-    
+
     .summary-label {
       color: #4b5563;
       font-weight: 500;
     }
-    
+
     .summary-value {
       color: #1f2937;
       font-weight: 600;
     }
-    
+
     .total-row {
       background: #1f2937;
       color: white;
       font-size: 9pt;
       font-weight: 600;
     }
-    
+
     .total-row .summary-label,
     .total-row .summary-value {
       color: white;
     }
-    
+
     /* Executive footer */
     .executive-footer {
       background: #f9fafb;
       padding: 25px;
       border-top: 1px solid #e5e7eb;
     }
-    
-    
+
+
     /* Professional closing */
     .professional-closing {
       text-align: center;
@@ -296,14 +297,14 @@
       padding-top: 15px;
       border-top: 1px solid #e5e7eb;
     }
-    
+
     .closing-message {
       font-size: 9pt;
       color: #4b5563;
       font-style: italic;
       margin-bottom: 20px;
     }
-    
+
     .company-logo-footer {
       width: 60px;
       height: 60px;
@@ -316,9 +317,9 @@
       font-size: 18pt;
       font-weight: 300;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Executive Header -->
@@ -335,14 +336,14 @@
             {{#if senderAddressCountry}}{{senderAddressCountry}}{{/if}}
           </div>
         </div>
-        
+
         <div class="invoice-plaque">
           <h2>Invoice</h2>
           <div class="number">#{{invoice.invoiceNumber}}</div>
         </div>
       </div>
     </div>
-    
+
     <!-- Executive Info Bar -->
     <div class="executive-bar">
       <div class="exec-item">
@@ -362,7 +363,7 @@
         <div class="exec-value">{{invoice.invoiceNumber}}</div>
       </div>
     </div>
-    
+
     <!-- Executive Content -->
     <div class="executive-content">
       <!-- Client Information -->
@@ -379,7 +380,7 @@
             {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
           </div>
         </div>
-        
+
         <div class="info-card">
           <h3>Project Information</h3>
           <div class="info-content">
@@ -390,7 +391,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Executive Table -->
       <table class="executive-table">
         <thead>
@@ -415,18 +416,18 @@
           {{/each}}
         </tbody>
       </table>
-      
+
       <!-- Financial Breakdown -->
       <div class="financial-section">
         <div class="summary-notes">
           {{#if invoice.notes}}
-            <h3>Project Notes</h3>
-            <p>{{invoice.notes}}</p>
+          <h3>Project Notes</h3>
+          <p>{{{nl2br invoice.notes}}}</p>
           {{/if}}
-          <h3 {{#if invoice.notes}}style="margin-top: 25px;"{{/if}}>Payment Instructions</h3>
+          <h3 {{#if invoice.notes}}style="margin-top: 25px;" {{/if}}>Payment Instructions</h3>
           <p>{{invoice.paymentTerms}}</p>
         </div>
-        
+
         <div class="financial-summary">
           <div class="summary-row">
             <span class="summary-label">Professional Services</span>
@@ -445,7 +446,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Executive Footer -->
     <div class="executive-footer">
       <div class="professional-closing">
@@ -459,4 +460,5 @@
     </div>
   </div>
 </body>
+
 </html>

@@ -59,7 +59,7 @@ import Swal from 'sweetalert2';
 import { formatInvoiceNumber } from '../utils/formatters';
 import InvoiceCard from '../components/InvoiceCard';
 import { templates } from './InvoiceTemplates';
-import {downloadPdf} from "../utils/pdfUtils.js";
+import { downloadPdf } from "../utils/pdfUtils.js";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -227,7 +227,10 @@ const Invoices = () => {
     // Calculate new dates
     const currentDate = new Date();
     const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
-    
+
+    // Calculate next invoice number (duplicated invoice number + 1)
+    const nextInvoiceNumber = (invoice.invoiceNumber || 0) + 1;
+
     // Prepare duplicate data
     const duplicateData = {
       customerId: invoice.customerId,
@@ -237,12 +240,12 @@ const Invoices = () => {
       paymentTerms: invoice.paymentTerms,
       date: currentDate.getTime(),
       dueDate: dueDate.getTime(),
-      invoiceNumber: null, // Let CreateInvoice generate the next number
+      invoiceNumber: nextInvoiceNumber, // Use duplicated invoice number + 1
       templateId: invoice.templateId, // Copy template
       currency: invoice.currency || 'USD', // Copy currency with fallback
       isDuplicate: true
     };
-    
+
     // Navigate to create page with duplicate data
     navigate('/invoices/create', { state: { duplicateData } });
   };
@@ -250,15 +253,15 @@ const Invoices = () => {
   const handleDownloadInvoice = async (invoice) => {
     try {
       const loadingToast = toast.loading('Generating PDF...');
-      
+
       // Generate PDF on-demand
       const response = await invoiceAPI.generatePdf(invoice.id);
-      
+
       toast.dismiss(loadingToast);
 
       const formattedNumber = formatInvoiceNumber(
-          invoice.invoiceNumber,
-          userData?.invoiceSettings?.prefix || 'INV'
+        invoice.invoiceNumber,
+        userData?.invoiceSettings?.prefix || 'INV'
       );
       downloadPdf(response.data?.pdf, `${formattedNumber}.pdf`);
     } catch (error) {
@@ -362,7 +365,7 @@ const Invoices = () => {
       try {
         // Delete all selected invoices
         await Promise.all(selectedInvoices.map(id => invoiceAPI.delete(id)));
-        
+
         Swal.fire({
           title: 'Deleted!',
           text: `${selectedInvoices.length} invoice${selectedInvoices.length > 1 ? 's have' : ' has'} been deleted successfully.`,
@@ -370,7 +373,7 @@ const Invoices = () => {
           timer: 2000,
           showConfirmButton: false
         });
-        
+
         setSelectedInvoices([]);
         fetchInvoices();
       } catch (error) {
@@ -388,11 +391,11 @@ const Invoices = () => {
   const handleBulkStatusUpdate = async (newStatus) => {
     try {
       await Promise.all(
-        selectedInvoices.map(id => 
+        selectedInvoices.map(id =>
           invoiceAPI.update(id, { status: newStatus })
         )
       );
-      
+
       toast.success(`Updated ${selectedInvoices.length} invoice${selectedInvoices.length > 1 ? 's' : ''} to ${newStatus}`);
       setSelectedInvoices([]);
       fetchInvoices();
@@ -409,18 +412,18 @@ const Invoices = () => {
 
   const handleBulkExport = () => {
     // Get selected invoice data
-    const selectedInvoiceData = filteredInvoices.filter(invoice => 
+    const selectedInvoiceData = filteredInvoices.filter(invoice =>
       selectedInvoices.includes(invoice.id)
     );
 
     // Define CSV headers
     const headers = ['Invoice #', 'Customer', 'Template', 'Date', 'Due Date', 'Amount', 'Status'];
-    
+
     // Convert data to CSV format
     const csvData = selectedInvoiceData.map(invoice => {
       const template = templates.find(t => t.id === (invoice.templateId || 'default'));
       const templateName = template ? template.name : 'Default';
-      
+
       return [
         formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix),
         invoice.customerName,
@@ -442,15 +445,15 @@ const Invoices = () => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
+
     link.setAttribute('href', url);
     link.setAttribute('download', `invoices_export_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`);
     link.style.visibility = 'hidden';
-    
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     toast.success(`Exported ${selectedInvoiceData.length} invoice${selectedInvoiceData.length > 1 ? 's' : ''} to CSV`);
     setSelectedInvoices([]);
   };
@@ -468,11 +471,11 @@ const Invoices = () => {
       {/* React 19 SEO Meta Tags */}
       <title>Invoices - FlowDesk Invoice Management</title>
       <meta name="description" content="View and manage all your invoices. Create, send, track payment status, and download PDF invoices. Filter by status and search across all invoices." />
-      
+
       <Container maxWidth="lg" sx={{ px: { xs: 0, sm: 3 } }}>
         <Box sx={{ mb: 4, px: { xs: 2, sm: 0 } }}>
-          <Box 
-            display="flex" 
+          <Box
+            display="flex"
             flexDirection={{ xs: 'column', sm: 'row' }}
             justifyContent={{ xs: 'flex-start', sm: 'space-between' }}
             alignItems={{ xs: 'flex-start', sm: 'center' }}
@@ -481,10 +484,10 @@ const Invoices = () => {
             <Typography variant="h4" sx={{ display: { xs: 'none', sm: 'block' } }}>
               Invoices
             </Typography>
-            <Box 
-              display="flex" 
-              alignItems="center" 
-              gap={2} 
+            <Box
+              display="flex"
+              alignItems="center"
+              gap={2}
               flexWrap="wrap"
               sx={{ width: { xs: '100%', sm: 'auto' } }}
             >
@@ -518,7 +521,7 @@ const Invoices = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => navigate('/invoices/create')}
-                sx={{ 
+                sx={{
                   minWidth: { xs: 'auto', sm: '140px' },
                   px: { xs: 2, sm: 3 }
                 }}
@@ -529,108 +532,108 @@ const Invoices = () => {
           </Box>
         </Box>
 
-      {filteredInvoices.length === 0 ? (
-        <Paper>
-          
-          <Box textAlign="center" py={8}>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              {searchTerm || statusFilter !== 'all' 
-                ? 'No invoices found matching your criteria' 
-                : 'No invoices yet'}
-            </Typography>
-            {!searchTerm && statusFilter === 'all' && (
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => navigate('/invoices/create')}
-                sx={{ mt: 2 }}
-              >
-                Create Your First Invoice
-              </Button>
-            )}
-          </Box>
-        </Paper>
-      ) : (
-        <>
-          {selectedInvoices.length > 0 && (
-            <Paper sx={{ mb: 2 }}>
-              <Toolbar
-                sx={{
-                  pl: { sm: 2 },
-                  pr: { xs: 1, sm: 1 },
-                  ...(selectedInvoices.length > 0 && {
-                    bgcolor: (theme) =>
-                      alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                  }),
-                  mb: 2,
-                }}
-              >
-                <Typography
-                  sx={{ flex: '1 1 100%' }}
-                  color="inherit"
-                  variant="subtitle1"
-                  component="div"
+        {filteredInvoices.length === 0 ? (
+          <Paper>
+
+            <Box textAlign="center" py={8}>
+              <Typography variant="h6" color="text.secondary" gutterBottom>
+                {searchTerm || statusFilter !== 'all'
+                  ? 'No invoices found matching your criteria'
+                  : 'No invoices yet'}
+              </Typography>
+              {!searchTerm && statusFilter === 'all' && (
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  onClick={() => navigate('/invoices/create')}
+                  sx={{ mt: 2 }}
                 >
-                  {selectedInvoices.length} selected
-                </Typography>
+                  Create Your First Invoice
+                </Button>
+              )}
+            </Box>
+          </Paper>
+        ) : (
+          <>
+            {selectedInvoices.length > 0 && (
+              <Paper sx={{ mb: 2 }}>
+                <Toolbar
+                  sx={{
+                    pl: { sm: 2 },
+                    pr: { xs: 1, sm: 1 },
+                    ...(selectedInvoices.length > 0 && {
+                      bgcolor: (theme) =>
+                        alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                    }),
+                    mb: 2,
+                  }}
+                >
+                  <Typography
+                    sx={{ flex: '1 1 100%' }}
+                    color="inherit"
+                    variant="subtitle1"
+                    component="div"
+                  >
+                    {selectedInvoices.length} selected
+                  </Typography>
 
-                <Tooltip title="Update Status">
-                  <FormControl size="small" sx={{ minWidth: 120, mr: 1 }}>
-                    <Select
-                      value=""
-                      displayEmpty
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          handleBulkStatusUpdate(e.target.value);
-                        }
-                      }}
-                    >
-                      <MenuItem value="" disabled>
-                        Update Status
-                      </MenuItem>
-                      <MenuItem value="draft">Draft</MenuItem>
-                      <MenuItem value="pending">Pending</MenuItem>
-                      <MenuItem value="paid">Paid</MenuItem>
-                      <MenuItem value="overdue">Overdue</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Tooltip>
+                  <Tooltip title="Update Status">
+                    <FormControl size="small" sx={{ minWidth: 120, mr: 1 }}>
+                      <Select
+                        value=""
+                        displayEmpty
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            handleBulkStatusUpdate(e.target.value);
+                          }
+                        }}
+                      >
+                        <MenuItem value="" disabled>
+                          Update Status
+                        </MenuItem>
+                        <MenuItem value="draft">Draft</MenuItem>
+                        <MenuItem value="pending">Pending</MenuItem>
+                        <MenuItem value="paid">Paid</MenuItem>
+                        <MenuItem value="overdue">Overdue</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Tooltip>
 
-                <Tooltip title="Export">
-                  <IconButton onClick={handleBulkExport}>
-                    <DownloadIcon />
-                  </IconButton>
-                </Tooltip>
+                  <Tooltip title="Export">
+                    <IconButton onClick={handleBulkExport}>
+                      <DownloadIcon />
+                    </IconButton>
+                  </Tooltip>
 
-                <Tooltip title="Delete">
-                  <IconButton onClick={handleBulkDelete}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </Toolbar>
-            </Paper>
-          )}
-          {/* Mobile Card View */}
-          {isMobile ? (
-            <>
-              {selectedInvoices.length > 0 && (
-                <Box sx={{ p: 2, mb: 1, bgcolor: 'background.paper', borderRadius: 1 }}>
-                  <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <Typography variant="body2" color="text.secondary">
-                      {selectedInvoices.length} selected
-                    </Typography>
-                    <Box>
-                      <IconButton size="small" onClick={handleBulkDuplicate}>
-                        <FileCopyIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton size="small" onClick={handleBulkDelete} color="error">
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
+                  <Tooltip title="Delete">
+                    <IconButton onClick={handleBulkDelete}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Toolbar>
+              </Paper>
+            )}
+            {/* Mobile Card View */}
+            {isMobile ? (
+              <>
+                {selectedInvoices.length > 0 && (
+                  <Box sx={{ p: 2, mb: 1, bgcolor: 'background.paper', borderRadius: 1 }}>
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Typography variant="body2" color="text.secondary">
+                        {selectedInvoices.length} selected
+                      </Typography>
+                      <Box>
+                        <IconButton size="small" onClick={handleBulkDuplicate}>
+                          <FileCopyIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton size="small" onClick={handleBulkDelete} color="error">
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              )}
-              <Stack spacing={1.5}>
+                )}
+                <Stack spacing={1.5}>
                   {filteredInvoices
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((invoice) => (
@@ -660,201 +663,201 @@ const Invoices = () => {
               /* Desktop Table View */
               <Paper>
                 <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          indeterminate={selectedInvoices.length > 0 && selectedInvoices.length < filteredInvoices.length}
-                          checked={filteredInvoices.length > 0 && selectedInvoices.length === filteredInvoices.length}
-                          onChange={handleSelectAllClick}
-                        />
-                      </TableCell>
-                      <TableCell>Invoice #</TableCell>
-                      <TableCell>Customer</TableCell>
-                      <TableCell>Template</TableCell>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Due Date</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Status</TableCell>
-                      <TableCell align="right">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredInvoices
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((invoice) => (
-                      <TableRow 
-                        key={invoice.id}
-                        hover
-                        onClick={(event) => handleClick(event, invoice.id)}
-                        role="checkbox"
-                        aria-checked={isSelected(invoice.id)}
-                        selected={isSelected(invoice.id)}
-                      >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
                         <TableCell padding="checkbox">
                           <Checkbox
                             color="primary"
-                            checked={isSelected(invoice.id)}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleClick(event, invoice.id);
-                            }}
+                            indeterminate={selectedInvoices.length > 0 && selectedInvoices.length < filteredInvoices.length}
+                            checked={filteredInvoices.length > 0 && selectedInvoices.length === filteredInvoices.length}
+                            onChange={handleSelectAllClick}
                           />
                         </TableCell>
-                        <TableCell>
-                          <Box display="flex" alignItems="center" gap={1}>
-                            {formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
-                            {invoice.recurringInvoiceId && (
-                              <Tooltip title="Generated from recurring invoice">
-                                <ScheduleIcon 
-                                  fontSize="small" 
-                                  sx={{ color: 'primary.main', opacity: 0.7 }}
-                                />
-                              </Tooltip>
-                            )}
-                          </Box>
-                        </TableCell>
-                        <TableCell>{invoice.customerName}</TableCell>
-                        <TableCell>
-                          {(() => {
-                            const template = templates.find(t => t.id === (invoice.templateId || 'default'));
-                            const templateId = invoice.templateId || 'default';
-                            const templateName = template ? template.name : 'Default';
-                            
-                            return (
-                              <Tooltip 
-                                title={
-                                  <Box sx={{ p: 1 }}>
-                                    <img 
-                                      src={`/template-previews/${templateId}-preview.png`}
-                                      alt={templateName}
-                                      style={{ 
-                                        width: 200, 
-                                        height: 'auto',
-                                        borderRadius: 4,
-                                        border: '1px solid #e0e0e0'
-                                      }}
-                                      onError={(e) => {
-                                        e.target.style.display = 'none';
+                        <TableCell>Invoice #</TableCell>
+                        <TableCell>Customer</TableCell>
+                        <TableCell>Template</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Due Date</TableCell>
+                        <TableCell>Amount</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredInvoices
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((invoice) => (
+                          <TableRow
+                            key={invoice.id}
+                            hover
+                            onClick={(event) => handleClick(event, invoice.id)}
+                            role="checkbox"
+                            aria-checked={isSelected(invoice.id)}
+                            selected={isSelected(invoice.id)}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={isSelected(invoice.id)}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  handleClick(event, invoice.id);
+                                }}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Box display="flex" alignItems="center" gap={1}>
+                                {formatInvoiceNumber(invoice.invoiceNumber, userData?.invoiceSettings?.prefix)}
+                                {invoice.recurringInvoiceId && (
+                                  <Tooltip title="Generated from recurring invoice">
+                                    <ScheduleIcon
+                                      fontSize="small"
+                                      sx={{ color: 'primary.main', opacity: 0.7 }}
+                                    />
+                                  </Tooltip>
+                                )}
+                              </Box>
+                            </TableCell>
+                            <TableCell>{invoice.customerName}</TableCell>
+                            <TableCell>
+                              {(() => {
+                                const template = templates.find(t => t.id === (invoice.templateId || 'default'));
+                                const templateId = invoice.templateId || 'default';
+                                const templateName = template ? template.name : 'Default';
+
+                                return (
+                                  <Tooltip
+                                    title={
+                                      <Box sx={{ p: 1 }}>
+                                        <img
+                                          src={`/template-previews/${templateId}-preview.png`}
+                                          alt={templateName}
+                                          style={{
+                                            width: 200,
+                                            height: 'auto',
+                                            borderRadius: 4,
+                                            border: '1px solid #e0e0e0'
+                                          }}
+                                          onError={(e) => {
+                                            e.target.style.display = 'none';
+                                          }}
+                                        />
+                                        <Typography variant="caption" display="block" align="center" sx={{ mt: 1 }}>
+                                          {templateName}
+                                        </Typography>
+                                      </Box>
+                                    }
+                                    arrow
+                                    placement="left"
+                                  >
+                                    <Chip
+                                      label={templateName}
+                                      size="small"
+                                      variant="outlined"
+                                      sx={{
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                          backgroundColor: 'action.hover'
+                                        }
                                       }}
                                     />
-                                    <Typography variant="caption" display="block" align="center" sx={{ mt: 1 }}>
-                                      {templateName}
-                                    </Typography>
-                                  </Box>
-                                }
-                                arrow
-                                placement="left"
-                              >
-                                <Chip 
-                                  label={templateName}
-                                  size="small"
-                                  variant="outlined"
-                                  sx={{ 
-                                    cursor: 'pointer',
-                                    '&:hover': {
-                                      backgroundColor: 'action.hover'
-                                    }
-                                  }}
-                                />
-                              </Tooltip>
-                            );
-                          })()}
-                        </TableCell>
-                        <TableCell>
+                                  </Tooltip>
+                                );
+                              })()}
+                            </TableCell>
+                            <TableCell>
 
-                          {invoice.date && !isNaN(new Date(invoice.date).getTime())
-                            ? format(new Date(invoice.date), 'MMM dd, yyyy')
-                            : '-'
-                          }
-                        </TableCell>
-                        <TableCell>
-                          {invoice.dueDate && !isNaN(new Date(invoice.dueDate).getTime())
-                            ? format(new Date(invoice.dueDate), 'MMM dd, yyyy') 
-                            : '-'
-                          }
-                        </TableCell>
-                        <TableCell>{formatCurrency(invoice.total, invoice.currency)}</TableCell>
-                        <TableCell>
-                          <FormControl size="small">
-                            <Select
-                              value={invoice.status}
-                              onChange={(e) => handleStatusChange(invoice.id, e.target.value)}
-                              renderValue={(value) => (
-                                <Chip
-                                  label={value}
-                                  color={getStatusColor(value)}
-                                  size="small"
-                                />
-                              )}
-                            >
-                              <MenuItem value="draft">Draft</MenuItem>
-                              <MenuItem value="pending">Pending</MenuItem>
-                              <MenuItem value="paid">Paid</MenuItem>
-                              <MenuItem value="overdue">Overdue</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </TableCell>
-                        <TableCell align="right">
-                          <IconButton
-                            size="small"
-                            onClick={() => navigate(`/invoices/${invoice.id}`)}
-                            title="View Invoice"
-                          >
-                            <ViewIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => navigate(`/invoices/${invoice.id}?send=true`)}
-                            title="Send Invoice"
-                            color="primary"
-                          >
-                            <SendIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleDuplicateInvoice(invoice)}
-                            title="Duplicate Invoice"
-                          >
-                            <FileCopyIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleDownloadInvoice(invoice)}
-                            title="Download PDF"
-                          >
-                            <DownloadIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
-                            title="Edit Invoice"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => handleDeleteInvoice(invoice.id)}
-                            title="Delete Invoice"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                              {invoice.date && !isNaN(new Date(invoice.date).getTime())
+                                ? format(new Date(invoice.date), 'MMM dd, yyyy')
+                                : '-'
+                              }
+                            </TableCell>
+                            <TableCell>
+                              {invoice.dueDate && !isNaN(new Date(invoice.dueDate).getTime())
+                                ? format(new Date(invoice.dueDate), 'MMM dd, yyyy')
+                                : '-'
+                              }
+                            </TableCell>
+                            <TableCell>{formatCurrency(invoice.total, invoice.currency)}</TableCell>
+                            <TableCell>
+                              <FormControl size="small">
+                                <Select
+                                  value={invoice.status}
+                                  onChange={(e) => handleStatusChange(invoice.id, e.target.value)}
+                                  renderValue={(value) => (
+                                    <Chip
+                                      label={value}
+                                      color={getStatusColor(value)}
+                                      size="small"
+                                    />
+                                  )}
+                                >
+                                  <MenuItem value="draft">Draft</MenuItem>
+                                  <MenuItem value="pending">Pending</MenuItem>
+                                  <MenuItem value="paid">Paid</MenuItem>
+                                  <MenuItem value="overdue">Overdue</MenuItem>
+                                </Select>
+                              </FormControl>
+                            </TableCell>
+                            <TableCell align="right">
+                              <IconButton
+                                size="small"
+                                onClick={() => navigate(`/invoices/${invoice.id}`)}
+                                title="View Invoice"
+                              >
+                                <ViewIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                onClick={() => navigate(`/invoices/${invoice.id}?send=true`)}
+                                title="Send Invoice"
+                                color="primary"
+                              >
+                                <SendIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                onClick={() => handleDuplicateInvoice(invoice)}
+                                title="Duplicate Invoice"
+                              >
+                                <FileCopyIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                onClick={() => handleDownloadInvoice(invoice)}
+                                title="Download PDF"
+                              >
+                                <DownloadIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
+                                title="Edit Invoice"
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                size="small"
+                                color="error"
+                                onClick={() => handleDeleteInvoice(invoice.id)}
+                                title="Delete Invoice"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Paper>
             )}
-            
+
             {/* Mobile-Friendly Pagination */}
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'center',
               alignItems: 'center',
               mt: 2,
               flexDirection: { xs: 'column', sm: 'row' },
@@ -883,7 +886,7 @@ const Invoices = () => {
             </Box>
           </>
         )}
-    </Container>
+      </Container>
     </>
   );
 };

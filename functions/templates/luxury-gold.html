@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 9pt;
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
     }
-    
+
     .invoice-container {
       max-width: 800px;
       margin: 20px auto;
@@ -27,7 +28,7 @@
       box-shadow: 0 10px 40px rgba(161, 98, 7, 0.15);
       padding: 60px;
     }
-    
+
     /* Ornate border frame */
     .ornate-frame {
       border: 3px double #a16207;
@@ -35,7 +36,7 @@
       position: relative;
       background: #fffbeb;
     }
-    
+
     .ornate-frame::before {
       content: '';
       position: absolute;
@@ -45,7 +46,7 @@
       bottom: 10px;
       border: 1px solid #d97706;
     }
-    
+
     /* Corner decorations */
     .corner-decoration {
       position: absolute;
@@ -53,42 +54,42 @@
       height: 50px;
       border: 2px solid #a16207;
     }
-    
+
     .corner-top-left {
       top: -2px;
       left: -2px;
       border-right: none;
       border-bottom: none;
     }
-    
+
     .corner-top-right {
       top: -2px;
       right: -2px;
       border-left: none;
       border-bottom: none;
     }
-    
+
     .corner-bottom-left {
       bottom: -2px;
       left: -2px;
       border-right: none;
       border-top: none;
     }
-    
+
     .corner-bottom-right {
       bottom: -2px;
       right: -2px;
       border-left: none;
       border-top: none;
     }
-    
+
     /* Luxury header */
     .header {
       text-align: center;
       margin-bottom: 20px;
       position: relative;
     }
-    
+
     .company-crest {
       width: 80px;
       height: 40px;
@@ -103,7 +104,7 @@
       font-weight: 700;
       box-shadow: 0 5px 15px rgba(161, 98, 7, 0.3);
     }
-    
+
     .company-name {
       font-size: 22pt;
       font-weight: 400;
@@ -112,20 +113,20 @@
       color: #a16207;
       text-transform: uppercase;
     }
-    
+
     .company-tagline {
       font-size: 9pt;
       font-style: italic;
       color: #92400e;
       margin-bottom: 20px;
     }
-    
+
     .company-details {
       font-size: 9pt;
       line-height: 1.4;
       color: #92400e;
     }
-    
+
     /* Elegant divider */
     .elegant-divider {
       height: 30px;
@@ -134,25 +135,25 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .divider-line {
       flex: 1;
       height: 1px;
       background: linear-gradient(90deg, transparent, #d97706, transparent);
     }
-    
+
     .divider-ornament {
       margin: 0 20px;
       color: #d97706;
       font-size: 16pt;
     }
-    
+
     /* Invoice title section */
     .invoice-title-section {
       text-align: center;
       margin-bottom: 20px;
     }
-    
+
     .invoice-title {
       font-size: 14pt;
       font-weight: 300;
@@ -160,13 +161,13 @@
       color: #a16207;
       margin-bottom: 10px;
     }
-    
+
     .invoice-number-elegant {
       font-size: 9pt;
       color: #92400e;
       font-style: italic;
     }
-    
+
     /* Two column layout */
     .info-columns {
       display: grid;
@@ -174,7 +175,7 @@
       gap: 60px;
       margin-bottom: 20px;
     }
-    
+
     .info-section h3 {
       font-size: 9pt;
       font-weight: 400;
@@ -185,30 +186,30 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-    
+
     .info-section div {
       line-height: 1.5;
       font-size: 9pt;
       color: #451a03;
     }
-    
+
     .info-section strong {
       color: #a16207;
       font-weight: 600;
     }
-    
+
     /* Luxury table */
     .luxury-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 20px;
     }
-    
+
     .luxury-table thead {
       border-top: 2px solid #a16207;
       border-bottom: 2px solid #a16207;
     }
-    
+
     .luxury-table th {
       padding: 20px 15px;
       text-align: left;
@@ -218,32 +219,32 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
-    
+
     .luxury-table td {
       padding: 18px 15px;
       border-bottom: 1px solid #fef3c7;
       color: #451a03;
     }
-    
+
     .luxury-table tbody tr:last-child td {
       border-bottom: 2px solid #a16207;
     }
-    
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Luxury totals */
     .totals-section {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 25px;
     }
-    
+
     .totals-frame {
       width: 350px;
       border: 2px solid #a16207;
@@ -251,7 +252,7 @@
       padding: 15px;
       position: relative;
     }
-    
+
     .totals-frame::after {
       content: '';
       position: absolute;
@@ -261,7 +262,7 @@
       bottom: 8px;
       border: 1px solid #d97706;
     }
-    
+
     .total-row {
       display: flex;
       justify-content: space-between;
@@ -269,7 +270,7 @@
       font-size: 9pt;
       color: #451a03;
     }
-    
+
     .total-row.grand-total {
       margin-top: 15px;
       padding-top: 20px;
@@ -278,7 +279,7 @@
       color: #a16207;
       font-weight: 600;
     }
-    
+
     /* Signature section */
     .signature-section {
       margin-top: 80px;
@@ -286,23 +287,23 @@
       grid-template-columns: 1fr 1fr;
       gap: 60px;
     }
-    
+
     .signature-box {
       text-align: center;
     }
-    
+
     .signature-line {
       border-bottom: 1px solid #a16207;
       margin-bottom: 15px;
       height: 40px;
     }
-    
+
     .signature-label {
       font-size: 9pt;
       color: #92400e;
       font-style: italic;
     }
-    
+
     /* Footer */
     .luxury-footer {
       margin-top: 25px;
@@ -310,34 +311,34 @@
       border-top: 2px solid #a16207;
       text-align: center;
     }
-    
+
     .footer-notes {
       margin-bottom: 15px;
     }
-    
+
     .footer-notes h3 {
       font-size: 9pt;
       color: #a16207;
       margin-bottom: 20px;
       letter-spacing: 1px;
     }
-    
+
     .footer-notes p {
       font-size: 9pt;
       color: #92400e;
       line-height: 1.4;
       font-style: italic;
     }
-    
+
     .thank-you-message {
       font-size: 9pt;
       color: #a16207;
       font-style: italic;
       letter-spacing: 1px;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <div class="ornate-frame">
@@ -346,7 +347,7 @@
       <div class="corner-decoration corner-top-right"></div>
       <div class="corner-decoration corner-bottom-left"></div>
       <div class="corner-decoration corner-bottom-right"></div>
-      
+
       <!-- Luxury Header -->
       <div class="header">
         <div class="company-crest">
@@ -360,23 +361,23 @@
           {{#if senderEmail}}{{senderEmail}} {{/if}}
           {{#if senderPhone}}| {{senderPhone}}{{/if}}
           {{#if senderAddressStreet}}
-            <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
+          <br>{{senderAddressStreet}} • {{senderAddressCityStateZip}}
           {{/if}}
         </div>
       </div>
-      
+
       <div class="elegant-divider">
         <div class="divider-line"></div>
         <div class="divider-ornament">❦</div>
         <div class="divider-line"></div>
       </div>
-      
+
       <!-- Invoice Title -->
       <div class="invoice-title-section">
         <h2 class="invoice-title">INVOICE</h2>
         <div class="invoice-number-elegant">Number {{invoice.invoiceNumber}}</div>
       </div>
-      
+
       <!-- Info Columns -->
       <div class="info-columns">
         <div class="info-section">
@@ -390,7 +391,7 @@
             {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
           </div>
         </div>
-        
+
         <div class="info-section">
           <h3>Invoice Details</h3>
           <div>
@@ -401,13 +402,13 @@
           </div>
         </div>
       </div>
-      
+
       <div class="elegant-divider">
         <div class="divider-line"></div>
         <div class="divider-ornament">❦</div>
         <div class="divider-line"></div>
       </div>
-      
+
       <!-- Luxury Table -->
       <table class="luxury-table">
         <thead>
@@ -429,7 +430,7 @@
           {{/each}}
         </tbody>
       </table>
-      
+
       <!-- Luxury Totals -->
       <div class="totals-section">
         <div class="totals-frame">
@@ -449,7 +450,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Signature Section -->
       <div class="signature-section">
         <div class="signature-box">
@@ -461,13 +462,13 @@
           <div class="signature-label">Date</div>
         </div>
       </div>
-      
+
       <!-- Luxury Footer -->
       <div class="luxury-footer">
         {{#if invoice.notes}}
         <div class="footer-notes">
           <h3>Additional Notes</h3>
-          <p>{{invoice.notes}}</p>
+          <p>{{{nl2br invoice.notes}}}</p>
         </div>
         {{/if}}
         <p class="thank-you-message">We sincerely appreciate your distinguished patronage</p>
@@ -475,4 +476,5 @@
     </div>
   </div>
 </body>
+
 </html>

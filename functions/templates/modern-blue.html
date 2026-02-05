@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <style>
@@ -8,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       font-size: 9pt;
@@ -16,13 +17,13 @@
       color: #1e293b;
       background: #ffffff;
     }
-    
+
     .invoice-container {
       max-width: 800px;
       margin: 0 auto;
       background: #ffffff;
     }
-    
+
     /* Compact professional header */
     .header {
       background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
@@ -31,7 +32,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .header::before {
       content: '';
       position: absolute;
@@ -42,7 +43,7 @@
       background: rgba(255, 255, 255, 0.05);
       transform: rotate(35deg);
     }
-    
+
     .header-content {
       display: flex;
       justify-content: space-between;
@@ -50,24 +51,24 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .company-info h1 {
       font-size: 16pt;
       font-weight: 600;
       color: white;
       margin-bottom: 8px;
     }
-    
+
     .company-info p {
       font-size: 8pt;
       color: rgba(255, 255, 255, 0.9);
       line-height: 1.3;
     }
-    
+
     .invoice-info {
       text-align: right;
     }
-    
+
     .invoice-title {
       font-size: 8pt;
       font-weight: 400;
@@ -76,30 +77,30 @@
       letter-spacing: 1px;
       margin-bottom: 4px;
     }
-    
+
     .invoice-number {
       font-size: 14pt;
       font-weight: 600;
       color: white;
       margin-bottom: 8px;
     }
-    
+
     .invoice-meta {
       font-size: 8pt;
       color: rgba(255, 255, 255, 0.9);
       line-height: 1.3;
     }
-    
+
     .invoice-meta-row {
       display: flex;
       gap: 15px;
       justify-content: flex-end;
     }
-    
+
     .invoice-meta-item {
       text-align: right;
     }
-    
+
     .invoice-meta-label {
       color: rgba(255, 255, 255, 0.7);
       font-size: 7pt;
@@ -107,24 +108,24 @@
       letter-spacing: 0.5px;
       margin-bottom: 2px;
     }
-    
+
     .invoice-meta-value {
       color: white;
       font-weight: 500;
     }
-    
+
     /* Main content area */
     .main-content {
       padding: 20px 30px;
     }
-    
+
     /* Compact billing section */
     .billing-section {
       margin-bottom: 15px;
       border-left: 3px solid #3b82f6;
       padding-left: 15px;
     }
-    
+
     .billing-header {
       font-size: 9pt;
       font-weight: 600;
@@ -133,18 +134,18 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .billing-info {
       font-size: 8pt;
       color: #475569;
       line-height: 1.3;
     }
-    
+
     .billing-info strong {
       color: #1e293b;
       font-weight: 600;
     }
-    
+
     /* Modern blue table */
     .items-table {
       width: 100%;
@@ -153,7 +154,7 @@
       background: white;
       border: 1px solid #e0f2fe;
     }
-    
+
     .items-table th {
       background: #f8fafc;
       padding: 8px 10px;
@@ -165,38 +166,38 @@
       letter-spacing: 0.5px;
       border-bottom: 2px solid #3b82f6;
     }
-    
+
     .items-table td {
       padding: 8px 10px;
       font-size: 8pt;
       color: #334155;
       border-bottom: 1px solid #e0f2fe;
     }
-    
+
     .items-table tbody tr:last-child td {
       border-bottom: none;
     }
-    
-    
+
+
     .text-right {
       text-align: right;
     }
-    
+
     .text-center {
       text-align: center;
     }
-    
+
     /* Compact totals */
     .totals-section {
       display: flex;
       justify-content: flex-end;
       margin-bottom: 15px;
     }
-    
+
     .totals-box {
       width: 300px;
     }
-    
+
     .total-row {
       display: flex;
       justify-content: space-between;
@@ -204,7 +205,7 @@
       font-size: 8pt;
       border-bottom: 1px solid #e0f2fe;
     }
-    
+
     .total-row:last-child {
       border-bottom: none;
       border-top: 2px solid #3b82f6;
@@ -213,21 +214,21 @@
       font-size: 11pt;
       font-weight: 700;
     }
-    
+
     .total-label {
       color: #64748b;
     }
-    
+
     .total-value {
       color: #1e293b;
       font-weight: 600;
     }
-    
+
     .total-row:last-child .total-label,
     .total-row:last-child .total-value {
       color: #2563eb;
     }
-    
+
     /* Footer positioned at bottom */
     .footer {
       margin-top: 60px;
@@ -235,13 +236,13 @@
       background: #f8fafc;
       border-top: 1px solid #e0f2fe;
     }
-    
+
     .footer-content {
       display: grid;
       grid-template-columns: 1.5fr 1fr;
       gap: 30px;
     }
-    
+
     .notes-section h3 {
       font-size: 9pt;
       font-weight: 600;
@@ -250,20 +251,20 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .notes-section p {
       font-size: 8pt;
       color: #475569;
       line-height: 1.3;
     }
-    
+
     .payment-terms-box {
       background: #f0f9ff;
       padding: 10px;
       border-left: 3px solid #3b82f6;
       text-align: left;
     }
-    
+
     .payment-terms-box h4 {
       font-size: 8pt;
       font-weight: 600;
@@ -272,15 +273,15 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .payment-terms-box p {
       font-size: 9pt;
       font-weight: 500;
       color: #1e293b;
     }
-    
   </style>
 </head>
+
 <body>
   <div class="invoice-container">
     <!-- Blue Gradient Header -->
@@ -296,7 +297,7 @@
             {{#if senderPhone}}{{senderPhone}}{{/if}}
           </p>
         </div>
-        
+
         <div class="invoice-info">
           <div class="invoice-title">INVOICE</div>
           <div class="invoice-number">{{invoice.invoiceNumber}}</div>
@@ -315,7 +316,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Main Content -->
     <div class="main-content">
       <!-- Blue-Accented Billing Section -->
@@ -330,7 +331,7 @@
           {{#if customerAddressCountry}}{{customerAddressCountry}}{{/if}}
         </div>
       </div>
-      
+
       <!-- Modern Blue Table -->
       <table class="items-table">
         <thead>
@@ -352,7 +353,7 @@
           {{/each}}
         </tbody>
       </table>
-      
+
       <!-- Blue Gradient Totals -->
       <div class="totals-section">
         <div class="totals-box">
@@ -373,17 +374,17 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Blue-Themed Footer -->
     <div class="footer">
       <div class="footer-content">
         {{#if invoice.notes}}
         <div class="notes-section">
           <h3>Notes</h3>
-          <p>{{invoice.notes}}</p>
+          <p>{{{nl2br invoice.notes}}}</p>
         </div>
         {{/if}}
-        
+
         <div class="payment-terms-box">
           <h4>Payment Terms</h4>
           <p>{{invoice.paymentTerms}}</p>
@@ -392,4 +393,5 @@
     </div>
   </div>
 </body>
+
 </html>
