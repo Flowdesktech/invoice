@@ -28,6 +28,54 @@
         "function": "api"
       },
       {
+        "source": "/",
+        "function": "ssr"
+      },
+      {
+        "source": "/features",
+        "function": "ssr"
+      },
+      {
+        "source": "/about",
+        "function": "ssr"
+      },
+      {
+        "source": "/blog",
+        "function": "ssr"
+      },
+      {
+        "source": "/contact",
+        "function": "ssr"
+      },
+      {
+        "source": "/privacy",
+        "function": "ssr"
+      },
+      {
+        "source": "/terms",
+        "function": "ssr"
+      },
+      {
+        "source": "/docs",
+        "function": "ssr"
+      },
+      {
+        "source": "/try-now",
+        "function": "ssr"
+      },
+      {
+        "source": "/login",
+        "function": "ssr"
+      },
+      {
+        "source": "/register",
+        "function": "ssr"
+      },
+      {
+        "source": "/generate-social-images",
+        "function": "ssr"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

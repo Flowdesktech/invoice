@@ -33,6 +33,8 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
     />
     
+    <!--ssr-head-->
+    
     <!-- Critical CSS for instant loading feedback -->
     <style>
       /* Prevent white flash with immediate background */
@@ -103,7 +105,7 @@
       <div class="loader-text">Loading...</div>
     </div>
     
-    <div id="root"></div>
+    <div id="root"><!--ssr-outlet--></div>
     
     <script>
       // Remove initial loader once React app is mounted
@@ -121,6 +123,6 @@
       });
     </script>
     
-    <script type="module" src="/src/index.jsx"></script>
+    <script type="module" src="/src/entry-client.jsx"></script>
   </body>
 </html>

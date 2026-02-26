@@ -88,6 +88,23 @@ exports.api = onRequest({
   minInstances: 0
 }, app);
 
+// SSR Cloud Function for public-facing pages
+// Renders React components on the server for SEO and faster initial load
+// The SSR handler is loaded lazily to avoid loading DOM shims for the API function.
+let _handleSSR = null;
+exports.ssr = onRequest({
+  region: 'us-central1',
+  memory: '512MiB',
+  timeoutSeconds: 30,
+  maxInstances: 10,
+  minInstances: 0,
+}, (req, res) => {
+  if (!_handleSSR) {
+    _handleSSR = require('./ssr').handleSSR;
+  }
+  return _handleSSR(req, res);
+});
+
 // Scheduled function to automatically generate recurring invoices
 // Runs every day at 2:00 AM (server time)
 exports.generateRecurringInvoices = onSchedule({

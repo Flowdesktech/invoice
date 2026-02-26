@@ -1,5 +1,5 @@
 # FlowDesk Invoice Management System
-# https://flowdesk.tech
+# https://invoice.flowdesk.tech
 
 # Allow all search engines to crawl public pages
 User-agent: *
@@ -52,4 +52,4 @@ User-agent: MJ12bot
 Disallow: /
 
 # Sitemap location
-Sitemap: https://flowdesk.tech/sitemap.xml
+Sitemap: https://invoice.flowdesk.tech/sitemap.xml

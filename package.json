@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:client && npm run build:ssr && npm run build:copy-template",
+    "build:client": "vite build",
+    "build:ssr": "cross-env SSR=true vite build --ssr src/entry-server.jsx --outDir functions/ssr-bundle && node -e \"require('fs').writeFileSync('functions/ssr-bundle/package.json','{\\\"type\\\":\\\"module\\\"}\\n')\"",
+    "build:copy-template": "node -e \"require('fs').copyFileSync('build/index.html','functions/ssr-template.html')\"",
     "preview": "vite preview",
     "deploy": "npm run build && firebase deploy",
     "deploy:hosting": "npm run build && firebase deploy --only hosting",
@@ -47,7 +50,9 @@
     }
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.3.2",
     "@mui/material": "^7.3.2",
