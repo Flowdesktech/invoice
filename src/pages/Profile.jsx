@@ -35,8 +35,11 @@ import {
   Home as HomeIcon,
   Settings as SettingsIcon,
   Lock as LockIcon,
+  PinOutlined as PinIcon,
+  Timer as TimerIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { useAppLock } from '../contexts/AppLockContext';
 import toast from 'react-hot-toast';
 
 function TabPanel({ children, value, index, ...other }) {
@@ -58,6 +61,19 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const { userData, currentProfile, updateUserProfile, changePassword } = useAuth();
+  const {
+    isEnabled: lockEnabled,
+    timeoutMinutes,
+    hasPin,
+    setupPin,
+    removePin,
+    updateTimeout,
+    lock,
+  } = useAppLock();
+  const [pinDraft, setPinDraft] = useState('');
+  const [pinConfirmDraft, setPinConfirmDraft] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [pinSaving, setPinSaving] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
@@ -170,6 +186,49 @@ const Profile = () => {
     } finally {
       setPasswordLoading(false);
     }
+  };
+
+  const handleSetupPin = async () => {
+    setPinError('');
+    if (!/^\d{4,12}$/.test(pinDraft)) {
+      setPinError('PIN must be 4-12 digits');
+      return;
+    }
+    if (pinDraft !== pinConfirmDraft) {
+      setPinError('PINs do not match');
+      return;
+    }
+    try {
+      setPinSaving(true);
+      await setupPin(pinDraft);
+      setPinDraft('');
+      setPinConfirmDraft('');
+      toast.success(hasPin() ? 'PIN updated' : 'App Lock enabled');
+    } catch (err) {
+      console.error('Error setting up PIN:', err);
+      setPinError('Failed to save PIN. Please try again.');
+    } finally {
+      setPinSaving(false);
+    }
+  };
+
+  const handleRemovePin = () => {
+    removePin();
+    setPinDraft('');
+    setPinConfirmDraft('');
+    setPinError('');
+    toast.success('App Lock disabled');
+  };
+
+  const handleTimeoutChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    updateTimeout(value);
+    toast.success(`Auto-lock set to ${value} minute${value === 1 ? '' : 's'}`);
+  };
+
+  const handleLockNow = () => {
+    lock();
+    toast.success('App locked');
   };
 
   return (
@@ -693,6 +752,145 @@ const Profile = () => {
           </TabPanel>
 
           <TabPanel value={activeTab} index={2}>
+            {/* App Lock section */}
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PinIcon fontSize="small" /> App Lock
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Require a PIN to access the app after a period of inactivity. This setting applies to this device only.
+              </Typography>
+
+              <Grid container spacing={3}>
+                <Grid item size={12}>
+                  <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
+                      <Box>
+                        <Typography variant="subtitle1" fontWeight={600}>
+                          {lockEnabled ? 'App Lock is enabled' : 'App Lock is disabled'}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {lockEnabled
+                            ? `Auto-locks after ${timeoutMinutes} minute${timeoutMinutes === 1 ? '' : 's'} of inactivity`
+                            : 'Set a PIN below to enable'}
+                        </Typography>
+                      </Box>
+                      {lockEnabled && (
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          startIcon={<LockIcon />}
+                          onClick={handleLockNow}
+                        >
+                          Lock Now
+                        </Button>
+                      )}
+                    </Box>
+                  </Paper>
+                </Grid>
+
+                {lockEnabled && (
+                  <Grid item size={{ xs: 12, sm: 6 }}>
+                    <FormControl fullWidth>
+                      <InputLabel>Auto-lock after</InputLabel>
+                      <Select
+                        value={timeoutMinutes}
+                        onChange={handleTimeoutChange}
+                        label="Auto-lock after"
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <TimerIcon fontSize="small" />
+                          </InputAdornment>
+                        }
+                      >
+                        <MenuItem value={1}>1 minute</MenuItem>
+                        <MenuItem value={5}>5 minutes</MenuItem>
+                        <MenuItem value={10}>10 minutes</MenuItem>
+                        <MenuItem value={15}>15 minutes</MenuItem>
+                        <MenuItem value={30}>30 minutes</MenuItem>
+                        <MenuItem value={60}>1 hour</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                )}
+
+                <Grid item size={12}>
+                  <Divider sx={{ my: 1 }} />
+                  <Typography variant="subtitle2" sx={{ mt: 1, mb: 2 }}>
+                    {lockEnabled ? 'Change PIN' : 'Set a PIN to enable App Lock'}
+                  </Typography>
+                </Grid>
+
+                <Grid item size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="New PIN"
+                    type="password"
+                    value={pinDraft}
+                    onChange={(e) => {
+                      setPinDraft(e.target.value.replace(/\D/g, '').slice(0, 12));
+                      if (pinError) setPinError('');
+                    }}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', autoComplete: 'new-password' }}
+                    helperText="4-12 digits"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PinIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+
+                <Grid item size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Confirm PIN"
+                    type="password"
+                    value={pinConfirmDraft}
+                    onChange={(e) => {
+                      setPinConfirmDraft(e.target.value.replace(/\D/g, '').slice(0, 12));
+                      if (pinError) setPinError('');
+                    }}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', autoComplete: 'new-password' }}
+                    error={!!pinError}
+                    helperText={pinError || ' '}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PinIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+
+                <Grid item size={12}>
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                    <Button
+                      variant="contained"
+                      onClick={handleSetupPin}
+                      disabled={pinSaving || !pinDraft || !pinConfirmDraft}
+                    >
+                      {pinSaving ? <CircularProgress size={22} /> : lockEnabled ? 'Update PIN' : 'Enable App Lock'}
+                    </Button>
+                    {lockEnabled && (
+                      <Button variant="text" color="error" onClick={handleRemovePin}>
+                        Remove PIN
+                      </Button>
+                    )}
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+
+            <Divider sx={{ my: 4 }} />
+
+            <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <LockIcon fontSize="small" /> Account Password
+            </Typography>
+
             <form onSubmit={handleSubmitPassword(onSubmitPassword)}>
               <Grid container spacing={3}>
                 <Grid item size={12}>

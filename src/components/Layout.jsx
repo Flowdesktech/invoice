@@ -34,14 +34,22 @@ import {
   TrendingUp as TrendingUpIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { AppLockProvider, useAppLock } from '../contexts/AppLockContext';
 import Logo from './Logo';
 import AccountSwitcher from './AccountSwitcher';
 import ProfileDialog from './ProfileDialog';
 import Footer from './Footer';
+import LockScreen from './LockScreen';
 
 const drawerWidth = 240;
 
-const Layout = () => {
+const LockOverlay = () => {
+  const { isLocked, isEnabled } = useAppLock();
+  if (!isEnabled || !isLocked) return null;
+  return <LockScreen />;
+};
+
+const LayoutInner = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
@@ -428,8 +436,17 @@ const Layout = () => {
         open={profileDialogOpen} 
         onClose={() => setProfileDialogOpen(false)} 
       />
+
+      {/* App Lock overlay */}
+      <LockOverlay />
     </Box>
   );
 };
+
+const Layout = () => (
+  <AppLockProvider>
+    <LayoutInner />
+  </AppLockProvider>
+);
 
 export default Layout;
