@@ -24,9 +24,10 @@ A professional invoice management system built with React 19 and Firebase, featu
 
 ## Technologies Used
 
-- **Build Tool**: Vite 6
-- **Frontend**: React 19 (RC), Material-UI 6, React Router DOM 7
-- **Backend**: Firebase 11 (Firestore, Authentication, Hosting)
+- **Framework**: Next.js 15 (App Router) with SSR
+- **Frontend**: React 19, Material-UI 7, Emotion
+- **Hosting**: Vercel (frontend) + Firebase (backend services)
+- **Backend**: Firebase 11 (Firestore, Authentication, Cloud Functions)
 - **PDF Generation**: jsPDF with autotable
 - **Forms**: React Hook Form
 - **Date Handling**: date-fns
@@ -61,16 +62,18 @@ Copy the `.env.example` file to `.env` and add your Firebase configuration:
 cp .env.example .env
 ```
 
-Then edit `.env` with your Firebase project values:
+Then edit `.env` (or `.env.local`) with your Firebase project values. Next.js
+exposes variables prefixed with `NEXT_PUBLIC_` to the browser bundle:
 
 ```env
-VITE_FIREBASE_API_KEY=your_api_key_here
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
-VITE_FIREBASE_PROJECT_ID=your_project_id_here
-VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id_here
-VITE_FIREBASE_APP_ID=your_app_id_here
-VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id_here
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key_here
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_auth_domain_here
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id_here
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_storage_bucket_here
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id_here
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id_here
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id_here
+NEXT_PUBLIC_FIREBASE_FUNCTIONS_REGION=us-central1
 ```
 
 ### 4. Firebase Setup
@@ -109,33 +112,77 @@ firebase deploy --only firestore:indexes
 ### 6. Run the Application
 
 ```bash
-# Development server with hot module replacement
+# Development server (Next.js)
 npm run dev
 
 # Build for production
 npm run build
 
-# Preview production build
-npm run preview
+# Serve the production build locally
+npm run start
 ```
 
-The application will open at `http://localhost:3000`
+The application will open at `http://localhost:3000`.
 
 ## Deployment
 
-### Deploy to Firebase Hosting
+### Frontend: Vercel
 
-1. Build the production version:
+The Next.js frontend is deployed to Vercel via its Git integration.
+
+1. Install the Vercel CLI (optional, only for manual deploys):
+   ```bash
+   npm install -g vercel
+   ```
+2. In the [Vercel dashboard](https://vercel.com/new), import this Git
+   repository. Vercel auto-detects Next.js; no special build settings are
+   required.
+3. Add the following environment variables in **Project Settings →
+   Environment Variables** (Production + Preview):
+   - `NEXT_PUBLIC_FIREBASE_API_KEY`
+   - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+   - `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+   - `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+   - `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+   - `NEXT_PUBLIC_FIREBASE_APP_ID`
+   - `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID`
+   - `NEXT_PUBLIC_FIREBASE_FUNCTIONS_REGION` (e.g. `us-central1`)
+4. Trigger a deploy (push to `main`/`master` or click **Deploy**).
+5. In **Project Settings → Domains**, add `invoice.flowdesk.tech`. Vercel
+   will instruct you to create a CNAME record pointing to
+   `cname.vercel-dns.com` at your DNS provider.
+
+### Backend: Firebase
+
+Firebase Cloud Functions, Firestore rules, indexes, and Storage rules are
+deployed by the `.github/workflows/deploy.yml` GitHub Action, which runs on
+every push to `main`/`master` that changes `functions/**` or any Firebase
+config file.
+
+Required GitHub Actions secrets:
+
+- `FIREBASE_SERVICE_ACCOUNT` – JSON contents of a service account key with
+  permission to deploy to the project
+- `VITE_FIREBASE_PROJECT_ID` – your Firebase project ID (kept under this
+  name to avoid breaking existing secrets)
+- `MAILGUN_API_KEY`, `MAILGUN_DOMAIN`, `MAILGUN_FROM_EMAIL`
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
+- `OPENAI_API_KEY`
+
+Manual deploy (requires `firebase login`):
+
 ```bash
-npm run build
+npm run deploy:functions   # Cloud Functions
+npm run deploy:rules       # Firestore rules
 ```
 
-2. Deploy to Firebase:
-```bash
-firebase deploy
-```
+### API proxy
 
-Your app will be available at `https://your-project-id.web.app`
+`next.config.mjs` rewrites `/api/:path*` from the Next.js app to the
+Firebase Cloud Functions host
+(`https://<region>-<project-id>.cloudfunctions.net/api/:path*`). This keeps
+browser requests same-origin and avoids CORS configuration on the
+Functions side.
 
 ## Usage Guide
 

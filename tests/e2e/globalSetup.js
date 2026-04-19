@@ -1,160 +1,114 @@
-import { preview } from 'vite';
 import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
-let server;
 let devProcess;
+
+const PORT = process.env.E2E_PORT || '3000';
+
+function waitForServer({ match, timeoutMs = 60000 }) {
+  return new Promise((resolve, reject) => {
+    let started = false;
+
+    devProcess.stdout?.on('data', (data) => {
+      const output = data.toString();
+      console.log('Next server:', output);
+      if (!started && match.test(output)) {
+        started = true;
+        setTimeout(resolve, 1500);
+      }
+    });
+
+    devProcess.stderr?.on('data', (data) => {
+      console.error('Next server error:', data.toString());
+    });
+
+    devProcess.on('error', (error) => {
+      console.error('Failed to start Next.js server:', error);
+      reject(error);
+    });
+
+    setTimeout(() => {
+      if (!started) reject(new Error(`Next.js server did not become ready within ${timeoutMs}ms`));
+    }, timeoutMs);
+  });
+}
 
 export async function setup() {
   const isCI = process.env.CI === 'true';
-  
+  const firebaseEnv = {
+    NEXT_PUBLIC_FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    NEXT_PUBLIC_FIREBASE_FUNCTIONS_REGION:
+      process.env.NEXT_PUBLIC_FIREBASE_FUNCTIONS_REGION || 'us-central1',
+  };
+
   if (isCI) {
-    // In CI, use preview mode with a built app
-    console.log('🚀 Starting preview server for E2E tests (CI mode)...');
-    
-    // Build the app first
-    console.log('📦 Building application...');
+    console.log('Building Next.js app for E2E tests (CI mode)...');
     await new Promise((resolve, reject) => {
       const buildProcess = spawn('npm', ['run', 'build'], {
         shell: true,
         stdio: 'inherit',
-        env: {
-          ...process.env,
-          // Add any required build env vars here
-          NODE_ENV: 'production',
-          // Ensure all Firebase env vars are passed to build
-          VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
-          VITE_FIREBASE_AUTH_DOMAIN: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-          VITE_FIREBASE_PROJECT_ID: process.env.VITE_FIREBASE_PROJECT_ID,
-          VITE_FIREBASE_STORAGE_BUCKET: process.env.VITE_FIREBASE_STORAGE_BUCKET,
-          VITE_FIREBASE_MESSAGING_SENDER_ID: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-          VITE_FIREBASE_APP_ID: process.env.VITE_FIREBASE_APP_ID
-        }
+        env: { ...process.env, ...firebaseEnv, NODE_ENV: 'production' },
       });
-      
       buildProcess.on('close', (code) => {
-        if (code === 0) {
-          console.log('✅ Build completed successfully');
-          // Verify build output exists
-          const fs = require('fs');
-          const path = require('path');
-          const indexPath = path.join(process.cwd(), 'build', 'index.html');
-          if (!fs.existsSync(indexPath)) {
-            reject(new Error('Build output missing - index.html not found'));
-          } else {
-            resolve();
-          }
-        } else {
-          reject(new Error(`Build failed with code ${code}`));
+        if (code !== 0) return reject(new Error(`Build failed with code ${code}`));
+        if (!fs.existsSync(path.join(process.cwd(), '.next'))) {
+          return reject(new Error('Build output missing - .next directory not found'));
         }
+        console.log('Build completed successfully');
+        resolve();
       });
     });
-    
-    // Start preview server with SPA fallback
-    server = await preview({
-      root: process.cwd(),
-      preview: {
-        port: 3000,
-        strictPort: true,
-        host: 'localhost'
-      },
-      build: {
-        outDir: 'build' // Match the vite.config.js setting
-      },
-      appType: 'spa' // Ensure SPA mode for client-side routing
+
+    console.log(`Starting Next.js production server on port ${PORT}...`);
+    devProcess = spawn('npm', ['run', 'start', '--', '-p', PORT], {
+      shell: true,
+      stdio: 'pipe',
+      env: { ...process.env, ...firebaseEnv, PORT },
     });
-    
-    console.log('✅ Preview server started at http://localhost:3000');
-    
+    await waitForServer({ match: /Ready in|started server on/i, timeoutMs: 60000 });
+    console.log(`Next.js server ready at http://localhost:${PORT}`);
   } else {
-    // Local development mode
-    console.log('🚀 Starting development server for E2E tests...');
-    
-    return new Promise((resolve) => {
-      // Start the dev server
-      devProcess = spawn('npm', ['run', 'dev'], {
-        shell: true,
-        detached: false,
-        stdio: 'pipe'
-      });
-
-      let serverStarted = false;
-
-      // Listen for server output
-      devProcess.stdout.on('data', (data) => {
-        const output = data.toString();
-        console.log('Dev server:', output);
-        
-        // Check if server has started
-        if (!serverStarted && (output.includes('Local:') || output.includes('ready in'))) {
-          serverStarted = true;
-          console.log('✅ Development server started successfully');
-          
-          // Wait a bit more to ensure server is fully ready
-          setTimeout(() => {
-            resolve();
-          }, 2000);
-        }
-      });
-
-      devProcess.stderr.on('data', (data) => {
-        console.error('Dev server error:', data.toString());
-      });
-
-      devProcess.on('error', (error) => {
-        console.error('Failed to start dev server:', error);
-        process.exit(1);
-      });
-
-      // Timeout after 30 seconds
-      setTimeout(() => {
-        if (!serverStarted) {
-          console.error('❌ Dev server failed to start within 30 seconds');
-          process.exit(1);
-        }
-      }, 30000);
+    console.log(`Starting Next.js dev server on port ${PORT}...`);
+    devProcess = spawn('npm', ['run', 'dev', '--', '-p', PORT], {
+      shell: true,
+      detached: false,
+      stdio: 'pipe',
+      env: { ...process.env, ...firebaseEnv },
     });
+    await waitForServer({ match: /Ready in|compiled client and server successfully/i });
+    console.log(`Next.js dev server ready at http://localhost:${PORT}`);
   }
 }
 
 export async function teardown() {
-  console.log('🛑 Stopping server...');
-  
-  // Handle preview server in CI mode
-  if (server) {
-    try {
-      await server.close();
-      console.log('✅ Preview server stopped');
-    } catch (error) {
-      console.error('Error stopping preview server:', error);
-    }
-  }
-  
-  // Handle dev process in local mode
+  console.log('Stopping Next.js server...');
   if (devProcess && devProcess.pid) {
     try {
-      // Kill the process group on Windows
       if (process.platform === 'win32') {
         spawn('taskkill', ['/F', '/T', '/PID', devProcess.pid.toString()], { shell: true });
       } else {
-        // Use negative PID to kill the entire process group
         process.kill(-devProcess.pid, 'SIGTERM');
       }
-      console.log('✅ Dev server stopped');
     } catch (error) {
-      // ESRCH error means process doesn't exist, which is fine
       if (error.code !== 'ESRCH') {
-        console.error('Error stopping dev server:', error);
+        console.error('Error stopping Next.js server:', error);
         try {
           devProcess.kill('SIGTERM');
-        } catch (e) {
-          // Ignore errors here
+        } catch (_) {
+          // ignore
         }
       }
     }
   }
 }
 
-// Handle process termination
 process.on('SIGINT', async () => {
   await teardown();
   process.exit(0);

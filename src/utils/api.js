@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { auth } from '../config/firebase';
 
-// Base URL for Firebase Functions
-// In development, this will be the emulator URL
-// In production, this will be your Firebase Functions URL
-const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  `https://us-central1-${import.meta.env.VITE_FIREBASE_PROJECT_ID || 'invoicemanagement-35961'}.cloudfunctions.net/api`;
+// Same-origin base URL. next.config.mjs rewrites /api/:path* to the
+// Firebase Cloud Functions host, so browser requests stay same-origin.
+const API_BASE_URL = '/api';
 
 // Create axios instance with default config
 const api = axios.create({

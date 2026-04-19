@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Drawer,
@@ -49,7 +51,7 @@ const LockOverlay = () => {
   return <LockScreen />;
 };
 
-const LayoutInner = () => {
+const LayoutInner = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
@@ -425,7 +427,7 @@ const LayoutInner = () => {
             minHeight: 'calc(100vh - 150px)', // Full viewport height minus AppBar
           }}
         >
-          <Outlet />
+          {children}
         </Box>
         
         <Footer />
@@ -443,9 +445,16 @@ const LayoutInner = () => {
   );
 };
 
-const Layout = () => (
+/**
+ * LayoutShell is the authenticated dashboard chrome (sidebar, topbar, footer).
+ * It accepts children so it can be composed inside a Next.js App Router layout.
+ * The AppLockProvider is provided by app/(dashboard)/layout.jsx.
+ */
+export const LayoutShell = ({ children }) => <LayoutInner>{children}</LayoutInner>;
+
+const Layout = ({ children }) => (
   <AppLockProvider>
-    <LayoutInner />
+    <LayoutInner>{children}</LayoutInner>
   </AppLockProvider>
 );
 

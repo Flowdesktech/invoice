@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   createContext,
   useContext,
@@ -71,16 +73,22 @@ const readNumber = (key, fallback) => {
 };
 
 export const AppLockProvider = ({ children }) => {
-  const [isEnabled, setIsEnabled] = useState(() => readBool(STORAGE_KEYS.enabled));
-  const [timeoutMinutes, setTimeoutMinutes] = useState(() =>
-    readNumber(STORAGE_KEYS.timeout, DEFAULT_TIMEOUT_MINUTES)
-  );
-  const [isLocked, setIsLocked] = useState(() => {
-    // If lock is enabled and we were locked before refresh, stay locked
-    return readBool(STORAGE_KEYS.enabled) && readBool(STORAGE_KEYS.locked);
-  });
+  // IMPORTANT: initial state must be identical on the server and on the
+  // client's first render to avoid hydration mismatches. localStorage is
+  // unavailable during SSR, so we start with safe defaults and then hydrate
+  // from storage in a useEffect after mount.
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [timeoutMinutes, setTimeoutMinutes] = useState(DEFAULT_TIMEOUT_MINUTES);
+  const [isLocked, setIsLocked] = useState(false);
 
   const inactivityTimerRef = useRef(null);
+
+  useEffect(() => {
+    const enabled = readBool(STORAGE_KEYS.enabled);
+    setIsEnabled(enabled);
+    setTimeoutMinutes(readNumber(STORAGE_KEYS.timeout, DEFAULT_TIMEOUT_MINUTES));
+    setIsLocked(enabled && readBool(STORAGE_KEYS.locked));
+  }, []);
 
   // ----- Public methods -----
 
