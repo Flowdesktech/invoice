@@ -187,49 +187,74 @@ const CreateInvoice = () => {
   }, [isEditMode, id, customers, searchParams]);
 
 
-  // Handle duplicate data
+  // Handle duplicate data - populate fields immediately, then resolve customer
+  // once customers are loaded. We track whether the non-customer fields have
+  // been applied so we don't re-apply on every re-render.
+  const [duplicateApplied, setDuplicateApplied] = useState(false);
+
   useEffect(() => {
-    const handleDuplicateData = async () => {
-      if (isDuplicateMode && customers.length > 0 && location.state?.duplicateData) {
-        const duplicateData = location.state.duplicateData;
+    if (!isDuplicateMode || !location.state?.duplicateData || duplicateApplied) {
+      return;
+    }
 
-        // Find the customer object from the customers list
-        const customer = customers.find(c => c.id === duplicateData.customerId);
+    const duplicateData = location.state.duplicateData;
 
-        // Set line items first
-        setLineItems(duplicateData.lineItems || [{ description: '', quantity: 1, rate: 0, amount: 0 }]);
+    // Apply line items immediately (independent of customers loading)
+    setLineItems(
+      Array.isArray(duplicateData.lineItems) && duplicateData.lineItems.length > 0
+        ? duplicateData.lineItems.map(item => ({
+            description: item.description || '',
+            quantity: Number(item.quantity) || 0,
+            rate: Number(item.rate) || 0,
+            amount: Number(item.amount) || (Number(item.quantity) || 0) * (Number(item.rate) || 0),
+          }))
+        : [{ description: '', quantity: 1, rate: 0, amount: 0 }]
+    );
 
-        // Set template if provided
-        if (duplicateData.templateId) {
-          const template = templates.find(t => t.id === duplicateData.templateId);
-          if (template) {
-            setSelectedTemplate(template);
-          }
-        }
-
-        // Use the invoice number passed from Invoices.jsx (duplicated invoice number + 1)
-        const nextNumber = duplicateData.invoiceNumber || 1;
-
-        // Reset form with duplicate data and the calculated invoice number
-        reset({
-          customer: customer || null,
-          invoiceNumber: nextNumber,
-          date: new Date(duplicateData.date),
-          dueDate: new Date(duplicateData.dueDate),
-          status: 'draft', // Always start duplicates as draft
-          notes: duplicateData.notes || '',
-          taxRate: duplicateData.taxRate || 0,
-          paymentTerms: duplicateData.paymentTerms || 'Due on receipt',
-          currency: duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
-        });
-
-        // Show success message
-        toast.success('Invoice duplicated successfully');
+    // Apply template
+    if (duplicateData.templateId) {
+      const template = templates.find(t => t.id === duplicateData.templateId);
+      if (template) {
+        setSelectedTemplate(template);
       }
-    };
+    }
 
-    handleDuplicateData();
-  }, [isDuplicateMode, customers, location.state]);
+    // Compute invoice number = duplicated invoice number + 1 (defensive parse)
+    const sourceNumber = Number(duplicateData.invoiceNumber);
+    const nextNumber = Number.isFinite(sourceNumber) && sourceNumber > 0 ? sourceNumber : 1;
+
+    // Populate the form fields (excluding customer, which we resolve below
+    // once the customer list is available)
+    setValue('invoiceNumber', nextNumber, { shouldDirty: true });
+    setValue('date', duplicateData.date ? new Date(duplicateData.date) : new Date(), { shouldDirty: true });
+    setValue('dueDate', duplicateData.dueDate ? new Date(duplicateData.dueDate) : addDays(new Date(), 7), { shouldDirty: true });
+    setValue('status', 'draft', { shouldDirty: true });
+    setValue('notes', duplicateData.notes || '', { shouldDirty: true });
+    setValue('taxRate', Number(duplicateData.taxRate) || 0, { shouldDirty: true });
+    setValue('paymentTerms', duplicateData.paymentTerms || 'Due on receipt', { shouldDirty: true });
+    setValue(
+      'currency',
+      duplicateData.currency || (currentProfile || userData)?.invoiceSettings?.currency || 'USD',
+      { shouldDirty: true }
+    );
+
+    setDuplicateApplied(true);
+    toast.success('Invoice duplicated successfully');
+  }, [isDuplicateMode, location.state, duplicateApplied, currentProfile, userData, setValue]);
+
+  // Resolve and set the customer once customers are loaded
+  useEffect(() => {
+    if (!isDuplicateMode || !location.state?.duplicateData || customers.length === 0) {
+      return;
+    }
+    const duplicateCustomerId = location.state.duplicateData.customerId;
+    if (!duplicateCustomerId) return;
+
+    const customer = customers.find(c => c.id === duplicateCustomerId);
+    if (customer) {
+      setValue('customer', customer, { shouldDirty: true });
+    }
+  }, [isDuplicateMode, customers, location.state, setValue]);
 
   useEffect(() => {
     calculateTotals();
@@ -919,11 +944,18 @@ const CreateInvoice = () => {
                       const profileData = currentProfile || userData;
                       const autoIncrement = profileData?.invoiceSettings?.autoIncrementNumber !== false;
                       const prefix = profileData?.invoiceSettings?.prefix || 'INV';
-                      const nextNumber = profileData?.invoiceSettings?.nextNumber || 1;
+                      const accountNextNumber = profileData?.invoiceSettings?.nextNumber || 1;
 
                       // Display only the number without prefix
                       const displayValue = field.value || '';
-                      const nextInvoiceNumberFormatted = formatInvoiceNumber(nextNumber, prefix);
+
+                      // Show "Will be saved as" using the actual form value when present
+                      // (e.g. for duplicates this is the duplicated invoice # + 1).
+                      // Fall back to the account's nextNumber for fresh invoices.
+                      const previewNumber = field.value
+                        ? Number(field.value)
+                        : accountNextNumber;
+                      const previewFormatted = formatInvoiceNumber(previewNumber, prefix);
 
                       return (
                         <TextField
@@ -939,13 +971,15 @@ const CreateInvoice = () => {
                           fullWidth
                           size="medium"
                           disabled={false}
-                          placeholder={!isEditMode && autoIncrement ? String(nextNumber) : ''}
+                          placeholder={!isEditMode && autoIncrement ? String(accountNextNumber) : ''}
                           helperText={
                             isEditMode
                               ? "Update invoice number"
-                              : autoIncrement
-                                ? `Will be saved as: ${nextInvoiceNumberFormatted}`
-                                : "Enter invoice number"
+                              : isDuplicateMode
+                                ? `Will be saved as: ${previewFormatted}`
+                                : autoIncrement
+                                  ? `Will be saved as: ${previewFormatted}`
+                                  : "Enter invoice number"
                           }
                           inputProps={{
                             style: { textAlign: 'right' }
