@@ -11,6 +11,7 @@
     "deploy:functions": "cd functions && npm install && cd .. && firebase deploy --only functions",
     "deploy:rules": "firebase deploy --only firestore:rules",
     "test": "vitest",
+    "test:unit": "vitest run --config vitest.unit.config.js",
     "test:e2e": "vitest run",
     "test:e2e:watch": "vitest watch",
     "test:e2e:ui": "vitest --ui",

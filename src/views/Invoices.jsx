@@ -225,41 +225,10 @@ const Invoices = () => {
     }
   };
 
+  // The editor loads the source invoice itself, so the copy always reflects the
+  // stored invoice and survives a reload of /invoices/create.
   const handleDuplicateInvoice = (invoice) => {
-    // Calculate new dates
-    const currentDate = new Date();
-    const dueDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 1 week from now
-
-    // Calculate next invoice number (duplicated invoice number + 1).
-    // Coerce to Number defensively so we don't accidentally string-concat.
-    const sourceNumber = Number(invoice.invoiceNumber);
-    const nextInvoiceNumber = (Number.isFinite(sourceNumber) ? sourceNumber : 0) + 1;
-
-    // Prepare duplicate data - include every field that the create form needs
-    // to faithfully reproduce the source invoice.
-    const duplicateData = {
-      customerId: invoice.customerId,
-      lineItems: Array.isArray(invoice.lineItems)
-        ? invoice.lineItems.map(item => ({
-            description: item.description || '',
-            quantity: Number(item.quantity) || 0,
-            rate: Number(item.rate) || 0,
-            amount: Number(item.amount) || (Number(item.quantity) || 0) * (Number(item.rate) || 0),
-          }))
-        : [],
-      taxRate: Number(invoice.taxRate) || 0,
-      notes: invoice.notes || '',
-      paymentTerms: invoice.paymentTerms || 'Due on receipt',
-      date: currentDate.getTime(),
-      dueDate: dueDate.getTime(),
-      invoiceNumber: nextInvoiceNumber, // Use duplicated invoice number + 1
-      templateId: invoice.templateId || null, // Copy template
-      currency: invoice.currency || 'USD', // Copy currency with fallback
-      isDuplicate: true
-    };
-
-    // Navigate to create page with duplicate data
-    navigate('/invoices/create', { state: { duplicateData } });
+    navigate(`/invoices/create?duplicate=${invoice.id}`);
   };
 
   const handleDownloadInvoice = async (invoice) => {
@@ -635,7 +604,11 @@ const Invoices = () => {
                         {selectedInvoices.length} selected
                       </Typography>
                       <Box>
-                        <IconButton size="small" onClick={handleBulkDuplicate}>
+                        <IconButton
+                          size="small"
+                          disabled={selectedInvoices.length !== 1}
+                          onClick={() => navigate(`/invoices/create?duplicate=${selectedInvoices[0]}`)}
+                        >
                           <FileCopyIcon fontSize="small" />
                         </IconButton>
                         <IconButton size="small" onClick={handleBulkDelete} color="error">

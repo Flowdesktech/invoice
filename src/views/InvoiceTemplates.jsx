@@ -27,7 +27,7 @@ import {
   Fullscreen as FullscreenIcon,
   FullscreenExit as FullscreenExitIcon,
 } from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 // Template data with 15 professional designs
@@ -217,6 +217,7 @@ export const templates = [
 const InvoiceTemplates = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -230,7 +231,8 @@ const InvoiceTemplates = () => {
 
   const handleSelectTemplate = (template) => {
     // Navigate back to the return path with template ID as query parameter
-    const returnPath = location.state?.returnPath || '/invoices/create';
+    const returnPath =
+      searchParams.get('returnPath') || location.state?.returnPath || '/invoices/create';
     
     // Parse the return path to handle both create and edit URLs
     const url = new URL(returnPath, window.location.origin);

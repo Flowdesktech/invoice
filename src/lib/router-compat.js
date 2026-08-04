@@ -19,6 +19,49 @@ import {
   useParams as useNextParams,
 } from 'next/navigation';
 
+// ---------- navigation state ----------
+// next/navigation has no equivalent of react-router's location state, so it is
+// persisted per destination pathname in sessionStorage and read back by
+// useLocation() after the navigation completes. Prefer query params for data
+// that should survive a reload or be shareable; this exists so that
+// navigate(to, { state }) does not silently lose data.
+
+const STATE_KEY_PREFIX = 'flowdesk:nav-state:';
+
+const stateKeyFor = (pathname) => `${STATE_KEY_PREFIX}${pathname}`;
+
+const pathnameOf = (to) => {
+  try {
+    return new URL(to, 'http://localhost').pathname;
+  } catch {
+    return to;
+  }
+};
+
+function writeNavigationState(to, state) {
+  if (typeof window === 'undefined') return;
+  try {
+    const key = stateKeyFor(pathnameOf(to));
+    if (state === undefined || state === null) {
+      window.sessionStorage.removeItem(key);
+    } else {
+      window.sessionStorage.setItem(key, JSON.stringify(state));
+    }
+  } catch {
+    // sessionStorage can throw in private mode / when full - state is optional
+  }
+}
+
+function readNavigationState(pathname) {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(stateKeyFor(pathname));
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 // ---------- Link ----------
 
 export const Link = React.forwardRef(function Link(
@@ -68,6 +111,7 @@ export function useNavigate() {
         return;
       }
       if (!to) return;
+      writeNavigationState(to, options.state);
       if (options.replace) router.replace(to);
       else router.push(to);
     },
@@ -82,12 +126,19 @@ export function useLocation() {
   const search = useNextSearchParams();
   const searchString = search?.toString() || '';
   const hash = typeof window !== 'undefined' ? window.location.hash : '';
+
+  // Read after mount so server and first client render agree.
+  const [state, setState] = React.useState(null);
+  React.useEffect(() => {
+    setState(readNavigationState(pathname));
+  }, [pathname]);
+
   return {
     pathname,
     search: searchString ? `?${searchString}` : '',
     hash,
-    state: null,
-    key: 'default',
+    state,
+    key: pathname,
   };
 }
 
